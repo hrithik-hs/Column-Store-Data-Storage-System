@@ -7,22 +7,14 @@ using namespace std;
 class Column{
 	private:
 		string name;
-		vector<string> column;
-		int type;
 	public:
 		Column();
-		Column(string name, int type);
+		Column(string name);
 		~Column();
 
-		void insertValue(string value);
-		void deleteValue(int index);
-		void alterValue(int index, string newValue);
-		void showValue(); // overload function
+		virtual void writeFile()=0;
+		virtual void loadFile()=0;
 
 		string getName();
-		int getType();
-
 		void setName(string name);
-		void setType(int type);
-
 };
