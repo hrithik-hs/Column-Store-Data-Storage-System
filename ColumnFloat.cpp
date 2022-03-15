@@ -1,14 +1,10 @@
 #include "ColumnFloat.h"
 
-ColumnFloat::ColumnFloat(){
+ColumnFloat::ColumnFloat():Column(){}
 
-}
-ColumnFloat::ColumnFloat(string name){
+ColumnFloat::ColumnFloat(string name):Column(name){}
 
-}
-ColumnFloat::~ColumnFloat(){
-
-}
+ColumnFloat::~ColumnFloat(){}
 
 void ColumnFloat::writeFile(){
 

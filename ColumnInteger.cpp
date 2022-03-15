@@ -3,15 +3,11 @@
 #include "ColumnInteger.h"
 
 
-ColumnInteger::ColumnInteger(){
+ColumnInteger::ColumnInteger():Column(){}
 
-}
-ColumnInteger::ColumnInteger(string name){
+ColumnInteger::ColumnInteger(string name):Column(name){}
 
-}
-ColumnInteger::~ColumnInteger(){
-
-}
+ColumnInteger::~ColumnInteger(){}
 
 void ColumnInteger::writeFile(){
 

@@ -1,15 +1,11 @@
 #include "ColumnString.h"
 
 
-ColumnString::ColumnString(){
+ColumnString::ColumnString():Column(){}
 
-}
-ColumnString::ColumnString(string name){
+ColumnString::ColumnString(string name):Column(name){}
 
-}
-ColumnString::~ColumnString(){
-
-}
+ColumnString::~ColumnString(){}
 
 void ColumnString::writeFile(){
 
