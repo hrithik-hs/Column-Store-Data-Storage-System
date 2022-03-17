@@ -9,17 +9,18 @@ class Table{
 		string name;
 		vector<Column * > columns;
 		Column * primaryKey;
+		unordered_set<string >columnNames;
 		// vector<pair<Column *,pair<Table *, Column *>>> foreignKey; 
 	public:
 		Table();
 		Table(string name);
-		Table(string column,vector<Column *> & columns);
-		Table(string column,vector<Column *> & columns, Column * primaryKey);
+		// Table(string name,vector<Column *> columns);
+		// Table(string name,vector<Column *> columns, Column * primaryKey);
 		~Table();
 
 		void dropTable();
 		void addColumn(Column * column);
-		void dropColumn(Column * column);
+		void dropColumn(string columnName);
 		void alterColumn(/*Old column new column new datatype*/); 
 		void showTable(vector<Column *>& columns/*, Filters */);
 

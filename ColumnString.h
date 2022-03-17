@@ -1,12 +1,13 @@
 #pragma once
 #include <bits/stdc++.h>
 #include "Column.h"
+#include "Data.h"
 
 using namespace std;
 
 class ColumnString: public Column{
 	private:
-		vector<float> column;
+		vector<Data<string> *> column;
 	public:
 		ColumnString();
 		ColumnString(string name);
@@ -18,5 +19,5 @@ class ColumnString: public Column{
 		void insertValue(string value);
 		void deleteValue(int index);
 		void alterValue(int index, string newValue);
-		void showValue(); // overload function
+		vector<Data<string> * > getColumn(); // overload function
 };
