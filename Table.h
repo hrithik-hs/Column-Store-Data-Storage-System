@@ -6,25 +6,29 @@ using namespace std;
 
 class Table{
 	private:
-		string name;
+		string name, address;
 		vector<Column * > columns;
 		Column * primaryKey;
 		unordered_set<string >columnNames;
+		vector<TableRecord*> tableRecords;
 		// vector<pair<Column *,pair<Table *, Column *>>> foreignKey; 
 	public:
 		Table();
-		Table(string name);
+		Table(string name, string address);
 		// Table(string name,vector<Column *> columns);
 		// Table(string name,vector<Column *> columns, Column * primaryKey);
 		~Table();
 
+		void loadFile();
+		void writeFile();
+
 		void dropTable();
-		void addColumn(Column * column);
+		void addColumn(Column * column, string type);
 		void dropColumn(string columnName);
-		void alterColumn(/*Old column new column new datatype*/); 
+		void alterColumn(string oldName, string newName); 
 		void showTable(vector<Column *>& columns/*, Filters */);
 
-		void setName(string name);
+		void setName(string newName);
 		void setPrimaryKey(Column * column);
 
 		Column * getPrimaryKey();
