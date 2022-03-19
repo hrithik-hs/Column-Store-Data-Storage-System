@@ -1,5 +1,4 @@
 #include "Table.h"
-#include "TableRecord.h"
 
 Table::Table(){}
 
@@ -59,8 +58,8 @@ void Table::loadFile(){
 
 void Table::writeFile(){
 	FILE* fptr = fopen(this->address, "w");
-	for(int i=0;i<this->columns.size();i++){
-		if(this->columns[i] != NULL) fwrite(this->tableRecords[i],sizeof(TableRecord),1,fptr);
+	for(int i=0;i<this->tableRecords.size();i++){
+		if(this->tableRecords[i] != NULL) fwrite(this->tableRecords[i],sizeof(TableRecord),1,fptr);
 	}
 }
 
