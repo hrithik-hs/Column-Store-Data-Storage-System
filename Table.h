@@ -1,6 +1,7 @@
 #pragma once
 #include <bits/stdc++.h>
 #include "Column.h"
+#include "TableRecord.h"
 
 using namespace std;
 
