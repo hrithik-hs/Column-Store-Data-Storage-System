@@ -117,7 +117,8 @@ void Table::setName(string newName){
 }
 
 void Table::setPrimaryKey(Column * column){
-	if(column && this->columnNames.find(column.getName())==this->columnNames.end()) return
+	if(column && this->columnNames.find(column->getName())==this->columnNames.end()) 
+		return;
 	for(int i=0;i<this->ColumnRecords.size();i++){
 		if(this->ColumnRecords[i] && this->ColumnRecords[i]->getIsPrimary()){
 			this->ColumnRecords[i]->togIsPrimary();

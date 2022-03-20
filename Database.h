@@ -1,6 +1,7 @@
 #pragma once
 #include <bits/stdc++.h>
 #include "Table.h"
+#include "TableRecord.h"
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -11,6 +12,7 @@ class Database{
 		string name;
 		string address;
 		vector<Table * > tables;
+		vector<TableRecord*> tableRecords;
 	public:
 		Database();
 		Database(string name, string address);
@@ -23,4 +25,5 @@ class Database{
 		void setName(string name);
 		string getName();
 		vector<Table*> getTables();
+		void writeFile();
 };
