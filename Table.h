@@ -1,6 +1,9 @@
 #pragma once
 #include <bits/stdc++.h>
 #include "Column.h"
+#include "ColumnInteger.h"
+#include "ColumnFloat.h"
+#include "ColumnString.h"
 #include "ColumnRecord.h"
 
 using namespace std;
@@ -24,13 +27,13 @@ class Table{
 		void writeFile();
 
 		void dropTable();
-		void addColumn(Column * column, string type);
+		void addColumn(string columnName, string type);
 		void dropColumn(string columnName);
 		void alterColumn(string oldName, string newName); 
 		void showTable(vector<Column *>& columns/*, Filters */);
 
-		void setName(string newName);
-		void setPrimaryKey(Column * column);
+		// void setName(string newName);
+		void setPrimaryKey(string columnName);
 
 		Column * getPrimaryKey();
 		string getName();

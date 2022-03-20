@@ -2,16 +2,19 @@
 
 #include "Data.h"
 
+template<typename T>
+Data<T>::Data(){}
 
-Data::Data(){}
-
-Data::Data(T value){
+template<typename T>
+Data<T>::Data(T value){
 	this->value=value;
 }
 
-T Data::getValue(){
+template<typename T>
+T Data<T>::getValue(){
 	return this->value;
 }
-void Data::setValue(T value){
+template<typename T>
+void Data<T>::setValue(T value){
 	this->value=value;
 }

@@ -4,13 +4,13 @@
 using namespace std;
 
 
-template<Typename T>
+template<typename T>
 class Data{
 	private:
 		T value;
 	public:
-		IntegerData();
-		IntegerData(T value);
+		Data();
+		Data(T value);
 
 		T getValue();
 		void setValue(T value);
