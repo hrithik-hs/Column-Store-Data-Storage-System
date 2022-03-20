@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Data.h"
 
 
@@ -12,6 +11,7 @@ Data::Data(T value){
 T Data::getValue(){
 	return this->value;
 }
+
 void Data::setValue(T value){
 	this->value=value;
 }
