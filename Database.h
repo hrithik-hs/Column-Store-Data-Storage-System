@@ -22,6 +22,9 @@ class Database{
 		void createTable(string tableName);
 		void dropTable(string tableName);
 		void addColumn(string tableName, string columnName, string columnDataType);
+		void dropColumn(string tableName, string columnName);
+		void alterColumn(string tableName, string columnName, string newName);
+		void setPrimaryKey(string tableName, string columnName);
 		
 		void setName(string name);
 		string getName();

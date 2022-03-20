@@ -51,6 +51,36 @@ void Database::addColumn(string tableName, string columnName, string datatype) {
     }
 }
 
+void Database::dropColumn(string tableName, string columnName) {
+    int len = this->tables.size();
+    for(int i = 0; i < len; i ++) {
+        if(this->tables[i]->getName() == tableName) {
+            this->tables[i]->dropColumn(columnName);
+            break;
+        }
+    }
+}
+
+void Database::alterColumn(string tableName, string columnName, string newName) {
+    int len = this->tables.size();
+    for(int i = 0; i < len; i ++) {
+        if(this->tables[i]->getName() == tableName) {
+            this->tables[i]->alterColumn(columnName, newName);
+            break;
+        }
+    }
+}
+
+void Database::setPrimaryKey(string tableName, string columnName) {
+    int len = this->tables.size();
+    for(int i = 0; i < len; i ++) {
+        if(this->tables[i]->getName() == tableName) {
+            this->tables[i]->setPrimaryKey(columnName);
+            break;
+        }
+    }
+}
+
 void Database::setName(string name){
 	this->name = name;
 }
