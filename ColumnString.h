@@ -13,8 +13,8 @@ class ColumnString: public Column{
 		ColumnString(string name);
 		~ColumnString();
 
-		void writeFile();
-		void loadFile();
+		void writeFile(string file_source);
+		void loadFile(string file_source);
 
 		void insertValue(string value);
 		void deleteValue(int index);
