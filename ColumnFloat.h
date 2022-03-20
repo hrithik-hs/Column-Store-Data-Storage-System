@@ -13,8 +13,8 @@ class ColumnFloat: public Column{
 		ColumnFloat(string name);
 		~ColumnFloat();
 
-		void writeFile();
-		void loadFile();
+		void writeFile(string file_source);
+		void loadFile(string file_source);
 
 		void insertValue(float value);
 		void deleteValue(int index);
