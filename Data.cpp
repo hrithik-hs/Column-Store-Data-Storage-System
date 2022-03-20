@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Data.h"
 
 template<typename T>
@@ -14,7 +13,8 @@ template<typename T>
 T Data<T>::getValue(){
 	return this->value;
 }
+
 template<typename T>
-void Data<T>::setValue(T value){
+void Data::setValue(T value){
 	this->value=value;
 }
