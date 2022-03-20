@@ -1,7 +1,7 @@
 #pragma once
 #include <bits/stdc++.h>
 #include "Column.h"
-#include "TableRecord.h"
+#include "ColumnRecord.h"
 
 using namespace std;
 
@@ -11,7 +11,7 @@ class Table{
 		vector<Column * > columns;
 		Column * primaryKey;
 		unordered_set<string >columnNames;
-		vector<TableRecord*> tableRecords;
+		vector<ColumnRecord*> ColumnRecords;
 		// vector<pair<Column *,pair<Table *, Column *>>> foreignKey; 
 	public:
 		Table();

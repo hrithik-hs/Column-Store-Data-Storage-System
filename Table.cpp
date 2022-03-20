@@ -25,9 +25,9 @@ Table::~Table(){
 	writeFile();
 	while(!this->columns.empty()){
 		delete this->columns.back();
-		delete this->tableRecords.back();
+		delete this->ColumnRecords.back();
 		this->columns.pop_back();
-		this->tableRecords.pop_back();
+		this->ColumnRecords.pop_back();
 	}
 	delete this->primaryKey;
 }
@@ -35,9 +35,9 @@ Table::~Table(){
 void Table::loadFile(){
 	string curAddress = this->address+'/'+this->name+".tb";
 	FILE* fptr = fopen(curAddress, "r");
-	TableRecord* tr;
+	ColumnRecord* tr;
 	while(!feof(repo_handle->pds_ndx_fp)){
-		fread(tr, sizeof(TableRecord), 1, fptr);
+		fread(tr, sizeof(ColumnRecord), 1, fptr);
 		this->columnNames.insert(tr->getColName());
 		if(tr->getColType() == "int"){
 			ColumnInteger* col = new ColumnInteger(tr->getColName(),this->address);
@@ -51,15 +51,15 @@ void Table::loadFile(){
 			ColumnString* col = new ColumnInteger(tr->getColName(),this->address);
 			this->columns.push_back(col);
 		}
-		this->tableRecords.push_back(tr);
+		this->ColumnRecords.push_back(tr);
 		if(tr->getIsPrimary()) this->primaryKey=this->columns.back();
 	}
 }
 
 void Table::writeFile(){
 	FILE* fptr = fopen(this->address, "w");
-	for(int i=0;i<this->tableRecords.size();i++){
-		if(this->tableRecords[i] != NULL) fwrite(this->tableRecords[i],sizeof(TableRecord),1,fptr);
+	for(int i=0;i<this->ColumnRecords.size();i++){
+		if(this->ColumnRecords[i] != NULL) fwrite(this->ColumnRecords[i],sizeof(ColumnRecord),1,fptr);
 	}
 }
 
@@ -68,7 +68,7 @@ void Table::dropTable(){}
 void Table::addColumn(Column * column, string type){
 	if(column && this->columnNames.find(column.getName())==this->columnNames.end()){
 		this->columns.push_back(column);
-		tableRecords.push_back(new TableRecord(column.getName(),type,0));
+		ColumnRecords.push_back(new ColumnRecord(column.getName(),type,0));
 	}
 }
 
@@ -77,7 +77,7 @@ void Table::dropColumn(string columnName){
 		for(int i=0;i<this->columns.size();i++){
 			if(this->columns[i]->getName()==columnName){
 				this->columns[i]=NULL;
-				this->tableRecords[i]=NULL;
+				this->ColumnRecords[i]=NULL;
 				break;
 			}
 		}
@@ -91,9 +91,9 @@ void Table::alterColumn(string oldName, string newName){
 	string newAddress = this->address+'/'+this->name+'/'+newName+".col";
 	int f=rename(oldAddress,newAddress);
 	if(f!=0) return;
-	for(int i=0;i<this->tableRecords.size();i++){
-		if(this->tableRecords[i] && this->tableRecords[i]->getColName()==oldName){
-			this->tableRecords[i]->setColName(newName);
+	for(int i=0;i<this->ColumnRecords.size();i++){
+		if(this->ColumnRecords[i] && this->ColumnRecords[i]->getColName()==oldName){
+			this->ColumnRecords[i]->setColName(newName);
 			this->columns->setName(newName);
 			this->columnNames.erase(oldName);
 			this->columnNames.insert(newName);
@@ -118,15 +118,15 @@ void Table::setName(string newName){
 
 void Table::setPrimaryKey(Column * column){
 	if(column && this->columnNames.find(column.getName())==this->columnNames.end()) return
-	for(int i=0;i<this->tableRecords.size();i++){
-		if(this->tableRecords[i] && this->tableRecords[i]->getIsPrimary()){
-			this->tableRecords[i]->togIsPrimary();
+	for(int i=0;i<this->ColumnRecords.size();i++){
+		if(this->ColumnRecords[i] && this->ColumnRecords[i]->getIsPrimary()){
+			this->ColumnRecords[i]->togIsPrimary();
 			break;
 		}
 	}
-	for(int i=0;i<this->tableRecords.size();i++){
-		if(this->tableRecords[i] && this->tableRecords[i]->getColName()==column.getName()){
-			this->tableRecords[i]->togIsPrimary();
+	for(int i=0;i<this->ColumnRecords.size();i++){
+		if(this->ColumnRecords[i] && this->ColumnRecords[i]->getColName()==column.getName()){
+			this->ColumnRecords[i]->togIsPrimary();
 			break;
 		}
 	}

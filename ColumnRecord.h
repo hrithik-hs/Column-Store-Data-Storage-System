@@ -3,14 +3,14 @@
 
 using namespace std;
 
-class TableRecord{
+class ColumnRecord{
 	private:
 		string columnName, columnType;
         int isPrimary;
 	public:
-		TableRecord();
-		TableRecord(string name, string address, int key);
-		~TableRecord();
+		ColumnRecord();
+		ColumnRecord(string name, string address, int key);
+		~ColumnRecord();
 
         void setColName(string name);
 
