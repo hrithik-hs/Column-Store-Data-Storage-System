@@ -17,7 +17,7 @@ Database::~Database(){
 }
 
 void Database::createTable(string tableName){
-    string address = this->address + "/" + name + ".db";
+    string address = this->address + "/" + tableName + ".db";
     fs::create_directories(address);
     ofstream outfile(address);
     Table* table = new Table(tableName, this->address);
@@ -38,6 +38,16 @@ void Database::dropTable(string tableName){
             this->tables[toDelete]->dropColumn(col->getName());
         }
         this->tables.erase(this->tables.begin() + toDelete);
+    }
+}
+
+void Database::addColumn(string tableName, string columnName, string datatype) {
+    int len = this->tables.size();
+    for(int i = 0; i < len; i ++) {
+        if(this->tables[i]->getName() == tableName) {
+            this->tables[i]->addColumn(columnName, datatype);
+            break;
+        }
     }
 }
 
