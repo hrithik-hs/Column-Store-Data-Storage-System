@@ -15,6 +15,6 @@ T Data<T>::getValue(){
 }
 
 template<typename T>
-void Data::setValue(T value){
+void Data<T>::setValue(T value){
 	this->value=value;
 }
