@@ -4,9 +4,11 @@ ColumnFloat::ColumnFloat():Column(){}
 
 ColumnFloat::ColumnFloat(string name):Column(name){}
 
+ColumnFloat::ColumnFloat(string name,string address):Column(name,address){}
+
 ColumnFloat::~ColumnFloat(){}
 
-void ColumnFloat::writeFile(){
+void ColumnFloat::writeFile(string file_source){
     ofstream writeptr(file_source, ios::out | ios::binary);
     if(!writeptr) {
         cout << "Cannot open the file" << endl;
@@ -17,7 +19,8 @@ void ColumnFloat::writeFile(){
     }
     writeptr.close();
 }
-void ColumnFloat::loadFile(){
+
+void ColumnFloat::loadFile(string file_source){
     ifstream readptr(file_source, ios::in | ios::binary);
     if(!readptr) {
         cout << "Cannot open the file" << endl;
@@ -43,6 +46,7 @@ void ColumnFloat::alterValue(int index, float newValue){
 	if(index <this->column.size() && index >=0)
 		this->column[index]->setValue(newValue);
 }
-void ColumnFloat::showValue(){
+
+vector<Data<float> *> ColumnFloat::getColumn(){
 	return this->column;
 }

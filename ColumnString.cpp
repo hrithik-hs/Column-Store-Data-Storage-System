@@ -3,21 +3,22 @@
 ColumnString::ColumnString():Column(){}
 
 ColumnString::ColumnString(string name):Column(name){}
+ColumnString::ColumnString(string name,string address):Column(name,address){}
 
 ColumnString::~ColumnString(){}
 
-void ColumnString::writeFile(){
+void ColumnString::writeFile(string file_source){
     ofstream writeptr(file_source, ios::out | ios::binary);
     if(!writeptr) {
         cout << "Cannot open the file" << endl;
         return;
     }
     for(int i = 0; i < column.size(); i ++) {
-        writeptr.write((char *)column[i]. sizeof(Data<string>));
+        writeptr.write((char *)column[i].sizeof(Data<string>));
     }
     writeptr.close();
 }
-void ColumnString::loadFile(){
+void ColumnString::loadFile(string file_source){
     ifstream readptr(file_source, ios::in | ios::binary);
     if(!readptr) {
         cout << "Cannot open the file" << endl;
@@ -43,6 +44,6 @@ void ColumnString::alterValue(int index, string newValue){
 	if(index <this->column.size() && index >=0)
 		this->column[index]->setValue(newValue);
 }
-void ColumnString::showValue(){
+vector<Data<string> * > ColumnString::getColumn(){
 	return this->column;
 }

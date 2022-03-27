@@ -11,6 +11,7 @@ class ColumnInteger: public Column{
 	public:
 		ColumnInteger();
 		ColumnInteger(string name);
+        ColumnInteger(string name,string address);
 		~ColumnInteger();
 
 		void writeFile(string file_source);

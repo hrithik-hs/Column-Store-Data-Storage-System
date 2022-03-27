@@ -11,6 +11,7 @@ class ColumnFloat: public Column{
 	public:
 		ColumnFloat();
 		ColumnFloat(string name);
+        ColumnFloat(string name,string address);
 		~ColumnFloat();
 
 		void writeFile(string file_source);

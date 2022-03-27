@@ -161,5 +161,19 @@ string Table::getName(){
 }
 
 vector<Column *> Table::getColumns(){
-	
+	return this->columns;
+}
+
+void Table::insertRow(Row *row){
+    
+}
+
+template <typename T1,typename T2>
+void Table::updateRow(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue){
+
+}
+
+template <typename T>
+void Table::deleteRow(string comparisionColumn,T comparisionValue){
+    
 }

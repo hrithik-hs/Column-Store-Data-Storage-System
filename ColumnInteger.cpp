@@ -4,20 +4,22 @@ ColumnInteger::ColumnInteger():Column(){}
 
 ColumnInteger::ColumnInteger(string name):Column(name){}
 
+ColumnInteger::ColumnInteger(string name,string address):Column(name,address){}
+
 ColumnInteger::~ColumnInteger(){}
 
-void ColumnInteger::writeFile(){
+void ColumnInteger::writeFile(string file_source){
     ofstream writeptr(file_source, ios::out | ios::binary);
     if(!writeptr) {
         cout << "Cannot open the file" << endl;
         return;
     }
     for(int i = 0; i < column.size(); i ++) {
-        writeptr.write((char *)column[i]. sizeof(Data<int>));
+        writeptr.write((char *)column[i].sizeof(Data<int>));
     }
     writeptr.close();
 }
-void ColumnInteger::loadFile(){
+void ColumnInteger::loadFile(string file_source){
     ifstream readptr(file_source, ios::in | ios::binary);
     if(!readptr) {
         cout << "Cannot open the file" << endl;

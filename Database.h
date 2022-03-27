@@ -2,6 +2,7 @@
 #include <bits/stdc++.h>
 #include "Table.h"
 #include "TableRecord.h"
+#include "Row.h"
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -25,9 +26,17 @@ class Database{
 		void dropColumn(string tableName, string columnName);
 		void alterColumn(string tableName, string columnName, string newName);
 		void setPrimaryKey(string tableName, string columnName);
-		
+
 		void setName(string name);
 		string getName();
 		vector<Table*> getTables();
 		void writeFile();
+
+		void insertRow(string tableName,Row * row);
+		
+		template <typename T1,typename T2>
+		void updateRow(string tableName,string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue);
+		
+		template <typename T>
+		void deleteRow(string tableName,string comparisionColumn,T comparisionValue);
 };

@@ -11,6 +11,7 @@ class ColumnString: public Column{
 	public:
 		ColumnString();
 		ColumnString(string name);
+        ColumnString(string name,string address);
 		~ColumnString();
 
 		void writeFile(string file_source);

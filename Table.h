@@ -5,6 +5,7 @@
 #include "ColumnFloat.h"
 #include "ColumnString.h"
 #include "ColumnRecord.h"
+#include "Row.h"
 
 using namespace std;
 
@@ -37,5 +38,13 @@ class Table{
 
 		Column * getPrimaryKey();
 		string getName();
-		vector<Column *> getColumns();    
+		vector<Column *> getColumns();
+
+		void insertRow(Row *row);
+
+        template <typename T1,typename T2>
+		void updateRow(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue);
+		
+		template <typename T>
+		void deleteRow(string comparisionColumn,T comparisionValue);
 };
