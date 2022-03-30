@@ -3,15 +3,19 @@
 
 using namespace std;
 
-
-template<typename T>
 class Data{
 	private:
-		T value;
+		string type;
 	public:
 		Data();
-		Data(T value);
+		Data(string type);
+		string getType();
+		
+		virtual void setValue(int value);
+		virtual void setValue(float value);
+		virtual void setValue(string value);
 
-		T getValue();
-		void setValue(T value);
+		virtual int getInt();
+		virtual float getFloat();
+		virtual string getString();
 };

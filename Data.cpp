@@ -1,20 +1,10 @@
-#pragma once
 #include "Data.h"
 
-template<typename T>
-Data<T>::Data(){}
+Data::Data(){}
 
-template<typename T>
-Data<T>::Data(T value){
-	this->value=value;
+Data::Data(string type){
+    this->type=type;
 }
-
-template<typename T>
-T Data<T>::getValue(){
-	return this->value;
-}
-
-template<typename T>
-void Data<T>::setValue(T value){
-	this->value=value;
+string Data::getType(){
+    return this->type;
 }

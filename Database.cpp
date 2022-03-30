@@ -91,22 +91,44 @@ vector<Table*> Database::getTables(){
 }
 
 void Database::insertRow(string  tableName,Row * row){
+	int len = this->tables.size();
+	for(int i = 0; i < len; i ++) {
+		if(this->tables[i]->getName() == tableName) {
 
+			this->tables[i]->insertRow(row);
+			break;
+		}
+	}
 }
 
 template <typename T1,typename T2>
 void Database::updateRow(string tableName,string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue){
-	
+	int len = this->tables.size();
+	for(int i = 0; i < len; i ++) {
+		if(this->tables[i]->getName() == tableName) {
+			this->tables[i]->updateRow<T1,T2>(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue);
+			break;
+		}
+	}
 }
 
 template <typename T>
 void Database::deleteRow(string tableName,string comparisionColumn,T comparisionValue){
-
+	int len = this->tables.size();
+	for(int i = 0; i < len; i ++) {
+		if(this->tables[i]->getName() == tableName) {
+			this->tables[i]->deleteRow<T>(string comparisionColumn,T comparisionValue);
+			break;
+		}
+	}
 }
 
 void Database::writeFile() {
 	string address = this->address + "/" + this->name + ".db";
 	FILE* fptr = fopen(&address[0], "w");
 	for(int i=0; i<this->tableRecords.size(); i++){
-		if(this->tableRecords[i] != NULL) fwrite(this->tableRecords[i],sizeof(tableRecords),1,fptr);
+		if(this->tableRecords[i] != NULL){
+			fwrite(this->tableRecords[i],sizeof(tableRecords),1,fptr);
+		}
+	}
 }

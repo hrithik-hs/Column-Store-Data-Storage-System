@@ -1,9 +1,6 @@
 #pragma once
 #include <bits/stdc++.h>
 #include "Column.h"
-#include "ColumnInteger.h"
-#include "ColumnFloat.h"
-#include "ColumnString.h"
 #include "ColumnRecord.h"
 #include "Row.h"
 
@@ -27,7 +24,6 @@ class Table{
 		void loadFile();
 		void writeFile();
 
-		void dropTable();
 		void addColumn(string columnName, string type);
 		void dropColumn(string columnName);
 		void alterColumn(string oldName, string newName); 

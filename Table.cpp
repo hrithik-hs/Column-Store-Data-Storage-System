@@ -34,53 +34,36 @@ Table::~Table(){
 
 void Table::loadFile(){
 	string curAddress = this->address+'/'+this->name+".tb";
+	string folderAddress = this->address+'/'+this->name;
 	FILE* fptr = fopen(&curAddress[0], "r");
 	ColumnRecord* tr;
 	while(!feof(fptr)){
 		fread(tr, sizeof(ColumnRecord), 1, fptr);
 		this->columnNames.insert(tr->getColName());
-		Column* col;
-		if(tr->getColType() == "int"){
-			col = new ColumnInteger(tr->getColName(),this->address);
-			// this->columns.push_back(col);
-		}
-		else if(tr->getColType() == "float"){
-			col = new ColumnFloat(tr->getColName(),this->address);
-			// this->columns.push_back(col);
-		}
-		else if(tr->getColType() == "string"){
-			col = new ColumnString(tr->getColName(),this->address);
-			// this->columns.push_back(col);
-		}
+		Column* col=new Column(tr->getColName(),folderAddress,tr->getColType());
+
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(tr);
 		if(tr->getIsPrimary()) this->primaryKey=this->columns.back();
 	}
+	fclose(fptr);
 }
 
 void Table::writeFile(){
-	FILE* fptr = fopen(&(this->address)[0], "w");
+	string curAddress = this->address+'/'+this->name+".tb";
+	FILE* fptr = fopen(&(curAddress)[0], "w");
 	for(int i=0;i<this->ColumnRecords.size();i++){
 		if(this->ColumnRecords[i] != NULL) fwrite(this->ColumnRecords[i],sizeof(ColumnRecord),1,fptr);
 	}
 	fclose(fptr);
 }
 
-void Table::dropTable(){}
 
 void Table::addColumn(string columnName, string type){
 	if(columnName.size() && this->columnNames.find(columnName)==this->columnNames.end()){
 		this->columnNames.insert(columnName);
-		Column* col;
-		if(type == "int"){
-			col = new ColumnInteger(columnName,this->address);
-		}
-		else if(type == "float"){
-			col = new ColumnFloat(columnName,this->address);
-		}
-		else if(type == "string"){
-			col = new ColumnString(columnName,this->address);
-		}
+		Column* col=new Column(columnName,this->address,type);
+		
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(new ColumnRecord(columnName,type,0));
 		string columnAddress = this->address+'/'+this->name+'/'+columnName+".col";
@@ -165,15 +148,34 @@ vector<Column *> Table::getColumns(){
 }
 
 void Table::insertRow(Row *row){
+    if(row->getRow().size()!=this->columns.size()){
+		return;
+	}
+	for(int i=0;i<row->getRow().size();i++){
+		if(row->getRow()[i]->getType()!=this->columns[i]->getType()){
+			return;
+		}
+	}
+	for(int i=0;i<row->getRow().size();i++){
+		if(this->columns[i]->getType()=="int"){
+			this->columns[i]->insertValue(row->getRow()[i]->getColumn().back()->getInt());
+		}
+		else if(this->columns[i]->getType()=="float"){
+			this->columns[i]->insertValue(row->getRow()[i]->getColumn().back()->getFloat());
+		}
+		else if(this->columns[i]->getType()=="string"){
+			this->columns[i]->insertValue(row->getRow()[i]->getColumn().back()->getString());
+		}
+		
+	}
+}
+
+// template <typename T1,typename T2>
+// void Table::updateRow(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue){
+
+// }
+
+// template <typename T>
+// void Table::deleteRow(string comparisionColumn,T comparisionValue){
     
-}
-
-template <typename T1,typename T2>
-void Table::updateRow(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue){
-
-}
-
-template <typename T>
-void Table::deleteRow(string comparisionColumn,T comparisionValue){
-    
-}
+// }

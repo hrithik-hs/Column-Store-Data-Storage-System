@@ -1,10 +1,6 @@
 #pragma once
 #include <bits/stdc++.h>
 #include "Column.h"
-#include "ColumnInteger.h"
-#include "ColumnFloat.h"
-#include "ColumnString.h"
-#include "ColumnRecord.h"
 
 using namespace std;
 
