@@ -19,7 +19,7 @@ Row::~Row(){
 // void addElement(Column * element);
 template <typename T>
 void Row::addElement(string type, T value){
-	Column* col=new Column()
+	Column* col=new Column();
 	col->insertValue(value);
 	col->setType(type);
 	this->row.push_back(col);
