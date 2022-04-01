@@ -1,6 +1,7 @@
 #include "ColumnRecord.h"
 
 ColumnRecord::ColumnRecord(){}
+ColumnRecord::~ColumnRecord(){}
 
 ColumnRecord::ColumnRecord(string columnName, string columnType, int key){
 	this->columnName=columnName;

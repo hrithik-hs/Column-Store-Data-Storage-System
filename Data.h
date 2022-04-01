@@ -9,6 +9,7 @@ class Data{
 	public:
 		Data();
 		Data(string type);
+        ~Data();
 		string getType();
 		
 		virtual void setValue(int value);

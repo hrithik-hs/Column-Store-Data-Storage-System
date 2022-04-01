@@ -31,6 +31,7 @@ class Database{
 		string getName();
 		vector<Table*> getTables();
 		void writeFile();
+        void loadFile();
 
 		void insertRow(string tableName,Row * row);
 		

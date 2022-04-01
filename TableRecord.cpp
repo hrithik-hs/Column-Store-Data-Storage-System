@@ -8,6 +8,6 @@ TableRecord::TableRecord(string name) {
 void TableRecord::setName(string name) {
     this->name = name;
 }
-string TableRecord::getName(string name) {
+string TableRecord::getName() {
     return this->name;
 }

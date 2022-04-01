@@ -12,5 +12,5 @@ class TableRecord{
 		~TableRecord();
 
         void setName(string name);
-        string getName(string name);
+        string getName();
 };

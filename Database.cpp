@@ -19,7 +19,8 @@ void Database::createTable(string tableName){
 	string address = this->address + "/" + tableName + ".db";
 	fs::create_directories(address);
 	ofstream outfile(address);
-	Table* table = new Table(tableName, this->address);
+    string folderAddress = this->address+'/'+this->name;
+	Table* table = new Table(tableName, folderAddress);
 	this->tables.push_back(table);
 	tableRecords.push_back(new TableRecord(tableName));
 }
@@ -106,7 +107,7 @@ void Database::updateRow(string tableName,string columnName,T1 newValue, string 
 	int len = this->tables.size();
 	for(int i = 0; i < len; i ++) {
 		if(this->tables[i]->getName() == tableName) {
-			this->tables[i]->updateRow<T1,T2>(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue);
+			// this->tables[i]->updateRow<T1,T2>(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue);
 			break;
 		}
 	}
@@ -117,10 +118,24 @@ void Database::deleteRow(string tableName,string comparisionColumn,T comparision
 	int len = this->tables.size();
 	for(int i = 0; i < len; i ++) {
 		if(this->tables[i]->getName() == tableName) {
-			this->tables[i]->deleteRow<T>(string comparisionColumn,T comparisionValue);
+			// this->tables[i]->deleteRow<T>(string comparisionColumn,T comparisionValue);
 			break;
 		}
 	}
+}
+
+void Database::loadFile() {
+    string curAddress = this->address+'/'+this->name+".db";
+	string folderAddress = this->address+'/'+this->name;
+	FILE* fptr = fopen(&curAddress[0], "r");
+	TableRecord* tr;
+	while(!feof(fptr)){
+		fread(tr, sizeof(TableRecord), 1, fptr);
+        this->tableRecords.push_back(tr);
+        Table* newTable = new Table(tr->getName(), folderAddress);
+		this->tables.push_back(newTable);
+	}
+	fclose(fptr);
 }
 
 void Database::writeFile() {
