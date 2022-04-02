@@ -15,8 +15,8 @@ class Row{
 		~Row();
 
 		// void addElement(Column * element);
-		template <typename T>
-		void addElement(string type, T value);
+		// template <typename T>
+		void addElement(string type, int value);
 
 		void setRow(vector<Column *> row);
 		vector<Column *> getRow();

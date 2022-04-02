@@ -37,8 +37,8 @@ void Table::loadFile(){
 	string folderAddress = this->address+'/'+this->name;
 	FILE* fptr = fopen(&curAddress[0], "r");
 	ColumnRecord* tr;
-	while(!feof(fptr)){
-		fread(tr, sizeof(ColumnRecord), 1, fptr);
+	while(fread(tr, sizeof(ColumnRecord), 1, fptr)){
+		// fread(tr, sizeof(ColumnRecord), 1, fptr);
 		this->columnNames.insert(tr->getColName());
 		Column* col=new Column(tr->getColName(),folderAddress,tr->getColType());
 
@@ -62,7 +62,7 @@ void Table::writeFile(){
 void Table::addColumn(string columnName, string type){
 	if(columnName.size() && this->columnNames.find(columnName)==this->columnNames.end()){
 		this->columnNames.insert(columnName);
-		Column* col=new Column(columnName,this->address,type);
+		Column* col=new Column(columnName,this->address + "/" + this->name,type);
 		
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(new ColumnRecord(columnName,type,0));

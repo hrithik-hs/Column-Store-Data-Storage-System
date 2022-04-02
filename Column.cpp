@@ -23,53 +23,65 @@ Column::~Column(){
 }
 
 void Column::writeFile(){
-	string file_source=this->address;
-	ofstream writeptr(file_source, ios::out | ios::binary);
+    cerr << "WriteFileColumn " << this->name << " " << this->address << endl;
+	string file_source=this->address+"/"+this->name+".col";
+	cerr << file_source << endl;
+    // ofstream writeptr(file_source, ios::out | ios::binary);
+    FILE* writeptr = fopen(&file_source[0], "w");
     if(!writeptr) {
-        cout << "Cannot open the file" << endl;
+        cout << "Cannot open the write file" << endl;
         return;
     }
     for(int i = 0; i < column.size(); i ++) {
 		if(this->type=="int"){
-			writeptr.write((char *)column[i], sizeof(DataInteger));
+			// writeptr.write((char *)column[i], sizeof(DataInteger));
+            fwrite(this->column[i],sizeof(DataInteger),1,writeptr);
 		}
 		else if(this->type=="float"){
-			writeptr.write((char *)column[i], sizeof(DataFloat));
+			// writeptr.write((char *)column[i], sizeof(DataFloat));
+            fwrite(this->column[i],sizeof(DataFloat),1,writeptr);
 		}
 		else if(this->type=="string"){
-			writeptr.write((char *)column[i], sizeof(DataString));
+			// writeptr.write((char *)column[i], sizeof(DataString));
+            fwrite(this->column[i],sizeof(DataString),1,writeptr);
 		}
         
     }
-    writeptr.close();
+    fclose(writeptr);
 }
 
 void Column::loadFile(){
-	string file_source=this->address;
-	ifstream readptr(file_source, ios::in | ios::binary);
+	// string file_source=this->address;
+	string file_source=this->address+"/"+this->name+".col";
+	// ifstream readptr(file_source, ios::in | ios::binary);
+    // cerr << file_source << endl;
+    FILE* readptr = fopen(&file_source[0], "r");
     if(!readptr) {
-        cout << "Cannot open the file" << endl;
+        cout << "Cannot open the load file" << endl;
         return;
     }
-    readptr.seekg(0, ios::beg);
-    while(readptr.peek() != EOF) {
+    // readptr.seekg(0, ios::beg);
+    while(1) {
 		if(this->type=="int"){
 			Data *ptr = new DataInteger();
-			readptr.read((char*)ptr, sizeof(DataInteger));
+			int sz = fread(ptr, sizeof(DataInteger), 1, readptr);
+            if(sz == 0) break;
 			column.push_back(ptr);
 		}
 		else if(this->type=="float"){
 			Data *ptr = new DataFloat();
-			readptr.read((char*)ptr, sizeof(DataFloat));
+			int sz = fread(ptr, sizeof(DataFloat), 1, readptr);
+            if(sz == 0) break;
 			column.push_back(ptr);
 		}
 		else if(this->type=="string"){
 			Data *ptr = new DataString();
-			readptr.read((char*)ptr, sizeof(DataString));
+			int sz = fread(ptr, sizeof(DataString), 1, readptr);
+            if(sz == 0) break;
 			column.push_back(ptr);
 		}
     }
-    readptr.close();
+    fclose(readptr);
 }
 
 void Column::insertValue(float value){

@@ -1,26 +1,35 @@
 #include "Database.h"
 
-Database::Database(){
-	
-}
+#define tr(X) cerr << X << endl;
+Database::Database(){}
+
 Database::Database(string name, string address){
 	this->name = name;
 	this->address = address;
+    this->loadFile();
 }
 Database::Database(string name, vector<Table *> & tables){
 	this->name = name;
 	this->tables = tables;
+    this->loadFile();
 }
 Database::~Database(){
-	writeFile();
+    writeFile();
+    while(!this->tables.empty()){
+		delete this->tables.back();
+		delete this->tableRecords.back();
+		this->tables.pop_back();
+		this->tableRecords.pop_back();
+	}
 }
 
 void Database::createTable(string tableName){
-	string address = this->address + "/" + tableName + ".db";
-	fs::create_directories(address);
+	string address = this->address + "/" +this->name+"/"+ tableName + ".tb";
+    string folderAddress = this->address+'/'+this->name+"/"+ tableName;
+	fs::create_directories(folderAddress);
 	ofstream outfile(address);
-    string folderAddress = this->address+'/'+this->name;
-	Table* table = new Table(tableName, folderAddress);
+    
+	Table* table = new Table(tableName, this->address+'/'+this->name);
 	this->tables.push_back(table);
 	tableRecords.push_back(new TableRecord(tableName));
 }
@@ -95,7 +104,6 @@ void Database::insertRow(string  tableName,Row * row){
 	int len = this->tables.size();
 	for(int i = 0; i < len; i ++) {
 		if(this->tables[i]->getName() == tableName) {
-
 			this->tables[i]->insertRow(row);
 			break;
 		}
@@ -129,8 +137,10 @@ void Database::loadFile() {
 	string folderAddress = this->address+'/'+this->name;
 	FILE* fptr = fopen(&curAddress[0], "r");
 	TableRecord* tr;
-	while(!feof(fptr)){
-		fread(tr, sizeof(TableRecord), 1, fptr);
+    int sz;
+	while(sz=fread(tr, sizeof(TableRecord), 1, fptr)){
+		// int sz=fread(tr, sizeof(TableRecord), 1, fptr);
+        tr(sz);
         this->tableRecords.push_back(tr);
         Table* newTable = new Table(tr->getName(), folderAddress);
 		this->tables.push_back(newTable);

@@ -17,8 +17,8 @@ Row::~Row(){
 }
 
 // void addElement(Column * element);
-template <typename T>
-void Row::addElement(string type, T value){
+// template <typename T>
+void Row::addElement(string type, int value){
 	Column* col=new Column();
 	col->insertValue(value);
 	col->setType(type);
