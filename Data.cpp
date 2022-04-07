@@ -1,3 +1,4 @@
+
 #include "Data.h"
 #define tr(x) cerr<<x<<endl
 #define fn() cerr<<__PRETTY_FUNCTION__<<endl;
@@ -27,4 +28,3 @@ float Data::getFloat(){
 }
 string Data::getString(){
     return "0";
-}

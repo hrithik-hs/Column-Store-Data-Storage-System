@@ -11,6 +11,7 @@
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 
+
 using namespace std;
 
 class Database{
@@ -36,7 +37,7 @@ class Database{
 		string getName();
 		vector<Table*> getTables();
 		void writeFile();
-        void loadFile();
+    void loadFile();
 
 		void insertRow(string tableName,Row * row);
 		
@@ -47,4 +48,5 @@ class Database{
 		void deleteRow(string tableName,string comparisionColumn,T comparisionValue);
         void close();
         void show();
+
 };

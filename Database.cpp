@@ -97,7 +97,6 @@ void Database::setPrimaryKey(string tableName, string columnName) {
 		}
 	}
 }
-
 void Database::setName(string name){
 	this->name = name;
 }
