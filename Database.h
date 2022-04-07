@@ -1,9 +1,16 @@
 #pragma once
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <typeinfo>
+#include <set>
+#include <fstream>
 #include "Table.h"
 #include "TableRecord.h"
-#include <filesystem>
-namespace fs = std::filesystem;
+#include "Row.h"
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+
 
 using namespace std;
 
@@ -25,9 +32,21 @@ class Database{
 		void dropColumn(string tableName, string columnName);
 		void alterColumn(string tableName, string columnName, string newName);
 		void setPrimaryKey(string tableName, string columnName);
-		
+
 		void setName(string name);
 		string getName();
 		vector<Table*> getTables();
 		void writeFile();
+    void loadFile();
+
+		void insertRow(string tableName,Row * row);
+		
+		template <typename T1,typename T2>
+		void updateRow(string tableName,string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue);
+		
+		template <typename T>
+		void deleteRow(string tableName,string comparisionColumn,T comparisionValue);
+        void close();
+        void show();
+
 };

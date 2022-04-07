@@ -1,0 +1,6 @@
+.vscode/c_cpp_properties.json
+.vscode/settings.json
+a.out
+File/Sample.db
+File/Sample/Emp.tb
+File/Sample/Emp/EmpID.col

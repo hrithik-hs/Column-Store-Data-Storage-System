@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<Database name="Sample">
+	<Table name="Employee">
+		<Column name="ID">
+		</Column>
+		<Column name="Name">
+		</Column>
+		<Column name="Salary">
+		</Column>
+	</Table>
+</Database>
