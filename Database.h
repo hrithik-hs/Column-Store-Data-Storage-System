@@ -1,5 +1,10 @@
 #pragma once
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <typeinfo>
+#include <set>
+#include <fstream>
 #include "Table.h"
 #include "TableRecord.h"
 #include "Row.h"
@@ -40,4 +45,6 @@ class Database{
 		
 		template <typename T>
 		void deleteRow(string tableName,string comparisionColumn,T comparisionValue);
+        void close();
+        void show();
 };

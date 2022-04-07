@@ -1,5 +1,10 @@
 #pragma once
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <unordered_set>
+
 #include "Column.h"
 #include "ColumnRecord.h"
 #include "Row.h"
@@ -27,7 +32,7 @@ class Table{
 		void addColumn(string columnName, string type);
 		void dropColumn(string columnName);
 		void alterColumn(string oldName, string newName); 
-		void showTable(vector<Column *>& columns/*, Filters */);
+		void showTable();
 
 		// void setName(string newName);
 		void setPrimaryKey(string columnName);
@@ -43,4 +48,5 @@ class Table{
 		
 		template <typename T>
 		void deleteRow(string comparisionColumn,T comparisionValue);
+        void close();
 };

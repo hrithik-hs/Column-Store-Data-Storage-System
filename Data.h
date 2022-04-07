@@ -1,16 +1,20 @@
 #pragma once
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <set>
+#include <cstring>
 
 using namespace std;
 
 class Data{
 	private:
-		string type;
+		// char type[100];
 	public:
 		Data();
-		Data(string type);
-        ~Data();
-		string getType();
+		// Data(string type);
+        virtual ~Data()=0;
+		virtual string getType()=0;
 		
 		virtual void setValue(int value);
 		virtual void setValue(float value);

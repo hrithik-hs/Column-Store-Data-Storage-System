@@ -1,5 +1,9 @@
 #pragma once
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <set>
+
 #include "Data.h"
 #include "DataInteger.h"
 #include "DataFloat.h"
@@ -42,4 +46,6 @@ class Column{
 		void setName(string name);
 		void setType(string type);
 		void setAddress(string address);
+        void close();
+        void showColumn();
 };

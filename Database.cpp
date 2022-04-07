@@ -1,6 +1,7 @@
 #include "Database.h"
+#define tr(X) cerr<< X << endl;
+#define fn() cerr<<__PRETTY_FUNCTION__<<endl;
 
-#define tr(X) cerr << X << endl;
 Database::Database(){}
 
 Database::Database(string name, string address){
@@ -14,16 +15,23 @@ Database::Database(string name, vector<Table *> & tables){
     this->loadFile();
 }
 Database::~Database(){
-    writeFile();
+    fn();
     while(!this->tables.empty()){
 		delete this->tables.back();
 		delete this->tableRecords.back();
 		this->tables.pop_back();
 		this->tableRecords.pop_back();
 	}
+    // fn();
 }
 
 void Database::createTable(string tableName){
+    for(auto table: this->tables) {
+        if(table->getName() == tableName) {
+            cerr << "Table Already Exists!" << endl;
+            return;
+        }
+    }
 	string address = this->address + "/" +this->name+"/"+ tableName + ".tb";
     string folderAddress = this->address+'/'+this->name+"/"+ tableName;
 	fs::create_directories(folderAddress);
@@ -135,14 +143,15 @@ void Database::deleteRow(string tableName,string comparisionColumn,T comparision
 void Database::loadFile() {
     string curAddress = this->address+'/'+this->name+".db";
 	string folderAddress = this->address+'/'+this->name;
-	FILE* fptr = fopen(&curAddress[0], "r");
-	TableRecord* tr;
+	FILE* fptr = fopen(&curAddress[0], "rb");
+	TableRecord *ptr = new TableRecord();
     int sz;
-	while(sz=fread(tr, sizeof(TableRecord), 1, fptr)){
-		// int sz=fread(tr, sizeof(TableRecord), 1, fptr);
-        tr(sz);
-        this->tableRecords.push_back(tr);
-        Table* newTable = new Table(tr->getName(), folderAddress);
+	while(sz=fread(ptr, sizeof(TableRecord), 1, fptr)){
+        // cerr << typeid(ptr).name() << endl; 
+        if(sz == 0) break;
+        // cerr << (ptr->getName()) << endl;
+        this->tableRecords.push_back(ptr);
+        Table* newTable = new Table(ptr->getName(), folderAddress);
 		this->tables.push_back(newTable);
 	}
 	fclose(fptr);
@@ -150,10 +159,26 @@ void Database::loadFile() {
 
 void Database::writeFile() {
 	string address = this->address + "/" + this->name + ".db";
-	FILE* fptr = fopen(&address[0], "w");
+	FILE* fptr = fopen(&address[0], "wb");
 	for(int i=0; i<this->tableRecords.size(); i++){
 		if(this->tableRecords[i] != NULL){
-			fwrite(this->tableRecords[i],sizeof(tableRecords),1,fptr);
+			fwrite(this->tableRecords[i],sizeof(TableRecord),1,fptr);
 		}
 	}
+}
+
+void Database::close() {
+    fn();
+    writeFile();
+    for(auto table: this->tables) {
+        table->close();
+    }
+}
+
+void Database::show() {
+    fn();
+    for(auto table : this->tables) {
+        cout << "Printing " << table->getName() << endl;
+        table->showTable();
+    }
 }

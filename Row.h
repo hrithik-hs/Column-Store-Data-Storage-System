@@ -1,5 +1,8 @@
 #pragma once
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <set>
 #include "Column.h"
 
 using namespace std;

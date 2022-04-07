@@ -1,14 +1,26 @@
 #include "DataString.h"
+#define tr(x) cerr<<x<<endl
+#define fn() cerr<<__PRETTY_FUNCTION__<<endl;
 
-DataString::DataString():Data("string"){}
+DataString::DataString(){
+    string type="string";
+    strcpy(this->type, type.c_str());
+}
+DataString::~DataString(){fn();}
 
-DataString::DataString(string value):Data("string"){
-    this->value=value;
+DataString::DataString(string value){
+    string type="string";
+    strcpy(this->type, type.c_str());
+    strcpy(this->value, value.c_str());
 }
 
 void DataString::setValue(string value){
-    this->value=value;
+   strcpy(this->value, value.c_str());
 }
 string DataString::getString(){
     return this->value;
+}
+
+string DataString::getType(){
+    return this->type;
 }

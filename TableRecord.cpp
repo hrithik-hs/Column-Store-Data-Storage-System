@@ -2,12 +2,12 @@
 
 TableRecord::TableRecord(){}
 TableRecord::TableRecord(string name) {
-    this->name = name;
+    strcpy(this->name, name.c_str());
 }
 TableRecord::~TableRecord(){}
 
 void TableRecord::setName(string name) {
-    this->name = name;
+    strcpy(this->name, name.c_str());
 }
 string TableRecord::getName() {
     return this->name;

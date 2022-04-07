@@ -1,4 +1,7 @@
 #include "Table.h"
+#define tr(X) cerr<< X << endl;
+#define fn() cerr<<__PRETTY_FUNCTION__<<endl;
+#include <typeinfo>
 
 Table::Table(){}
 
@@ -22,7 +25,7 @@ Table::Table(string name, string address){
 // }
 
 Table::~Table(){
-	writeFile();
+    fn();
 	while(!this->columns.empty()){
 		delete this->columns.back();
 		delete this->ColumnRecords.back();
@@ -30,21 +33,21 @@ Table::~Table(){
 		this->ColumnRecords.pop_back();
 	}
 	delete this->primaryKey;
+    // fn();
 }
 
 void Table::loadFile(){
 	string curAddress = this->address+'/'+this->name+".tb";
 	string folderAddress = this->address+'/'+this->name;
 	FILE* fptr = fopen(&curAddress[0], "r");
-	ColumnRecord* tr;
-	while(fread(tr, sizeof(ColumnRecord), 1, fptr)){
-		// fread(tr, sizeof(ColumnRecord), 1, fptr);
-		this->columnNames.insert(tr->getColName());
-		Column* col=new Column(tr->getColName(),folderAddress,tr->getColType());
-
+	ColumnRecord* ptr = new ColumnRecord();
+	while(fread(ptr, sizeof(ColumnRecord), 1, fptr)){
+		// fread(ptr, sizeof(ColumnRecord), 1, fptr);
+		this->columnNames.insert(ptr->getColName());
+		Column* col=new Column(ptr->getColName(),folderAddress,ptr->getColType());
 		this->columns.push_back(col);
-		this->ColumnRecords.push_back(tr);
-		if(tr->getIsPrimary()) this->primaryKey=this->columns.back();
+		this->ColumnRecords.push_back(ptr);
+		if(ptr->getIsPrimary()) this->primaryKey=this->columns.back();
 	}
 	fclose(fptr);
 }
@@ -53,7 +56,8 @@ void Table::writeFile(){
 	string curAddress = this->address+'/'+this->name+".tb";
 	FILE* fptr = fopen(&(curAddress)[0], "w");
 	for(int i=0;i<this->ColumnRecords.size();i++){
-		if(this->ColumnRecords[i] != NULL) fwrite(this->ColumnRecords[i],sizeof(ColumnRecord),1,fptr);
+		if(this->ColumnRecords[i] != NULL) 
+            fwrite(this->ColumnRecords[i],sizeof(ColumnRecord),1,fptr);
 	}
 	fclose(fptr);
 }
@@ -61,7 +65,7 @@ void Table::writeFile(){
 
 void Table::addColumn(string columnName, string type){
 	if(columnName.size() && this->columnNames.find(columnName)==this->columnNames.end()){
-		this->columnNames.insert(columnName);
+        this->columnNames.insert(columnName);
 		Column* col=new Column(columnName,this->address + "/" + this->name,type);
 		
 		this->columns.push_back(col);
@@ -70,6 +74,9 @@ void Table::addColumn(string columnName, string type){
 		FILE* fptr = fopen(&columnAddress[0], "w");
 		fclose(fptr);
 	}
+    else{
+        cerr << "Column Already Exists!" << endl;
+    }
 }
 
 void Table::dropColumn(string columnName){
@@ -102,8 +109,12 @@ void Table::alterColumn(string oldName, string newName){ /*only for renaming*/
 	}
 } 
 
-void Table::showTable(vector<Column *>& columns/*, Filters */){
-	
+void Table::showTable(){
+    fn();
+	for(auto column: this->columns) {
+        cout << "Printing " << column->getName() << " " << column->getType() << endl;
+        column->showColumn(); 
+    }
 }
 
 /*
@@ -166,10 +177,16 @@ void Table::insertRow(Row *row){
 		else if(this->columns[i]->getType()=="string"){
 			this->columns[i]->insertValue(row->getRow()[i]->getColumn().back()->getString());
 		}
-		
 	}
 }
 
+void Table::close() {
+    fn();
+    writeFile();
+    for(auto column: this->columns) {
+        column->close();
+    }
+}
 // template <typename T1,typename T2>
 // void Table::updateRow(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue){
 
