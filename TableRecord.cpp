@@ -10,5 +10,6 @@ void TableRecord::setName(string name) {
     strcpy(this->name, name.c_str());
 }
 string TableRecord::getName() {
+
     return this->name;
 }

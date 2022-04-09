@@ -140,6 +140,7 @@ void Table::setName(string newName){
 
 void Table::setPrimaryKey(string columnName){
 	if(columnName.size() && this->columnNames.find(columnName)==this->columnNames.end()) return;
+
 	for(int i=0;i<this->ColumnRecords.size();i++){
 		if(this->ColumnRecords[i] && this->ColumnRecords[i]->getIsPrimary()){
 			this->ColumnRecords[i]->togIsPrimary();

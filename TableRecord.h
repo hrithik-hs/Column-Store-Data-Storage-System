@@ -3,11 +3,13 @@
 #include <iostream>
 #include <cstring>
 
+
 using namespace std;
 
 class TableRecord{
 	private:
 		char name[100];
+
 	public:
 		TableRecord();
 		TableRecord(string name);
@@ -15,5 +17,5 @@ class TableRecord{
 
         void setName(string name);
         string getName();
-        
+
 };
