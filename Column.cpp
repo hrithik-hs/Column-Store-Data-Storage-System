@@ -21,10 +21,10 @@ Column::Column(string name,string address,string type){
 }
 
 Column::~Column(){
-    fn();
+    // fn();
 	while(!this->column.empty()){
 		// tr((this->column.back()==NULL));
-		// tr(sizeof(this->column.back()));
+		// tr((this->column.back()));
         // tr(typeid((DataInteger *)this->column.back()).name());
         // tr((DataInteger *)this->column.back()->getInt());
         delete this->column.back();
@@ -35,12 +35,11 @@ Column::~Column(){
 }
 
 void Column::writeFile(){
-    fn();
+    // fn();
     // cerr << "WriteFileColumn " << this->name << " " << this->address << endl;
 	string file_source=this->address+"/"+this->name+".col";
     FILE* writeptr = fopen(&file_source[0], "w");
     if(!writeptr) {
-        fn();
         cout << "Cannot open the write file" << endl;
         return;
     }
@@ -48,69 +47,62 @@ void Column::writeFile(){
     for(int i = 0; i < column.size(); i ++) {
        
 		if(this->type=="int"){
-            DataInteger * ptr=new DataInteger(this->column[i]->getInt());
-            // DataInteger ptr(this->column[i]->getInt());
-            tr(this->column[i]->getInt());
-            int sz=fwrite(ptr,sizeof(DataInteger),1,writeptr);
+            int writeData=this->column[i]->getInt();
+            int sz=fwrite(&writeData,sizeof(writeData),1,writeptr);
             // tr("Write size:");
             // tr(sz);
 		}
-		// else if(this->type=="float"){
-        //     fwrite(this->column[i],sizeof(DataFloat),1,writeptr);
-		// }
-		// else if(this->type=="string"){
-        //     fwrite(this->column[i],sizeof(DataString),1,writeptr);
-		// }
+		else if(this->type=="float"){
+            float writeData=this->column[i]->getFloat();
+            int sz=fwrite(&writeData,sizeof(writeData),1,writeptr);
+
+		}
+		else if(this->type=="string"){
+            char writeData[100];
+            strcpy(writeData,this->column[i]->getString().c_str());
+            int sz=fwrite(&writeData,sizeof(writeData),1,writeptr);
+		}
         
     }
     fclose(writeptr);
-
-    tr("\nread-----\n");
-    FILE* readptr = fopen(&file_source[0], "r");
-    DataInteger *ptr=new DataInteger();
-    // int sz = fread((DataInteger *)ptr, sizeof(DataInteger), 1, readptr);
-    int sz = fread(ptr, sizeof(ptr), 1, readptr);
-    // if(sz == 0) break;
-    tr(typeid(ptr).name());
-    tr("ptr value:");tr(ptr->getInt());
-    fclose(readptr);
-    tr("read-----\n");
 }
 
 void Column::loadFile(){
-    fn();
+    // fn();
 	string file_source=this->address+"/"+this->name+".col";
     FILE* readptr = fopen(&file_source[0], "r");
     if(!readptr) {
-        fn();
         cout << "Cannot open the load file" << endl;
         return;
     }
     while(1) {
 		if(this->type=="int"){
-			DataInteger *ptr=new DataInteger();
-			// int sz = fread((DataInteger *)ptr, sizeof(DataInteger), 1, readptr);
-			int sz = fread(ptr, sizeof(ptr), 1, readptr);
+			int readData;
+			int sz = fread(&readData, sizeof(readData), 1, readptr);
             if(sz == 0) break;
-            tr(typeid(ptr).name());
-            tr("ptr value:");
-            tr(ptr->getInt());
-			// this->column.push_back(ptr);
+            DataInteger *ptr=new DataInteger(readData);
+			this->column.push_back(ptr);
+
+            // tr(ptr->getInt());
             // ptr->getInt();
             // tr(sz);
             // tr("Inside load column:");
             
 		}
 		else if(this->type=="float"){
-			Data *ptr = new DataFloat();
-			int sz = fread(ptr, sizeof(DataFloat), 1, readptr);
+			float readData;
+			int sz = fread(&readData, sizeof(readData), 1, readptr);
             if(sz == 0) break;
+            Data *ptr = new DataFloat(readData);
 			column.push_back(ptr);
 		}
 		else if(this->type=="string"){
-			Data *ptr = new DataString();
-			int sz = fread(ptr, sizeof(DataString), 1, readptr);
+
+			// string readData;
+            char readData[100];
+			int sz = fread(&readData, sizeof(readData), 1, readptr);
             if(sz == 0) break;
+            Data *ptr = new DataString(readData);
 			column.push_back(ptr);
 		}
     }
@@ -172,25 +164,25 @@ void Column::setAddress(string address){
 }
 
 void Column::close() {
-    fn();
     writeFile();
 }
 
 void Column::showColumn() {
-    fn();
-    tr("column size : ");
-    tr(this->column.size());
-    tr(typeid(this->column.back()).name());
+    // fn();
+    // tr("column size : ");
+    // tr(this->column.size());
+    // tr(typeid(this->column.back()).name());
     for(int i=0;i< this->column.size();i++) {
         if(this->getType() == "int"){
-            // cout << this->column[i]->getInt() << endl;
+            cout << this->column[i]->getInt() << " ";
             // tr(this->column[i]->getInt());
         }
-        // if(data->getType() == "string"){
-        //     cout << data->getString() << endl;
-        // }
-        // if(data->getType() == "float"){
-        //     cout << data->getFloat() << endl;
-        // }
+        if(this->getType() == "string"){
+            cout << this->column[i]->getString() << " ";
+        }
+        if(this->getType() == "float"){
+            cout << this->column[i]->getFloat() << " ";
+        }
     }
+    cout<<endl;
 }

@@ -12,14 +12,13 @@ DataInteger::DataInteger(int value){
     strcpy(this->type, type.c_str());
     this->value=value;
 }
-DataInteger::~DataInteger(){fn();}
+DataInteger::~DataInteger(){}
 
 void DataInteger::setValue(int value){
     this->value=value;
 }
 
 int DataInteger::getInt(){
-    fn();
     return this->value;
 }
 

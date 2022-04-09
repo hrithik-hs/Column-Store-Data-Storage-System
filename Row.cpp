@@ -16,10 +16,23 @@ Row::~Row(){
 	}
 }
 
-// void addElement(Column * element);
-// template <typename T>
-void Row::addElement(string type, int value){
+void Row::addElement(int value){
 	Column* col=new Column();
+    string type="int";
+	col->insertValue(value);
+	col->setType(type);
+	this->row.push_back(col);
+}
+void Row::addElement(float value){
+	Column* col=new Column();
+    string type="float";
+	col->insertValue(value);
+	col->setType(type);
+	this->row.push_back(col);
+}
+void Row::addElement(string value){
+	Column* col=new Column();
+    string type="string";
 	col->insertValue(value);
 	col->setType(type);
 	this->row.push_back(col);

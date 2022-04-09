@@ -17,9 +17,10 @@ class Row{
 		// Row(const Row &row); //copy constuctor (if needed)
 		~Row();
 
-		// void addElement(Column * element);
-		// template <typename T>
-		void addElement(string type, int value);
+		
+		void addElement(int value);
+		void addElement(float value);
+		void addElement(string value);
 
 		void setRow(vector<Column *> row);
 		vector<Column *> getRow();

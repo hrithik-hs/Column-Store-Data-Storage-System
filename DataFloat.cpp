@@ -6,7 +6,7 @@ DataFloat::DataFloat(){
     string type="float";
     strcpy(this->type, type.c_str());
 }
-DataFloat::~DataFloat(){fn();}
+DataFloat::~DataFloat(){}
 
 DataFloat::DataFloat(float value){
     string type="float";
