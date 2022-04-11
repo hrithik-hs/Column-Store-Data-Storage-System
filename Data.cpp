@@ -28,3 +28,4 @@ float Data::getFloat(){
 }
 string Data::getString(){
     return "0";
+}
