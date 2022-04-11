@@ -12,6 +12,7 @@ Data::Data(){}
 
 Data::~Data(){}
 
+
 // string Data::getType(){
 //     return this->type;
 // }

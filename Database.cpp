@@ -24,6 +24,7 @@ Database::~Database(){
 		delete this->tableRecords.back();
 		this->tableRecords.pop_back();
 	}
+
 }
 
 void Database::createTable(string tableName){
@@ -144,10 +145,10 @@ void Database::loadFile() {
     string curAddress = this->address+'/'+this->name+".db";
 	string folderAddress = this->address+'/'+this->name;
 	FILE* fptr = fopen(&curAddress[0], "rb");
-    
 	while(1){
 	    TableRecord *ptr = new TableRecord();
         int sz=fread(ptr, sizeof(TableRecord), 1, fptr);
+
         if(sz == 0) break;
         // cerr << (ptr->getName()) << endl;
         this->tableRecords.push_back(ptr);
@@ -168,7 +169,6 @@ void Database::writeFile() {
 }
 
 void Database::close() {
-    // fn();
     writeFile();
     for(auto table: this->tables) {
         table->close();
@@ -176,7 +176,6 @@ void Database::close() {
 }
 
 void Database::show() {
-    // fn();
     for(auto table : this->tables) {
         cout << "Printing " << table->getName() << endl;
         table->showTable();
