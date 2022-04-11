@@ -10,7 +10,8 @@ Data::Data(){}
 //    strcpy(this->type, type.c_str());
 // }
 
-Data::~Data(){fn();}
+Data::~Data(){}
+
 
 // string Data::getType(){
 //     return this->type;

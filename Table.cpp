@@ -25,13 +25,17 @@ Table::Table(string name, string address){
 // }
 
 Table::~Table(){
-    fn();
 	while(!this->columns.empty()){
+        // tr(this->columns.back());
 		delete this->columns.back();
-		delete this->ColumnRecords.back();
 		this->columns.pop_back();
-		this->ColumnRecords.pop_back();
 	}
+    // delete this->ColumnRecords.back();
+    while(!this->ColumnRecords.empty()){
+        // tr(this->ColumnRecords.back());
+        delete this->ColumnRecords.back();
+		this->ColumnRecords.pop_back();
+    }
 	delete this->primaryKey;
     // fn();
 }
@@ -40,9 +44,11 @@ void Table::loadFile(){
 	string curAddress = this->address+'/'+this->name+".tb";
 	string folderAddress = this->address+'/'+this->name;
 	FILE* fptr = fopen(&curAddress[0], "r");
-	ColumnRecord* ptr = new ColumnRecord();
-	while(fread(ptr, sizeof(ColumnRecord), 1, fptr)){
-		// fread(ptr, sizeof(ColumnRecord), 1, fptr);
+	while(1){
+	    ColumnRecord* ptr = new ColumnRecord();
+		int sz=fread(ptr, sizeof(ColumnRecord), 1, fptr);
+        if(sz==0)break;
+
 		this->columnNames.insert(ptr->getColName());
 		Column* col=new Column(ptr->getColName(),folderAddress,ptr->getColType());
 		this->columns.push_back(col);
@@ -110,9 +116,11 @@ void Table::alterColumn(string oldName, string newName){ /*only for renaming*/
 } 
 
 void Table::showTable(){
-    fn();
+    // fn();
+    // tr(this->columns.size());
 	for(auto column: this->columns) {
-        cout << "Printing " << column->getName() << " " << column->getType() << endl;
+        cout << "Printing Column " << column->getName() << ": DataType " << column->getType() << endl;
+
         column->showColumn(); 
     }
 }
@@ -182,7 +190,6 @@ void Table::insertRow(Row *row){
 }
 
 void Table::close() {
-    fn();
     writeFile();
     for(auto column: this->columns) {
         column->close();
