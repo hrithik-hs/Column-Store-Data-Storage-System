@@ -5,9 +5,11 @@
 
 Table::Table(){}
 
-Table::Table(string name, string address){
+Table::Table(string name, string address,int size){
 	this->name=name;
 	this->address = address;
+    this->size=size;
+    this->flag.resize(0,size);
 	this->loadFile();
 }
 
@@ -49,7 +51,7 @@ void Table::loadFile(){
 		int sz=fread(ptr, sizeof(ColumnRecord), 1, fptr);
         if(sz==0)break;
 		this->columnNames.insert(ptr->getColName());
-		Column* col=new Column(ptr->getColName(),folderAddress,ptr->getColType());
+		Column* col=new Column(ptr->getColName(),folderAddress,ptr->getColType(),ptr->getPrimary(),ptr->getUnique(),ptr->getNotNull());
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(ptr);
 		if(ptr->getIsPrimary()) this->primaryKey=this->columns.back();
@@ -71,13 +73,13 @@ void Table::writeFile(){
 }
 
 
-void Table::addColumn(string columnName, string type){
+void Table::addColumn(string columnName, string type, bool primary=0, bool unique=0, bool notNull=0){
 	if(columnName.size() && this->columnNames.find(columnName)==this->columnNames.end()){
         this->columnNames.insert(columnName);
-		Column* col=new Column(columnName,this->address + "/" + this->name,type);
+		Column* col=new Column(columnName,this->address + "/" + this->name,type,primary,unique,notNull);
 		
 		this->columns.push_back(col);
-		this->ColumnRecords.push_back(new ColumnRecord(columnName,type,0));
+		this->ColumnRecords.push_back(new ColumnRecord(columnName,type,primary,unique,notNull));
 		string columnAddress = this->address+'/'+this->name+'/'+columnName+".col";
 		FILE* fptr = fopen(&columnAddress[0], "w");
 		fclose(fptr);
@@ -168,6 +170,8 @@ vector<Column *> Table::getColumns(){
 	return this->columns;
 }
 
+
+
 void Table::insertRow(Row *row){
     if(row->getRow().size()!=this->columns.size()){
 		return;
@@ -177,6 +181,14 @@ void Table::insertRow(Row *row){
 			return;
 		}
 	}
+    for(int i=0;i<row->getRow().size();i++){
+		if(this->columns[i]->checkConstraint(row->getRow()[i]->getColumn().back(),this->flag)){
+            cout<<"Invalid Row Input"<<endl;
+            return;
+        }
+	}
+    size++;
+    this->flag.push_back(0);
 	for(int i=0;i<row->getRow().size();i++){
 		if(this->columns[i]->getType()=="int"){
 			this->columns[i]->insertValue(row->getRow()[i]->getColumn().back()->getInt());
@@ -196,6 +208,10 @@ void Table::close() {
     for(auto column: this->columns) {
         column->close();
     }
+}
+
+int Table::getSize(){
+    return this->size;
 }
 // template <typename T1,typename T2>
 // void Table::updateRow(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue){

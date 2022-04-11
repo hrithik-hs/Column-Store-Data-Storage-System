@@ -13,10 +13,24 @@ Column::Column(string name,string address){
     this->address=address;
     this->loadFile();
 }
-Column::Column(string name,string address,string type){
+// Column::Column(string name,string address,string type){
+// 	this->name=name;
+//     this->address=address;
+// 	this->type=type;
+//     this->loadFile();
+// }
+
+Column::Column(string name,string address,string type,bool primary=0, bool unique=0, bool notNull=0){
 	this->name=name;
     this->address=address;
 	this->type=type;
+    this->primary = primary;
+    this->unique=unique;
+    this->notNull=notNull;
+    if(primary){
+        this->unique=1;
+        this->notNull=1;
+    }
     this->loadFile();
 }
 
@@ -139,6 +153,21 @@ void Column::alterValue(int index, string newValue){
 	if(index <this->column.size() && index >=0)
 		this->column[index]->setValue(newValue);
 }
+
+bool Column::checkConstraint(Data * data,vector<bool>flag){
+    if(this->notNull && !data)return 0;
+    if(!data)return 1;
+    if(this->unique){
+        for(int i=0;i<this->column.size();i++){
+            if(flag[i])continue;
+            if(this->type=="int" && this->column[i]->getInt()==data->getInt())return 0;
+            if(this->type=="float" && this->column[i]->getFloat()==data->getFloat())return 0;
+            if(this->type=="string" && this->column[i]->getString()==data->getString())return 0;
+        }
+    }
+    return 1;
+}
+
 
 vector<Data *> Column::getColumn(){
 	return this->column;

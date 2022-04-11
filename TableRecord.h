@@ -9,13 +9,15 @@ using namespace std;
 class TableRecord{
 	private:
 		char name[100];
-
+        int size;
 	public:
 		TableRecord();
-		TableRecord(string name);
+		TableRecord(string name,int size);
 		~TableRecord();
 
         void setName(string name);
         string getName();
+        int getSize();
+        void setSize(int size);
 
 };

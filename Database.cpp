@@ -38,9 +38,9 @@ void Database::createTable(string tableName){
 	fs::create_directories(folderAddress);
 	ofstream outfile(address);
     
-	Table* table = new Table(tableName, this->address+'/'+this->name);
+	Table* table = new Table(tableName, this->address+'/'+this->name,0);
 	this->tables.push_back(table);
-	tableRecords.push_back(new TableRecord(tableName));
+	tableRecords.push_back(new TableRecord(tableName,0));
 }
 void Database::dropTable(string tableName){
 	int len = this->tables.size(), toDelete = -1;
@@ -59,11 +59,11 @@ void Database::dropTable(string tableName){
 	}
 }
 
-void Database::addColumn(string tableName, string columnName, string datatype) {
+void Database::addColumn(string tableName, string columnName, string datatype,bool primary=0, bool unique=0, bool notNull=0) {
 	int len = this->tables.size();
 	for(int i = 0; i < len; i ++) {
 		if(this->tables[i]->getName() == tableName) {
-			this->tables[i]->addColumn(columnName, datatype);
+			this->tables[i]->addColumn(columnName, datatype,primary,unique,notNull);
 			break;
 		}
 	}
@@ -151,7 +151,7 @@ void Database::loadFile() {
         if(sz == 0) break;
         // cerr << (ptr->getName()) << endl;
         this->tableRecords.push_back(ptr);
-        Table* newTable = new Table(ptr->getName(), folderAddress);
+        Table* newTable = new Table(ptr->getName(), folderAddress,ptr->getSize());
 		this->tables.push_back(newTable);
 	}
 	fclose(fptr);
@@ -162,6 +162,7 @@ void Database::writeFile() {
 	FILE* fptr = fopen(&address[0], "wb");
 	for(int i=0; i<this->tableRecords.size(); i++){
 		if(this->tableRecords[i] != NULL){
+            this->tableRecords[i]->setSize(this->tables[i]->getSize());
 			fwrite(this->tableRecords[i],sizeof(TableRecord),1,fptr);
 		}
 	}

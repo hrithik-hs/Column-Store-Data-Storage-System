@@ -15,9 +15,9 @@ int main(){
     Database * database=new Database("Sample","./File");
     // database->show();
     database->createTable("Emp");
-    database->addColumn("Emp","EmpID","int");
-    database->addColumn("Emp","Name","string");
-    database->addColumn("Emp","Salary","float");
+    database->addColumn("Emp","EmpID","int",1,0,0);
+    database->addColumn("Emp","Name","string",0,0,0);
+    database->addColumn("Emp","Salary","float",0,0,0);
     // cerr<<"create success\n";
     // Row * row=new Row();
     // row->addElement(1);

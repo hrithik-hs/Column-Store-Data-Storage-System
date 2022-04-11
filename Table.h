@@ -18,10 +18,12 @@ class Table{
 		Column * primaryKey;
 		unordered_set<string >columnNames;
 		vector<ColumnRecord*> ColumnRecords;
-		// vector<pair<Column *,pair<Table *, Column *>>> foreignKey; 
+		// vector<pair<Column *,pair<Table *, Column *>>> foreignKey;
+        int size;
+        vector<bool>flag;
 	public:
 		Table();
-		Table(string name, string address);
+		Table(string name, string address,int size);
 		// Table(string name,vector<Column *> columns);
 		// Table(string name,vector<Column *> columns, Column * primaryKey);
 		~Table();
@@ -29,7 +31,7 @@ class Table{
 		void loadFile();
 		void writeFile();
 
-		void addColumn(string columnName, string type);
+		void addColumn(string columnName, string type,bool primary, bool unique, bool notNull);
 		void dropColumn(string columnName);
 		void alterColumn(string oldName, string newName); 
 		void showTable();
@@ -40,6 +42,7 @@ class Table{
 		Column * getPrimaryKey();
 		string getName();
 		vector<Column *> getColumns();
+        int getSize();
 
 		void insertRow(Row *row);
 

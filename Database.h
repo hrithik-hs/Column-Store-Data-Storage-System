@@ -28,7 +28,7 @@ class Database{
 
 		void createTable(string tableName);
 		void dropTable(string tableName);
-		void addColumn(string tableName, string columnName, string columnDataType);
+		void addColumn(string tableName, string columnName, string columnDataType,bool primary, bool unique, bool notNull);
 		void dropColumn(string tableName, string columnName);
 		void alterColumn(string tableName, string columnName, string newName);
 		void setPrimaryKey(string tableName, string columnName);
@@ -37,7 +37,7 @@ class Database{
 		string getName();
 		vector<Table*> getTables();
 		void writeFile();
-    void loadFile();
+        void loadFile();
 
 		void insertRow(string tableName,Row * row);
 		

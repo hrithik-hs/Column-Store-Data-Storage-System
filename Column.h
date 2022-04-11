@@ -17,11 +17,13 @@ class Column{
         string address;
 		string type;
 		vector<Data *> column;
+        bool primary, unique, notNull; 
 	public:
 		Column();
 		Column(string name);
         Column(string name,string address);
-        Column(string name,string address,string type);
+        // Column(string name,string address,string type);
+        Column(string name,string address,string type,bool primary, bool unique, bool notNull);
 		~Column();
 
 		void writeFile();
@@ -37,6 +39,8 @@ class Column{
 		void alterValue(int index, int newValue);
 		void alterValue(int index, float newValue);
 		void alterValue(int index, string newValue);
+
+        bool checkConstraint(Data * data,vector<bool>flag);
 
 		vector<Data *> getColumn();
 		string getType();

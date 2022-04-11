@@ -11,10 +11,11 @@ class ColumnRecord{
 	private:
 		char columnName[100];
         char columnType[100];
-        int isPrimary;
+        bool isPrimary;
+        bool unique, notNull;
 	public:
 		ColumnRecord();
-		ColumnRecord(string name, string address, int key);
+		ColumnRecord(string name, string address,bool primary, bool unique, bool notNull);
 		~ColumnRecord();
 
         void setColName(string name);
@@ -23,4 +24,8 @@ class ColumnRecord{
         string getColType();
         int getIsPrimary();
         void togIsPrimary();
+
+        bool getPrimary();
+        bool getUnique();
+        bool getNotNull();
 };
