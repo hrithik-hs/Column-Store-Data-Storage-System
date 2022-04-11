@@ -8,6 +8,7 @@ DataString::DataString(){
 }
 DataString::~DataString(){}
 
+
 DataString::DataString(string value){
     string type="string";
     strcpy(this->type, type.c_str());

@@ -14,6 +14,7 @@ DataInteger::DataInteger(int value){
 }
 DataInteger::~DataInteger(){}
 
+
 void DataInteger::setValue(int value){
     this->value=value;
 }

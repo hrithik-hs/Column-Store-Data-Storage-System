@@ -25,7 +25,6 @@ Table::Table(string name, string address){
 // }
 
 Table::~Table(){
-    // fn();
 	while(!this->columns.empty()){
         // tr(this->columns.back());
 		delete this->columns.back();
@@ -38,6 +37,7 @@ Table::~Table(){
 		this->ColumnRecords.pop_back();
     }
 	delete this->primaryKey;
+    // fn();
 }
 
 void Table::loadFile(){
@@ -48,15 +48,13 @@ void Table::loadFile(){
 	    ColumnRecord* ptr = new ColumnRecord();
 		int sz=fread(ptr, sizeof(ColumnRecord), 1, fptr);
         if(sz==0)break;
+
 		this->columnNames.insert(ptr->getColName());
 		Column* col=new Column(ptr->getColName(),folderAddress,ptr->getColType());
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(ptr);
 		if(ptr->getIsPrimary()) this->primaryKey=this->columns.back();
 	}
-    // for(auto col:this->ColumnRecords){
-    //     tr(col->getColName());
-    // }
 	fclose(fptr);
 }
 
@@ -122,6 +120,7 @@ void Table::showTable(){
     // tr(this->columns.size());
 	for(auto column: this->columns) {
         cout << "Printing Column " << column->getName() << ": DataType " << column->getType() << endl;
+
         column->showColumn(); 
     }
 }
@@ -191,7 +190,6 @@ void Table::insertRow(Row *row){
 }
 
 void Table::close() {
-    // fn();
     writeFile();
     for(auto column: this->columns) {
         column->close();

@@ -25,6 +25,7 @@ Column::~Column(){
 	while(!this->column.empty()){
 		// tr((this->column.back()==NULL));
 		// tr((this->column.back()));
+
         // tr(typeid((DataInteger *)this->column.back()).name());
         // tr((DataInteger *)this->column.back()->getInt());
         delete this->column.back();
@@ -33,7 +34,6 @@ Column::~Column(){
 	}
     // fn();
 }
-
 void Column::writeFile(){
     // fn();
     // cerr << "WriteFileColumn " << this->name << " " << this->address << endl;
@@ -84,6 +84,7 @@ void Column::loadFile(){
 			this->column.push_back(ptr);
 
             // tr(ptr->getInt());
+
             // ptr->getInt();
             // tr(sz);
             // tr("Inside load column:");
@@ -103,6 +104,7 @@ void Column::loadFile(){
 			int sz = fread(&readData, sizeof(readData), 1, readptr);
             if(sz == 0) break;
             Data *ptr = new DataString(readData);
+
 			column.push_back(ptr);
 		}
     }

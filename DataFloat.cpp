@@ -8,6 +8,7 @@ DataFloat::DataFloat(){
 }
 DataFloat::~DataFloat(){}
 
+
 DataFloat::DataFloat(float value){
     string type="float";
     strcpy(this->type, type.c_str());
