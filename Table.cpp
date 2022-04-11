@@ -55,6 +55,7 @@ void Table::loadFile(){
 		this->ColumnRecords.push_back(ptr);
 		if(ptr->getIsPrimary()) this->primaryKey=this->columns.back();
 	}
+	this->flag.assign(this->ColumnRecords.size(), 0);
 	fclose(fptr);
 }
 
@@ -62,7 +63,7 @@ void Table::writeFile(){
 	string curAddress = this->address+'/'+this->name+".tb";
 	FILE* fptr = fopen(&(curAddress)[0], "w");
 	for(int i=0;i<this->ColumnRecords.size();i++){
-		if(this->ColumnRecords[i] != NULL) 
+		if(this->ColumnRecords[i] != NULL && this->flag[i] == 0) 
             fwrite(this->ColumnRecords[i],sizeof(ColumnRecord),1,fptr);
 	}
 	fclose(fptr);
@@ -118,6 +119,7 @@ void Table::alterColumn(string oldName, string newName){ /*only for renaming*/
 void Table::showTable(){
     // fn();
     // tr(this->columns.size());
+	if(this->columns.size() == 0) return ;
 	for(auto column: this->columns) {
         cout << "Printing Column " << column->getName() << ": DataType " << column->getType() << endl;
 
@@ -176,7 +178,8 @@ void Table::insertRow(Row *row){
 			return;
 		}
 	}
-	for(int i=0;i<row->getRow().size();i++){
+	this->flag.push_back(0);
+	for(int i=0;i<row->getRow().size();i++) {
 		if(this->columns[i]->getType()=="int"){
 			this->columns[i]->insertValue(row->getRow()[i]->getColumn().back()->getInt());
 		}
@@ -191,6 +194,7 @@ void Table::insertRow(Row *row){
 
 void Table::close() {
     writeFile();
+	if(this->columns.size() == 0) return ;
     for(auto column: this->columns) {
         column->close();
     }
@@ -200,7 +204,14 @@ void Table::close() {
 
 // }
 
-// template <typename T>
-// void Table::deleteRow(string comparisionColumn,T comparisionValue){
-    
-// }
+void Table::deleteRow(string columnName, int primaryKeyValue) {
+	if(columnNames.find(columnName) == columnNames.end()) {
+		cerr << "[-]Error: Column Does not exists." << endl;
+		return ;
+	}
+	if(primaryKeyValue > (int)(this->flag.size())) {
+		cerr << "[-]Error: Invalid Primary key." << endl;
+		return ; 
+	}
+	this->flag[primaryKeyValue] = 1;
+}

@@ -18,6 +18,7 @@ class Table{
 		Column * primaryKey;
 		unordered_set<string >columnNames;
 		vector<ColumnRecord*> ColumnRecords;
+		vector<bool> flag;
 		// vector<pair<Column *,pair<Table *, Column *>>> foreignKey; 
 	public:
 		Table();
@@ -46,7 +47,6 @@ class Table{
         template <typename T1,typename T2>
 		void updateRow(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue);
 		
-		template <typename T>
-		void deleteRow(string comparisionColumn,T comparisionValue);
+		void deleteRow(string columnName, int primaryKeyValue);
         void close();
 };
