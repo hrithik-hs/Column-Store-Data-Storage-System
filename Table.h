@@ -2,8 +2,10 @@
 // #include <bits/stdc++.h>
 #include <iostream>
 #include <vector>
-#include <set>
+#include <map>
 #include <unordered_set>
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
 
 #include "Column.h"
 #include "ColumnRecord.h"
@@ -16,7 +18,7 @@ class Table{
 		string name, address;
 		vector<Column * > columns;
 		Column * primaryKey;
-		unordered_set<string >columnNames;
+		map<string,int> columnNames;
 		vector<ColumnRecord*> ColumnRecords;
 		// vector<pair<Column *,pair<Table *, Column *>>> foreignKey; 
 	public:
@@ -42,6 +44,8 @@ class Table{
 		vector<Column *> getColumns();
 
 		void insertRow(Row *row);
+		void selectRows(vector<string> columnNames, vector<pair<string,Data*>> conditions);
+		void deleteRows(vector<pair<string,Data*>> conditions);
 
         template <typename T1,typename T2>
 		void updateRow(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue);

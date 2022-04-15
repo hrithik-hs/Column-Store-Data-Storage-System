@@ -38,6 +38,14 @@ void Database::createTable(string tableName){
     string folderAddress = this->address+'/'+this->name+"/"+ tableName;
 	fs::create_directories(folderAddress);
 	ofstream outfile(address);
+
+	string flagAddress = folderAddress + "/" + tableName + ".flag";
+	FILE* fptr1 = fopen(&flagAddress[0], "w");
+	fclose(fptr1);
+
+	string delAddress = folderAddress + "/" + tableName + ".del";
+	FILE* fptr2 = fopen(&delAddress[0], "w");
+	fclose(fptr2);
     
 	Table* table = new Table(tableName, this->address+'/'+this->name);
 	this->tables.push_back(table);
@@ -114,6 +122,26 @@ void Database::insertRow(string  tableName,Row * row){
 	for(int i = 0; i < len; i ++) {
 		if(this->tables[i]->getName() == tableName) {
 			this->tables[i]->insertRow(row);
+			break;
+		}
+	}
+}
+
+void Database::selectRows(string tableName, vector<string> cols, vector<pair<string,Data*>> conditions){
+	int len = this->tables.size();
+	for(int i = 0; i < len; i ++) {
+		if(this->tables[i]->getName() == tableName) {
+			this->tables[i]->selectRows(cols,conditions);
+			break;
+		}
+	}
+}
+
+void Database::deleteRows(string tableName, vector<pair<string,Data*>> conditions){
+	int len = this->tables.size();
+	for(int i = 0; i < len; i ++) {
+		if(this->tables[i]->getName() == tableName) {
+			this->tables[i]->deleteRows(conditions);
 			break;
 		}
 	}
