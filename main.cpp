@@ -28,17 +28,19 @@ int main(){
     row->addElement("A");
     database->insertRow("Emp", row);
 
-    // Row * row1=new Row();
-    // row1->addElement(2);
-    // row1->addElement("def");
-    // row1->addElement(101.0f);
-    // // database->insertRow("Emp",row1);
+    Row * row1=new Row();
+    row1->addElement(2);
+    row1->addElement("def");
+    row1->addElement(101.0f);
+    row1->addElement("A");
+    database->insertRow("Emp",row1);
 
-    // Row * row2=new Row();
-    // row2->addElement(3);
-    // row2->addElement("ghi");
-    // row2->addElement(102.0f);
-    // // database->insertRow("Emp",row2);
+    Row * row2=new Row();
+    row2->addElement(3);
+    row2->addElement("ghi");
+    row2->addElement(102.0f);
+    row2->addElement("C");
+    database->insertRow("Emp",row2);
 
     // vector<string> cols={"EmpID","Name"};
     // vector<pair<string,Data*>> conditions;

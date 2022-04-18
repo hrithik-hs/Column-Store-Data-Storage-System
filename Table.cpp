@@ -75,10 +75,10 @@ void Table::addColumn(string columnName, string type){
 	if(columnName.size() && this->columnNames.find(columnName)==this->columnNames.end()){
         this->columnNames[(columnName)]=this->columns.size();
 		Column* col=new Column(columnName,this->address + "/" + this->name,type);
-		
+		// cerr << "CAT " << col->getType() << endl;
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(new ColumnRecord(columnName,type,0));
-		if(strcmp("enum", type.c_str()) == 0) {
+		if(type == "enum") {
 			for(int i = 0; i < 10; i ++) {
 				string columnAddress = this->address + "/" + this->name + "/" + columnName + "_" + to_string(i) + ".col";
 				FILE* fptr = fopen(&columnAddress[0], "w");
@@ -142,7 +142,6 @@ void Table::showTable(){
 	vector<pair<string,Data*>> conditions;
 	vector<string> cols;
 	for(auto column: this->columnNames) {
-        cout << "TABLE::SHOWTABLE() " << column.first << endl;
 		cols.push_back(column.first);
     }
 	cout<<endl;
@@ -204,10 +203,15 @@ vector<Column *> Table::getColumns(){
 }
 
 void Table::insertRow(Row *row){
+	// cerr << row->getRow().size() << endl;
     if(row->getRow().size()!=this->columns.size()){
 		return;
 	}
 	for(int i=0;i<row->getRow().size();i++){
+		// cerr << row->getRow()[i]->getType() << endl;
+		if(row->getRow()[i]->getType() == "string" && this->columns[i]->getType() == "enum") {
+			continue;
+		}
 		if(row->getRow()[i]->getType()!=this->columns[i]->getType()){
 			return;
 		}
@@ -226,6 +230,7 @@ void Table::insertRow(Row *row){
 	cout<<"Inserting into index: "<<delIndex<<endl;
 
 	for(int i=0;i<row->getRow().size();i++){
+		cerr << this->columns[i]->getType() << endl;
 		if(this->columns[i]->getType()=="int"){
 			this->columns[i]->insertValue(row->getRow()[i]->getInt(),delIndex);
 		}
@@ -239,10 +244,13 @@ void Table::insertRow(Row *row){
 			string value = row->getRow()[i]->getString();
 			vector<string> encoding = this->ColumnRecords[i]->getEncoding();
 			this->columns[i]->insertValue(value, delIndex, this->ColumnRecords[i]->getEncoding());
+			for(int j = 0; j < encoding.size(); j ++) {
+				cerr << "DE " << encoding[j] << endl; 
+			}
 			int found = -1;
-			for(int i = 0; i < encoding.size(); i ++) {
-				if(value == encoding[i]) {
-					found = i;
+			for(int j = 0; j < encoding.size(); j ++) {
+				if(value == encoding[j]) {
+					found = j;
 					break;
 				}
 			}
@@ -286,23 +294,19 @@ void Table::selectRows(vector<string> cols, vector<pair<string,Data*>> condition
 	cout<<endl;
 	string flagAddress = this->address+'/'+this->name+'/'+this->name+".flag";
 	FILE* fptr = fopen(&flagAddress[0], "r");
-    cout << "HERE " << flag << endl;
 	while(flag){
 		block++;
 		vector<int> index;
 		for(int i=0;i<blockSize;i++){
 			int fl;
 			int sz = fread(&fl, sizeof(fl), 1, fptr);
-            cout << "SZ " << sz << endl;
 			if(sz == 0){
 				flag=0;
 				break;
 			}
 			if(!fl) {
                 index.push_back(i);
-                cout << "DOING" << endl;
             }
-            cout << "TABLE::SELECTROWS() VAR INDEX " << index.back() << endl;
 		}
 		if(conditions.size()){
 			for(int i=0;i<conditions.size();i++){
@@ -331,7 +335,6 @@ void Table::selectRows(vector<string> cols, vector<pair<string,Data*>> condition
 		for(int i=0;i<cols.size();i++){
 			int colIndex = this->columnNames[cols[i]];
 			colType.push_back(this->columns[colIndex]->getType());
-            cout << colIndex << " COLINDEX" << endl;
             if(colType.back() != "enum") {
 			    ans.push_back(this->columns[colIndex]->selectRows(block,index));
             }

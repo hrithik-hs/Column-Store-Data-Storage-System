@@ -17,6 +17,7 @@ Column::Column(string name,string address,string type){
 	this->name=name;
     this->address=address;
 	this->type=type;
+    // cerr << "DOG " << this->type << endl;
     this->loadFile();
 }
 

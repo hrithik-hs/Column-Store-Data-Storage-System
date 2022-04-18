@@ -6,6 +6,7 @@ ColumnRecord::~ColumnRecord(){}
 ColumnRecord::ColumnRecord(string columnName, string columnType, int key){
 	strcpy(this->columnName, columnName.c_str());
 	strcpy(this->columnType, columnType.c_str());
+    this->difVal = 0;
     if("enum" == columnType) {
         this->isEnum = true;
     }
@@ -32,11 +33,20 @@ int ColumnRecord::getIsPrimary(){
 }
 
 vector<string> ColumnRecord::getEncoding() {
-    return this->encoding;
+    vector<string> res;
+    for(int i = 0; i < this->difVal; i ++) {
+        char temp[100];
+        strcpy(temp, this->encoding[i]);
+        res.push_back(temp);
+    }
+    return res;
 }
 
 void ColumnRecord::setEncoding(vector<string> _encoding) {
-    this->encoding = _encoding;
+    for(int i = 0; i < _encoding.size(); i ++) {
+        strcpy(this->encoding[i], _encoding[i].c_str());
+    }
+    this->difVal = _encoding.size();
 }
 
 void ColumnRecord::togIsPrimary(){

@@ -13,7 +13,8 @@ class ColumnRecord{
         char columnType[100];
         int isPrimary;
         bool isEnum;
-        vector<string> encoding;
+        int difVal;
+        char encoding[10][100];
 	public:
 		ColumnRecord();
 		ColumnRecord(string name, string address, int key);

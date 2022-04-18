@@ -72,6 +72,7 @@ void Database::addColumn(string tableName, string columnName, string datatype) {
 	int len = this->tables.size();
 	for(int i = 0; i < len; i ++) {
 		if(this->tables[i]->getName() == tableName) {
+			// cerr << "DE " << datatype << endl;
 			this->tables[i]->addColumn(columnName, datatype);
 			break;
 		}
