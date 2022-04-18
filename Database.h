@@ -40,6 +40,8 @@ class Database{
     void loadFile();
 
 		void insertRow(string tableName,Row * row);
+		void selectRows(string tableName, vector<string> cols, vector<pair<string,Data*>> conditions);
+		void deleteRows(string tableName, vector<pair<string,Data*>> conditions);
 		
 		template <typename T1,typename T2>
 		void updateRow(string tableName,string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue);
