@@ -22,9 +22,8 @@ Column::Column(string name,string address,string type){
 
 Column::~Column(){
     // fn();
-	while(!this->column.empty()){
-        delete this->column.back();
-		this->column.pop_back();
+	for(int i = 0; i < this->column.size(); i ++) {
+		delete this->column[i];
 	}
 }
 void Column::writeFile(){

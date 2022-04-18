@@ -58,8 +58,11 @@ int main(){
     database->show();
 
     database->close();
+    cerr << "[+] Database Successfully Closed" << endl;
     delete database;
+    cerr << "[+] Database Successfully Deleted" << endl;
     delete row;
+    cerr << "[+] Row Successfully Deleted" << endl;
     delete row1;
     delete row2;
     delete row3;

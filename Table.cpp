@@ -25,18 +25,12 @@ Table::Table(string name, string address){
 // }
 
 Table::~Table(){
-	while(!this->columns.empty()){
-        // tr(this->columns.back());
-		delete this->columns.back();
-		this->columns.pop_back();
+	for(int i = 0; i < this->columns.size(); i ++) {
+		delete this->columns[i];
 	}
-    // delete this->ColumnRecords.back();
-    while(!this->ColumnRecords.empty()){
-        // tr(this->ColumnRecords.back());
-        delete this->ColumnRecords.back();
-		this->ColumnRecords.pop_back();
-    }
-	delete this->primaryKey;
+	for(int i = 0; i < this->ColumnRecords.size(); i ++) {
+		delete this->ColumnRecords[i];
+	}
     // fn();
 }
 
@@ -63,9 +57,10 @@ void Table::loadFile(){
 
 void Table::writeFile(){
 	string curAddress = this->address+'/'+this->name+".tb";
-	FILE* fptr = fopen(&(curAddress)[0], "w");
+	FILE* fptr = fopen(&(curAddress)[0], "wb");
 	for(int i=0;i<this->ColumnRecords.size();i++){
-		if(this->ColumnRecords[i] != NULL && this->flag[i] == 0) 
+		// cerr << this->ColumnRecords[i]->getColName() << endl;
+		if(this->ColumnRecords[i] != NULL) 
             fwrite(this->ColumnRecords[i],sizeof(ColumnRecord),1,fptr);
 	}
 	fclose(fptr);
