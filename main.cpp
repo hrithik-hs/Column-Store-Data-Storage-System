@@ -18,6 +18,7 @@ int main(){
     database->addColumn("Emp","EmpID","int");
     database->addColumn("Emp","Name","string");
     database->addColumn("Emp","Salary","float");
+    database->setIsUniqueConstraint("Emp", "EmpID", true);
     cerr<<"create success\n";
     Row * row=new Row();
     row->addElement(1);
@@ -32,7 +33,7 @@ int main(){
     database->insertRow("Emp",row1);
 
     Row * row2=new Row();
-    row2->addElement(3);
+    row2->addElement(1);
     row2->addElement("ghi");
     row2->addElement(102.0f);
     database->insertRow("Emp",row2);

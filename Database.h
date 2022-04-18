@@ -32,12 +32,13 @@ class Database{
 		void dropColumn(string tableName, string columnName);
 		void alterColumn(string tableName, string columnName, string newName);
 		void setPrimaryKey(string tableName, string columnName);
+		void setIsUniqueConstraint(string tableName, string columnName, bool value);
 
 		void setName(string name);
 		string getName();
 		vector<Table*> getTables();
 		void writeFile();
-    void loadFile();
+    	void loadFile();
 
 		void insertRow(string tableName,Row * row);
 		void selectRows(string tableName, vector<string> cols, vector<pair<string,Data*>> conditions);

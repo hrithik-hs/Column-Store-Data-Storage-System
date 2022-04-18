@@ -107,6 +107,15 @@ void Database::setPrimaryKey(string tableName, string columnName) {
 void Database::setName(string name){
 	this->name = name;
 }
+void Database::setIsUniqueConstraint(string tableName, string columnName, bool value) {
+	for(int i = 0; i < (int)(this->tables.size()); i ++) {
+		if(this->tables[i]->getName() == tableName) {
+			this->tables[i]->setIsUniqueConstraint(columnName, value);
+			return ;
+		}
+	}
+}
+
 string Database::getName(){
 	return this->name;
 }

@@ -187,6 +187,16 @@ void Table::insertRow(Row *row){
 			return;
 		}
 	}
+	for(int i = 0; i < (int)(row->getRow().size()); i ++) {
+		string type = row->getRow()[i]->getType();
+		if(type == "int" || type == "float" || type == "string") {
+			bool result = this->columns[i]->checkConstraints(row->getRow()[i]);
+			if(result == 0) {
+				cout << "[-] Insertion Failed." << endl;
+				return ;
+			} 
+		}
+	}
 	string delAddress = this->address+'/'+this->name+'/'+this->name+".del";
 	FILE* delptr = fopen(&delAddress[0], "r+");
 	int delIndex;
@@ -344,3 +354,12 @@ void Table::deleteRows(vector<pair<string,Data*>> conditions){
 	fclose(delptr);
 }
 
+void Table::setIsUniqueConstraint(string columnName, bool value) {
+	if(this->columnNames.find(columnName) == this->columnNames.end()) {
+		cout << "[-] Column Does not Exists. Uniqueness Constraint cannot be added." << endl;
+		return;
+	}
+	int index = this->columnNames[columnName];
+	this->columns[index]->setIsUniqueConstraint(value);
+	cout << "[+] Uniqueness Constraint set successfully." << endl;
+}

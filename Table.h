@@ -52,5 +52,8 @@ class Table{
 		void updateRow(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue);
 		
 		void deleteRow(string columnName, int primaryKeyValue);
+
+		void setIsNotNullConstraint(string columnName, bool value);
+		void setIsUniqueConstraint(string columnName, bool value);
         void close();
 };
