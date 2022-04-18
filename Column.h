@@ -35,12 +35,14 @@ class Column{
 		void insertValue(float value, int index);
 		void insertValue(int value, int index);
 		void insertValue(string value, int index);
+		void insertValue(string value, int index, vector<string> encoding);
 
 		// void deleteValue(int index);
 
 		void alterValue(int index, int newValue);
 		void alterValue(int index, float newValue);
 		void alterValue(int index, string newValue);
+		void alterValue(int index, string newValue, vector<string> encoding);
 
 		vector<Data *> getColumn();
 		string getType();
@@ -55,5 +57,7 @@ class Column{
 		vector<int> selectRows(int block,int value, vector<int> index);
 		vector<int> selectRows(int block,float value, vector<int> index);
 		vector<int> selectRows(int block,string value, vector<int> index);
+		vector<int> selectRows(int block, string value, vector<int> index, vector<string> encoding);
 		vector<Data*> selectRows(int block, vector<int> index);
+		vector<Data*> selectRows(int block, vector<int> index, vector<string> encoding);
 };

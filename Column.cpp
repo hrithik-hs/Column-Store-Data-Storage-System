@@ -60,6 +60,53 @@ void Column::insertValue(string value, int index){
     fclose(writeptr);
 }
 
+void Column::insertValue(string value, int index, vector<string> encoding) {
+    bool writeData = true;
+    int found = -1;
+    for(int i = 0; i < encoding.size(); i ++) {
+        if(value == encoding[i]) {
+            found = i;
+            break;
+        }
+    }
+    if(found == -1) {
+        if(encoding.size() == 0) {
+            found = 0;
+        }
+        else {
+            string file_source1 = this->address + "/" + this->name + "_0" + ".col";
+            string file_source2 = this->address + "/" + this->name + "_" + to_string(encoding.size()) + ".col";
+            FILE* fptr1 = fopen(&file_source1[0], "r+");
+            bool data = 0;
+            int count = 0;
+            while(true) {
+                int sz = fread(&data, sizeof(data), 1, fptr1);
+                if(sz == 0) break;
+                count ++;
+            }
+            fclose(fptr1);
+            FILE* fptr2 = fopen(&file_source2[0], "r+");
+            for(int i = 0; i < count; i ++) {
+                int sz = fwrite(&data, sizeof(data), 1, fptr2);
+            }
+            fclose(fptr2);
+            found = encoding.size();
+        }
+        encoding.push_back(value);
+    }
+    for(int i = 0; i < encoding.size(); i ++) {
+        string file_source = this->address + "/" + this->name + "_" + to_string(i) + ".col";
+        FILE* writeptr = fopen(&file_source[0], "r+");
+        bool writeData = (i == found);
+        if(index != -1) {
+            fseek(writeptr, index*sizeof(writeData), SEEK_SET);
+        }
+        else fseek(writeptr, 0, SEEK_END);
+        int sz = fwrite(&writeData, sizeof(writeData), 1, writeptr);
+        fclose(writeptr);
+    }
+}
+
 // void Column::deleteValue(int index){
 // 	if(index <this->column.size() && index >=0)
 // 		this->column[index]=NULL;
@@ -160,6 +207,29 @@ vector<int> Column::selectRows(int block,string value, vector<int> index){
     return ans;
 }
 
+vector<int> Column::selectRows(int block, string value, vector<int> index, vector<string> encoding) {
+    if(index.size() == 0) return index;
+    int found = -1;
+    for(int i = 0; i < encoding.size(); i ++) {
+        if(value == encoding[i]) {
+            found = i;
+            break;
+        }
+    }
+    if(found == -1) return vector<int>();
+    string file_source = this->address + "/" + this->name + "_" + to_string(found) + ".col";
+    FILE* readptr = fopen(&file_source[0], "r");
+    vector<int> ans;
+    for(int i = 0; i < index.size(); i ++) {
+        bool readData;
+        fseek(readptr, (block * blockSize + index[i]) * sizeof(readData), SEEK_SET);
+        int sz = fread(&readData, sizeof(readData), 1, readptr);
+        if(readData) ans.push_back(index[i]);
+    }
+    fclose(readptr);
+    return ans;
+}
+
 vector<Data*> Column::selectRows(int block, vector<int> index){
     vector<Data*> ans;
     string file_source=this->address+"/"+this->name+".col";
@@ -192,5 +262,31 @@ vector<Data*> Column::selectRows(int block, vector<int> index){
         }
     }
     fclose(readptr);
+    return ans;
+}
+
+vector<Data*> Column::selectRows(int block, vector<int> index, vector<string> encoding){
+    vector<Data*> ans;
+    vector<FILE* > rptr;
+    for(int i = 0; i < encoding.size(); i ++) {
+        string file_name = this->address + "/" + this->name + "_" + to_string(i) + ".col";
+        rptr.push_back(fopen(&file_name[0], "r"));
+    }
+    for(int i = 0; i < index.size(); i ++) {
+        bool readData[10];
+        for(int j = 0; j < encoding.size(); j ++) {
+            fseek(rptr[j], (block * blockSize + index[i]) * sizeof(bool), SEEK_SET);
+            int sz = fread(&(readData[j]), sizeof(readData[j]), 1, rptr[j]);
+        }
+        char value[100];
+        for(int j = 0; j < encoding.size(); j ++) {
+            if(readData[j]) {
+                strcpy(value, encoding[j].c_str());
+                break;
+            }
+        }
+        DataString *ptr = new DataString(value);
+        ans.push_back(ptr);
+    }
     return ans;
 }

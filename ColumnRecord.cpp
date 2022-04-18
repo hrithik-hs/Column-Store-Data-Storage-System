@@ -6,6 +6,12 @@ ColumnRecord::~ColumnRecord(){}
 ColumnRecord::ColumnRecord(string columnName, string columnType, int key){
 	strcpy(this->columnName, columnName.c_str());
 	strcpy(this->columnType, columnType.c_str());
+    if("enum" == columnType) {
+        this->isEnum = true;
+    }
+    else {
+        this->isEnum = false;
+    }
     this->isPrimary = key;
 }
 
@@ -23,6 +29,14 @@ string ColumnRecord::getColType(){
 
 int ColumnRecord::getIsPrimary(){
     return this->isPrimary;
+}
+
+vector<string> ColumnRecord::getEncoding() {
+    return this->encoding;
+}
+
+void ColumnRecord::setEncoding(vector<string> _encoding) {
+    this->encoding = _encoding;
 }
 
 void ColumnRecord::togIsPrimary(){

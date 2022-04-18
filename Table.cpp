@@ -78,9 +78,18 @@ void Table::addColumn(string columnName, string type){
 		
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(new ColumnRecord(columnName,type,0));
-		string columnAddress = this->address+'/'+this->name+'/'+columnName+".col";
-		FILE* fptr = fopen(&columnAddress[0], "w");
-		fclose(fptr);
+		if(strcmp("enum", type.c_str()) == 0) {
+			for(int i = 0; i < 10; i ++) {
+				string columnAddress = this->address + "/" + this->name + "/" + columnName + "_" + to_string(i) + ".col";
+				FILE* fptr = fopen(&columnAddress[0], "w");
+				fclose(fptr);
+			}
+		}
+		else {
+			string columnAddress = this->address + '/' + this->name + '/' + columnName + ".col";
+			FILE* fptr = fopen(&columnAddress[0], "w");
+			fclose(fptr);
+		}	
 	}
     else{
         cerr << "Column Already Exists!" << endl;
@@ -102,17 +111,29 @@ void Table::dropColumn(string columnName){
 
 void Table::alterColumn(string oldName, string newName){ /*only for renaming*/
 	if(this->columnNames.find(oldName)==this->columnNames.end() || this->columnNames.find(newName)!=this->columnNames.end()) return;
-	string oldAddress = this->address+'/'+this->name+'/'+oldName+".col";
-	string newAddress = this->address+'/'+this->name+'/'+newName+".col";
-	int f=rename(&oldAddress[0],&newAddress[0]);
-	if(f!=0) return;
+	string coltype;
 	for(int i=0;i<this->ColumnRecords.size();i++){
 		if(this->ColumnRecords[i] && this->ColumnRecords[i]->getColName()==oldName){
+			coltype = this->columns[i]->getType();
 			this->ColumnRecords[i]->setColName(newName);
 			this->columns[i]->setName(newName);
 			this->columnNames[(newName)]=this->columnNames[(oldName)];
 			this->columnNames.erase(oldName);
 			break;
+		}
+	}
+	if(coltype != "enum") {
+		string oldAddress = this->address + '/' + this->name + '/' + oldName + ".col";
+		string newAddress = this->address + '/' + this->name + '/' + newName + ".col";
+		int f = rename(&oldAddress[0],&newAddress[0]);
+		if(f!=0) return;
+	}
+	else {
+		for(int i = 0; i < 10; i ++) {
+			string oldAddress = this->address + '/' + this->name + '/' + oldName + "_" + to_string(i) + ".col";
+			string newAddress = this->address + '/' + this->name + '/' + newName + "_" + to_string(i) + ".col";
+			int f = rename(&oldAddress[0], &newAddress[0]);
+			if(f != 0) return;
 		}
 	}
 } 
@@ -121,6 +142,7 @@ void Table::showTable(){
 	vector<pair<string,Data*>> conditions;
 	vector<string> cols;
 	for(auto column: this->columnNames) {
+        cout << "TABLE::SHOWTABLE() " << column.first << endl;
 		cols.push_back(column.first);
     }
 	cout<<endl;
@@ -213,6 +235,22 @@ void Table::insertRow(Row *row){
 		else if(this->columns[i]->getType()=="string"){
 			this->columns[i]->insertValue(row->getRow()[i]->getString(),delIndex);
 		}
+		else if(this->columns[i]->getType()=="enum") {
+			string value = row->getRow()[i]->getString();
+			vector<string> encoding = this->ColumnRecords[i]->getEncoding();
+			this->columns[i]->insertValue(value, delIndex, this->ColumnRecords[i]->getEncoding());
+			int found = -1;
+			for(int i = 0; i < encoding.size(); i ++) {
+				if(value == encoding[i]) {
+					found = i;
+					break;
+				}
+			}
+            if(found == -1) {
+                encoding.push_back(value);
+                this->ColumnRecords[i]->setEncoding(encoding);
+            }
+		}
 	}
 
 	string flagAddress = this->address+'/'+this->name+'/'+this->name+".flag";
@@ -248,17 +286,23 @@ void Table::selectRows(vector<string> cols, vector<pair<string,Data*>> condition
 	cout<<endl;
 	string flagAddress = this->address+'/'+this->name+'/'+this->name+".flag";
 	FILE* fptr = fopen(&flagAddress[0], "r");
+    cout << "HERE " << flag << endl;
 	while(flag){
 		block++;
 		vector<int> index;
 		for(int i=0;i<blockSize;i++){
 			int fl;
 			int sz = fread(&fl, sizeof(fl), 1, fptr);
+            cout << "SZ " << sz << endl;
 			if(sz == 0){
 				flag=0;
 				break;
 			}
-			if(!fl) index.push_back(i);
+			if(!fl) {
+                index.push_back(i);
+                cout << "DOING" << endl;
+            }
+            cout << "TABLE::SELECTROWS() VAR INDEX " << index.back() << endl;
 		}
 		if(conditions.size()){
 			for(int i=0;i<conditions.size();i++){
@@ -272,6 +316,10 @@ void Table::selectRows(vector<string> cols, vector<pair<string,Data*>> condition
 				else if(this->columns[colIndex]->getType()=="string"){
 					index = this->columns[colIndex]->selectRows(block,conditions[i].second->getString(),index);
 				}
+                else if(this->columns[colIndex]->getType()=="enum"){
+                    cout << "Calling This" << endl;
+					index = this->columns[colIndex]->selectRows(block,conditions[i].second->getString(),index, this->ColumnRecords[colIndex]->getEncoding());
+				}
 			}
 		}
 		// cout<<"Printing index array for block "<<block<<":"<<endl;
@@ -283,13 +331,23 @@ void Table::selectRows(vector<string> cols, vector<pair<string,Data*>> condition
 		for(int i=0;i<cols.size();i++){
 			int colIndex = this->columnNames[cols[i]];
 			colType.push_back(this->columns[colIndex]->getType());
-			ans.push_back(this->columns[colIndex]->selectRows(block,index));
+            cout << colIndex << " COLINDEX" << endl;
+            if(colType.back() != "enum") {
+			    ans.push_back(this->columns[colIndex]->selectRows(block,index));
+            }
+            else {
+                cout << "\n TABLE::SELECT ROWS " << "ENUM" << endl; 
+                ans.push_back(this->columns[colIndex]->selectRows(block,index, this->ColumnRecords[colIndex]->getEncoding()));
+            }
 		}
+        for(auto i : index) {
+            cout << i << endl;
+        }
 		for(int j=0;j<index.size();j++){
 			for(int i=0;i<cols.size();i++){
-				if(colType[i]=="int") cout<<ans[i][j]->getInt()<<"\t";
-				else if(colType[i]=="float") cout<<ans[i][j]->getFloat()<<"\t";
-				if(colType[i]=="string") cout<<string(ans[i][j]->getString())<<"\t";
+				if(colType[i]=="int") cout<< ans[i][j]->getInt() <<"\t";
+				else if(colType[i]=="float") cout<< ans[i][j]->getFloat() << "\t";
+				if(colType[i]=="string" || colType[i] == "enum") cout<<string(ans[i][j]->getString())<<endl;
 			}
 			cout<<endl;
 		}
@@ -327,6 +385,9 @@ void Table::deleteRows(vector<pair<string,Data*>> conditions){
 				}
 				else if(this->columns[colIndex]->getType()=="string"){
 					index = this->columns[colIndex]->selectRows(block,conditions[i].second->getString(),index);
+				}
+                else if(this->columns[colIndex]->getType()=="enum"){
+					index = this->columns[colIndex]->selectRows(block,conditions[i].second->getString(),index, this->ColumnRecords[colIndex]->getEncoding());
 				}
 			}
 		}
