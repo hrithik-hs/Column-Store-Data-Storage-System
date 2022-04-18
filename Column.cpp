@@ -21,119 +21,49 @@ Column::Column(string name,string address,string type){
 }
 
 Column::~Column(){
-    fn();
+    // fn();
 	while(!this->column.empty()){
-		// tr((this->column.back()==NULL));
-		// tr(sizeof(this->column.back()));
-        // tr(typeid((DataInteger *)this->column.back()).name());
-        // tr((DataInteger *)this->column.back()->getInt());
         delete this->column.back();
-        // tr(1);
 		this->column.pop_back();
 	}
-    // fn();
 }
-
 void Column::writeFile(){
-    fn();
-    // cerr << "WriteFileColumn " << this->name << " " << this->address << endl;
-	string file_source=this->address+"/"+this->name+".col";
-    FILE* writeptr = fopen(&file_source[0], "w");
-    if(!writeptr) {
-        fn();
-        cout << "Cannot open the write file" << endl;
-        return;
-    }
-    
-    for(int i = 0; i < column.size(); i ++) {
-       
-		if(this->type=="int"){
-            DataInteger * ptr=new DataInteger(this->column[i]->getInt());
-            // DataInteger ptr(this->column[i]->getInt());
-            tr(this->column[i]->getInt());
-            int sz=fwrite(ptr,sizeof(DataInteger),1,writeptr);
-            // tr("Write size:");
-            // tr(sz);
-		}
-		// else if(this->type=="float"){
-        //     fwrite(this->column[i],sizeof(DataFloat),1,writeptr);
-		// }
-		// else if(this->type=="string"){
-        //     fwrite(this->column[i],sizeof(DataString),1,writeptr);
-		// }
-        
-    }
-    fclose(writeptr);
-
-    tr("\nread-----\n");
-    FILE* readptr = fopen(&file_source[0], "r");
-    DataInteger *ptr=new DataInteger();
-    // int sz = fread((DataInteger *)ptr, sizeof(DataInteger), 1, readptr);
-    int sz = fread(ptr, sizeof(ptr), 1, readptr);
-    // if(sz == 0) break;
-    tr(typeid(ptr).name());
-    tr("ptr value:");tr(ptr->getInt());
-    fclose(readptr);
-    tr("read-----\n");
 }
 
 void Column::loadFile(){
-    fn();
-	string file_source=this->address+"/"+this->name+".col";
-    FILE* readptr = fopen(&file_source[0], "r");
-    if(!readptr) {
-        fn();
-        cout << "Cannot open the load file" << endl;
-        return;
-    }
-    while(1) {
-		if(this->type=="int"){
-			DataInteger *ptr=new DataInteger();
-			// int sz = fread((DataInteger *)ptr, sizeof(DataInteger), 1, readptr);
-			int sz = fread(ptr, sizeof(ptr), 1, readptr);
-            if(sz == 0) break;
-            tr(typeid(ptr).name());
-            tr("ptr value:");
-            tr(ptr->getInt());
-			// this->column.push_back(ptr);
-            // ptr->getInt();
-            // tr(sz);
-            // tr("Inside load column:");
-            
-		}
-		else if(this->type=="float"){
-			Data *ptr = new DataFloat();
-			int sz = fread(ptr, sizeof(DataFloat), 1, readptr);
-            if(sz == 0) break;
-			column.push_back(ptr);
-		}
-		else if(this->type=="string"){
-			Data *ptr = new DataString();
-			int sz = fread(ptr, sizeof(DataString), 1, readptr);
-            if(sz == 0) break;
-			column.push_back(ptr);
-		}
-    }
-    fclose(readptr);
 }
 
-void Column::insertValue(float value){
-	Data * data=new DataFloat(value);
-	this->column.push_back(data);
+void Column::insertValue(float value, int index){
+    string file_source=this->address+"/"+this->name+".col";
+    FILE* writeptr = fopen(&file_source[0], "r+");
+    if(index!=-1) fseek(writeptr,index*sizeof(value),SEEK_SET);
+    else fseek(writeptr,0,SEEK_END);
+    int sz=fwrite(&value,sizeof(value),1,writeptr);
+    fclose(writeptr);
 }
-void Column::insertValue(int value){
-	Data * data=new DataInteger(value);
-	this->column.push_back(data);
+void Column::insertValue(int value, int index){
+    string file_source=this->address+"/"+this->name+".col";
+    FILE* writeptr = fopen(&file_source[0], "r+");
+    if(index!=-1) fseek(writeptr,index*sizeof(value),SEEK_SET);
+    else fseek(writeptr,0,SEEK_END);
+    int sz=fwrite(&value,sizeof(value),1,writeptr);
+    fclose(writeptr);
 }
-void Column::insertValue(string value){
-	Data * data=new DataString(value);
-	this->column.push_back(data);
+void Column::insertValue(string value, int index){
+    char writeData[100];
+    strcpy(writeData,value.c_str());
+    string file_source=this->address+"/"+this->name+".col";
+    FILE* writeptr = fopen(&file_source[0], "r+");
+    if(index!=-1) fseek(writeptr,index*sizeof(writeData),SEEK_SET);
+    else fseek(writeptr,0,SEEK_END);
+    int sz=fwrite(&writeData,sizeof(writeData),1,writeptr);
+    fclose(writeptr);
 }
 
-void Column::deleteValue(int index){
-	if(index <this->column.size() && index >=0)
-		this->column[index]=NULL;
-}
+// void Column::deleteValue(int index){
+// 	if(index <this->column.size() && index >=0)
+// 		this->column[index]=NULL;
+// }
 
 void Column::alterValue(int index, int newValue){
 	if(index <this->column.size() && index >=0)
@@ -172,25 +102,95 @@ void Column::setAddress(string address){
 }
 
 void Column::close() {
-    fn();
     writeFile();
 }
 
-void Column::showColumn() {
-    fn();
-    tr("column size : ");
-    tr(this->column.size());
-    tr(typeid(this->column.back()).name());
-    for(int i=0;i< this->column.size();i++) {
-        if(this->getType() == "int"){
-            // cout << this->column[i]->getInt() << endl;
-            // tr(this->column[i]->getInt());
-        }
-        // if(data->getType() == "string"){
-        //     cout << data->getString() << endl;
-        // }
-        // if(data->getType() == "float"){
-        //     cout << data->getFloat() << endl;
-        // }
+vector<int> Column::selectRows(int block,int value, vector<int> index){
+    if(index.size()==0) return index;
+    string file_source=this->address+"/"+this->name+".col";
+    FILE* readptr = fopen(&file_source[0], "r");
+    // if(!readptr) {
+    //     cout << "Cannot open the load file" << endl;
+    //     return;
+    // }
+    vector<int> ans;
+    for(int i=0;i<index.size();i++){
+        fseek(readptr,(block*blockSize + index[i])*sizeof(int),SEEK_SET);
+        int readData;
+		int sz = fread(&readData, sizeof(readData), 1, readptr);
+        if(readData==value) ans.push_back(index[i]);    
     }
+    fclose(readptr);
+    return ans;
+}
+vector<int> Column::selectRows(int block,float value, vector<int> index){
+    if(index.size()==0) return index;
+    string file_source=this->address+"/"+this->name+".col";
+    FILE* readptr = fopen(&file_source[0], "r");
+    // if(!readptr) {
+    //     cout << "Cannot open the load file" << endl;
+    //     return;
+    // }
+    vector<int> ans;
+    for(int i=0;i<index.size();i++){
+        fseek(readptr,(block*blockSize + index[i])*sizeof(float),SEEK_SET);
+        float readData;
+		int sz = fread(&readData, sizeof(readData), 1, readptr);
+        if(readData==value) ans.push_back(index[i]);    
+    }
+    fclose(readptr);
+    return ans;
+}
+vector<int> Column::selectRows(int block,string value, vector<int> index){
+    if(index.size()==0) return index;
+    string file_source=this->address+"/"+this->name+".col";
+    FILE* readptr = fopen(&file_source[0], "r");
+    // if(!readptr) {
+    //     cout << "Cannot open the load file" << endl;
+    //     return;
+    // }
+    vector<int> ans;
+    for(int i=0;i<index.size();i++){
+        char readData[100];
+        fseek(readptr,(block*blockSize + index[i])*sizeof(readData),SEEK_SET);
+		int sz = fread(&readData, sizeof(readData), 1, readptr);
+        if(string(readData)==value) ans.push_back(index[i]);    
+    }
+    fclose(readptr);
+    return ans;
+}
+
+vector<Data*> Column::selectRows(int block, vector<int> index){
+    vector<Data*> ans;
+    string file_source=this->address+"/"+this->name+".col";
+    FILE* readptr = fopen(&file_source[0], "r");
+    if(this->type == "int"){
+        for(int i=0;i<index.size();i++){
+            fseek(readptr,(block*blockSize + index[i])*sizeof(int),SEEK_SET);
+            int readData;
+            int sz = fread(&readData, sizeof(readData), 1, readptr);
+            DataInteger *ptr=new DataInteger(readData);
+            ans.push_back(ptr);
+        }
+    }
+    else if(this->type == "float"){
+        for(int i=0;i<index.size();i++){
+            fseek(readptr,(block*blockSize + index[i])*sizeof(float),SEEK_SET);
+            float readData;
+            int sz = fread(&readData, sizeof(readData), 1, readptr);
+            DataFloat *ptr=new DataFloat(readData);
+            ans.push_back(ptr);
+        }
+    }
+    else if(this->type == "string"){
+        for(int i=0;i<index.size();i++){
+            char readData[100];
+            fseek(readptr,(block*blockSize + index[i])*sizeof(readData),SEEK_SET);
+            int sz = fread(&readData, sizeof(readData), 1, readptr);
+            DataString *ptr=new DataString(readData);
+            ans.push_back(ptr);
+        }
+    }
+    fclose(readptr);
+    return ans;
 }

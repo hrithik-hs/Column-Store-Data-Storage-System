@@ -1,3 +1,4 @@
+
 #include "Data.h"
 #define tr(x) cerr<<x<<endl
 #define fn() cerr<<__PRETTY_FUNCTION__<<endl;
@@ -9,7 +10,8 @@ Data::Data(){}
 //    strcpy(this->type, type.c_str());
 // }
 
-Data::~Data(){fn();}
+Data::~Data(){}
+
 
 // string Data::getType(){
 //     return this->type;

@@ -3,26 +3,31 @@
 #include <iostream>
 #include <vector>
 #include <set>
-#include "Column.h"
+
+#include "Data.h"
+#include "DataInteger.h"
+#include "DataFloat.h"
+#include "DataString.h"
 
 using namespace std;
 
 class Row{
 	private:
-		vector<Column * >row;
+		vector<Data * >row;
 		//code
 	public:
 		Row();
-		Row(vector<Column*>row);
+		Row(vector<Data*>row);
 		// Row(const Row &row); //copy constuctor (if needed)
 		~Row();
 
-		// void addElement(Column * element);
-		// template <typename T>
-		void addElement(string type, int value);
+		void addElement(int value);
+		void addElement(float value);
+		void addElement(string value);
 
-		void setRow(vector<Column *> row);
-		vector<Column *> getRow();
+
+		void setRow(vector<Data *> row);
+		vector<Data *> getRow();
 
 		//code
 };

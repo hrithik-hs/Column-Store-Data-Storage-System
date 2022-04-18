@@ -15,14 +15,16 @@ Database::Database(string name, vector<Table *> & tables){
     this->loadFile();
 }
 Database::~Database(){
-    fn();
+    // fn();
     while(!this->tables.empty()){
 		delete this->tables.back();
-		delete this->tableRecords.back();
 		this->tables.pop_back();
+	}
+    while(!this->tableRecords.empty()){
+		delete this->tableRecords.back();
 		this->tableRecords.pop_back();
 	}
-    // fn();
+
 }
 
 void Database::createTable(string tableName){
@@ -36,6 +38,14 @@ void Database::createTable(string tableName){
     string folderAddress = this->address+'/'+this->name+"/"+ tableName;
 	fs::create_directories(folderAddress);
 	ofstream outfile(address);
+
+	string flagAddress = folderAddress + "/" + tableName + ".flag";
+	FILE* fptr1 = fopen(&flagAddress[0], "w");
+	fclose(fptr1);
+
+	string delAddress = folderAddress + "/" + tableName + ".del";
+	FILE* fptr2 = fopen(&delAddress[0], "w");
+	fclose(fptr2);
     
 	Table* table = new Table(tableName, this->address+'/'+this->name);
 	this->tables.push_back(table);
@@ -97,7 +107,6 @@ void Database::setPrimaryKey(string tableName, string columnName) {
 		}
 	}
 }
-
 void Database::setName(string name){
 	this->name = name;
 }
@@ -113,6 +122,26 @@ void Database::insertRow(string  tableName,Row * row){
 	for(int i = 0; i < len; i ++) {
 		if(this->tables[i]->getName() == tableName) {
 			this->tables[i]->insertRow(row);
+			break;
+		}
+	}
+}
+
+void Database::selectRows(string tableName, vector<string> cols, vector<pair<string,Data*>> conditions){
+	int len = this->tables.size();
+	for(int i = 0; i < len; i ++) {
+		if(this->tables[i]->getName() == tableName) {
+			this->tables[i]->selectRows(cols,conditions);
+			break;
+		}
+	}
+}
+
+void Database::deleteRows(string tableName, vector<pair<string,Data*>> conditions){
+	int len = this->tables.size();
+	for(int i = 0; i < len; i ++) {
+		if(this->tables[i]->getName() == tableName) {
+			this->tables[i]->deleteRows(conditions);
 			break;
 		}
 	}
@@ -144,10 +173,10 @@ void Database::loadFile() {
     string curAddress = this->address+'/'+this->name+".db";
 	string folderAddress = this->address+'/'+this->name;
 	FILE* fptr = fopen(&curAddress[0], "rb");
-	TableRecord *ptr = new TableRecord();
-    int sz;
-	while(sz=fread(ptr, sizeof(TableRecord), 1, fptr)){
-        // cerr << typeid(ptr).name() << endl; 
+	while(1){
+	    TableRecord *ptr = new TableRecord();
+        int sz=fread(ptr, sizeof(TableRecord), 1, fptr);
+
         if(sz == 0) break;
         // cerr << (ptr->getName()) << endl;
         this->tableRecords.push_back(ptr);
@@ -168,7 +197,6 @@ void Database::writeFile() {
 }
 
 void Database::close() {
-    fn();
     writeFile();
     for(auto table: this->tables) {
         table->close();
@@ -176,7 +204,6 @@ void Database::close() {
 }
 
 void Database::show() {
-    fn();
     for(auto table : this->tables) {
         cout << "Printing " << table->getName() << endl;
         table->showTable();

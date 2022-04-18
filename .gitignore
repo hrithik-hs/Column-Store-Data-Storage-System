@@ -7,3 +7,9 @@ File/Sample/Emp.tb
 File/Sample/Emp/EmpID.col
 File/Sample/Emp/Name.col
 File/Sample/Emp/Salary.col
+<<<<<<< HEAD
+=======
+File/Sample/Emp/Emp.del
+File/Sample/Emp/Emp.flag
+
+>>>>>>> 1fe560f0bf64e599bf8a5f2493f515c49129e4c2

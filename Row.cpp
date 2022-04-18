@@ -3,7 +3,7 @@
 
 Row::Row(){}
 
-Row::Row(vector<Column*>row){
+Row::Row(vector<Data*>row){
 	this->row=row;
 }
 
@@ -16,19 +16,25 @@ Row::~Row(){
 	}
 }
 
-// void addElement(Column * element);
-// template <typename T>
-void Row::addElement(string type, int value){
-	Column* col=new Column();
-	col->insertValue(value);
-	col->setType(type);
-	this->row.push_back(col);
+void Row::addElement(int value){
+	Data * data=new DataInteger(value);
+	this->row.push_back(data);
 }
 
-void Row::setRow(vector<Column *> row){
+void Row::addElement(float value){
+	Data * data=new DataFloat(value);
+	this->row.push_back(data);
+}
+
+void Row::addElement(string value){
+	Data * data=new DataString(value);
+	this->row.push_back(data);
+}
+
+void Row::setRow(vector<Data *> row){
 	this->row=row;
 }
 
-vector<Column *> Row::getRow(){
+vector<Data *> Row::getRow(){
 	return this->row;
 }

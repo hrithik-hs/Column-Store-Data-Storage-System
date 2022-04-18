@@ -3,12 +3,16 @@
 #include <iostream>
 #include <vector>
 #include <set>
+#include <stdio.h>
+#include <unistd.h>
 
 #include "Data.h"
 #include "DataInteger.h"
 #include "DataFloat.h"
 #include "DataString.h"
 using namespace std;
+
+#define blockSize 2
 
 
 class Column{
@@ -28,11 +32,11 @@ class Column{
 		void loadFile();
 		
 
-		void insertValue(float value);
-		void insertValue(int value);
-		void insertValue(string value);
+		void insertValue(float value, int index);
+		void insertValue(int value, int index);
+		void insertValue(string value, int index);
 
-		void deleteValue(int index);
+		// void deleteValue(int index);
 
 		void alterValue(int index, int newValue);
 		void alterValue(int index, float newValue);
@@ -47,5 +51,9 @@ class Column{
 		void setType(string type);
 		void setAddress(string address);
         void close();
-        void showColumn();
+
+		vector<int> selectRows(int block,int value, vector<int> index);
+		vector<int> selectRows(int block,float value, vector<int> index);
+		vector<int> selectRows(int block,string value, vector<int> index);
+		vector<Data*> selectRows(int block, vector<int> index);
 };

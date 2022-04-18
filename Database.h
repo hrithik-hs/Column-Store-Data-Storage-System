@@ -11,6 +11,7 @@
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 
+
 using namespace std;
 
 class Database{
@@ -36,9 +37,11 @@ class Database{
 		string getName();
 		vector<Table*> getTables();
 		void writeFile();
-        void loadFile();
+    void loadFile();
 
 		void insertRow(string tableName,Row * row);
+		void selectRows(string tableName, vector<string> cols, vector<pair<string,Data*>> conditions);
+		void deleteRows(string tableName, vector<pair<string,Data*>> conditions);
 		
 		template <typename T1,typename T2>
 		void updateRow(string tableName,string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue);
@@ -47,4 +50,5 @@ class Database{
 		void deleteRow(string tableName,string comparisionColumn,T comparisionValue);
         void close();
         void show();
+
 };
