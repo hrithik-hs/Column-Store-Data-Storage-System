@@ -49,14 +49,15 @@ void Table::loadFile(){
 	    ColumnRecord* ptr = new ColumnRecord();
 		int sz=fread(ptr, sizeof(ColumnRecord), 1, fptr);
         if(sz==0)break;
-
 		this->columnNames[(ptr->getColName())]=i;
 		i++;
+
 		Column* col=new Column(ptr->getColName(),folderAddress,ptr->getColType());
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(ptr);
 		if(ptr->getIsPrimary()) this->primaryKey=this->columns.back();
 	}
+	this->flag.assign(this->ColumnRecords.size(), 0);
 	fclose(fptr);
 }
 
@@ -64,7 +65,7 @@ void Table::writeFile(){
 	string curAddress = this->address+'/'+this->name+".tb";
 	FILE* fptr = fopen(&(curAddress)[0], "w");
 	for(int i=0;i<this->ColumnRecords.size();i++){
-		if(this->ColumnRecords[i] != NULL) 
+		if(this->ColumnRecords[i] != NULL && this->flag[i] == 0) 
             fwrite(this->ColumnRecords[i],sizeof(ColumnRecord),1,fptr);
 	}
 	fclose(fptr);
@@ -122,6 +123,7 @@ void Table::showTable(){
 	vector<string> cols;
 	for(auto column: this->columnNames) {
 		cols.push_back(column.first);
+
     }
 	cout<<endl;
 	this->selectRows(cols,conditions);
@@ -190,7 +192,6 @@ void Table::insertRow(Row *row){
 			return;
 		}
 	}
-
 	string delAddress = this->address+'/'+this->name+'/'+this->name+".del";
 	FILE* delptr = fopen(&delAddress[0], "r+");
 	int delIndex;
@@ -204,6 +205,7 @@ void Table::insertRow(Row *row){
 	cout<<"Inserting into index: "<<delIndex<<endl;
 
 	for(int i=0;i<row->getRow().size();i++){
+
 		if(this->columns[i]->getType()=="int"){
 			this->columns[i]->insertValue(row->getRow()[i]->getInt(),delIndex);
 		}
@@ -227,6 +229,7 @@ void Table::insertRow(Row *row){
 
 void Table::close() {
     writeFile();
+	if(this->columns.size() == 0) return ;
     for(auto column: this->columns) {
         column->close();
     }
@@ -345,3 +348,4 @@ void Table::deleteRows(vector<pair<string,Data*>> conditions){
 	fclose(fptr);
 	fclose(delptr);
 }
+

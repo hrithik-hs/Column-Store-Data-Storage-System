@@ -53,6 +53,7 @@ int main(){
     database->insertRow("Emp",row3);
 
 
+
     cerr<<"\n----\n";
     database->show();
 
@@ -62,6 +63,7 @@ int main(){
     delete row1;
     delete row2;
     delete row3;
+
 
     return 0;
 }
