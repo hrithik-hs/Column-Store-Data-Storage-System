@@ -23,9 +23,8 @@ Column::Column(string name,string address,string type){
 
 Column::~Column(){
     // fn();
-	while(!this->column.empty()){
-        delete this->column.back();
-		this->column.pop_back();
+	for(int i = 0; i < this->column.size(); i ++) {
+		delete this->column[i];
 	}
 }
 void Column::writeFile(){
@@ -147,6 +146,11 @@ void Column::setType(string type){
 }
 void Column::setAddress(string address){
 	this->address=address;
+}
+
+
+void Column::setIsUniqueConstraint(bool value) {
+    this->isUnique = value;
 }
 
 void Column::close() {
@@ -290,4 +294,62 @@ vector<Data*> Column::selectRows(int block, vector<int> index, vector<string> en
         ans.push_back(ptr);
     }
     return ans;
+}
+bool Column::checkConstraints(Data* data) {
+    if(this->isUnique == true) {
+        bool flag = 0;
+        if(data->getType() == "int") {
+            flag = checkIsUniqueConstraint(data->getInt());
+        }
+        else if(data->getType() == "float") {
+            flag = checkIsUniqueConstraint(data->getFloat());
+        }
+        else if(data->getType() == "string") {
+            flag = checkIsUniqueConstraint(data->getString());
+        }
+        if(flag) {
+            cout << "[+] Uniqueness constraint verified." << endl;
+        }
+        else {
+            cout << "[-] Uniqueness constraint violated." << endl;
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Column::checkIsUniqueConstraint(int value) {
+    string file_source=this->address+"/"+this->name+".col";
+    FILE* readptr = fopen(&file_source[0], "r");
+    while(1) {
+        int data;
+        int sz = fread(&data, sizeof(data), 1, readptr);
+        if(sz == 0) break;
+        if(data == value) return false;
+    }
+    return true;
+}
+
+bool Column::checkIsUniqueConstraint(float value) {
+    string file_source=this->address+"/"+this->name+".col";
+    FILE* readptr = fopen(&file_source[0], "r");
+    while(1) {
+        float data;
+        int sz = fread(&data, sizeof(data), 1, readptr);
+        if(sz == 0) break;
+        if(data == value) return false;
+    }
+    return true;
+}
+
+bool Column::checkIsUniqueConstraint(string value) {
+    string file_source=this->address+"/"+this->name+".col";
+    FILE* readptr = fopen(&file_source[0], "r");
+    while(1) {
+        char data[100];
+        int sz = fread(&data, sizeof(data), 1, readptr);
+        if(sz == 0) break;
+        if(data == value) return false;
+    }
+    return true;
 }

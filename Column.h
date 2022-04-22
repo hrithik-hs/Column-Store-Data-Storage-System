@@ -21,6 +21,7 @@ class Column{
         string address;
 		string type;
 		vector<Data *> column;
+		bool isUnique;
 	public:
 		Column();
 		Column(string name);
@@ -43,6 +44,10 @@ class Column{
 		void alterValue(int index, float newValue);
 		void alterValue(int index, string newValue);
 		void alterValue(int index, string newValue, vector<string> encoding);
+		bool checkConstraints(Data* data);
+		bool checkIsUniqueConstraint(int value);
+		bool checkIsUniqueConstraint(float value);
+		bool checkIsUniqueConstraint(string value);
 
 		vector<Data *> getColumn();
 		string getType();
@@ -52,6 +57,8 @@ class Column{
 		void setName(string name);
 		void setType(string type);
 		void setAddress(string address);
+		void setIsNotNullConstraint(bool value);
+		void setIsUniqueConstraint(bool value);
         void close();
 
 		vector<int> selectRows(int block,int value, vector<int> index);

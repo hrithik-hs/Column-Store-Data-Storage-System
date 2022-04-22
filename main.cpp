@@ -21,6 +21,8 @@ int main(){
     database->addColumn("Emp", "Test", "enum");
     cout << "create success\n";
 
+    database->setIsUniqueConstraint("Emp", "EmpID", true);
+    cerr<<"create success\n";
     Row * row=new Row();
     row->addElement(1);
     row->addElement("abc");
@@ -36,7 +38,7 @@ int main(){
     database->insertRow("Emp",row1);
 
     Row * row2=new Row();
-    row2->addElement(3);
+    row2->addElement(1);
     row2->addElement("ghi");
     row2->addElement(102.0f);
     row2->addElement("C");
@@ -57,16 +59,19 @@ int main(){
     // row3->addElement(103.0f);
     // // database->insertRow("Emp",row3);
 
-
-    // cerr<<"\n----\n";
     database->show();
 
     database->close();
+    cerr << "[+] Database Successfully Closed" << endl;
     delete database;
-    // delete row;
-    // delete row1;
-    // delete row2;
+
+    cerr << "[+] Database Successfully Deleted" << endl;
+    delete row;
+    cerr << "[+] Row Successfully Deleted" << endl;
+    delete row1;
+    delete row2;
     // delete row3;
+
 
     return 0;
 }

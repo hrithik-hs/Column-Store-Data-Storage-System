@@ -25,18 +25,12 @@ Table::Table(string name, string address){
 // }
 
 Table::~Table(){
-	while(!this->columns.empty()){
-        // tr(this->columns.back());
-		delete this->columns.back();
-		this->columns.pop_back();
+	for(int i = 0; i < this->columns.size(); i ++) {
+		delete this->columns[i];
 	}
-    // delete this->ColumnRecords.back();
-    while(!this->ColumnRecords.empty()){
-        // tr(this->ColumnRecords.back());
-        delete this->ColumnRecords.back();
-		this->ColumnRecords.pop_back();
-    }
-	delete this->primaryKey;
+	for(int i = 0; i < this->ColumnRecords.size(); i ++) {
+		delete this->ColumnRecords[i];
+	}
     // fn();
 }
 
@@ -49,21 +43,23 @@ void Table::loadFile(){
 	    ColumnRecord* ptr = new ColumnRecord();
 		int sz=fread(ptr, sizeof(ColumnRecord), 1, fptr);
         if(sz==0)break;
-
 		this->columnNames[(ptr->getColName())]=i;
 		i++;
+
 		Column* col=new Column(ptr->getColName(),folderAddress,ptr->getColType());
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(ptr);
 		if(ptr->getIsPrimary()) this->primaryKey=this->columns.back();
 	}
+	this->flag.assign(this->ColumnRecords.size(), 0);
 	fclose(fptr);
 }
 
 void Table::writeFile(){
 	string curAddress = this->address+'/'+this->name+".tb";
-	FILE* fptr = fopen(&(curAddress)[0], "w");
+	FILE* fptr = fopen(&(curAddress)[0], "wb");
 	for(int i=0;i<this->ColumnRecords.size();i++){
+		// cerr << this->ColumnRecords[i]->getColName() << endl;
 		if(this->ColumnRecords[i] != NULL) 
             fwrite(this->ColumnRecords[i],sizeof(ColumnRecord),1,fptr);
 	}
@@ -143,6 +139,7 @@ void Table::showTable(){
 	vector<string> cols;
 	for(auto column: this->columnNames) {
 		cols.push_back(column.first);
+
     }
 	cout<<endl;
 	this->selectRows(cols,conditions);
@@ -216,7 +213,16 @@ void Table::insertRow(Row *row){
 			return;
 		}
 	}
-
+	for(int i = 0; i < (int)(row->getRow().size()); i ++) {
+		string type = row->getRow()[i]->getType();
+		if(type == "int" || type == "float" || type == "string") {
+			bool result = this->columns[i]->checkConstraints(row->getRow()[i]);
+			if(result == 0) {
+				cout << "[-] Insertion Failed." << endl;
+				return ;
+			} 
+		}
+	}
 	string delAddress = this->address+'/'+this->name+'/'+this->name+".del";
 	FILE* delptr = fopen(&delAddress[0], "r+");
 	int delIndex;
@@ -230,7 +236,6 @@ void Table::insertRow(Row *row){
 	cout<<"Inserting into index: "<<delIndex<<endl;
 
 	for(int i=0;i<row->getRow().size();i++){
-		cerr << this->columns[i]->getType() << endl;
 		if(this->columns[i]->getType()=="int"){
 			this->columns[i]->insertValue(row->getRow()[i]->getInt(),delIndex);
 		}
@@ -273,6 +278,7 @@ void Table::insertRow(Row *row){
 
 void Table::close() {
     writeFile();
+	if(this->columns.size() == 0) return ;
     for(auto column: this->columns) {
         column->close();
     }
@@ -408,4 +414,14 @@ void Table::deleteRows(vector<pair<string,Data*>> conditions){
 	}
 	fclose(fptr);
 	fclose(delptr);
+}
+
+void Table::setIsUniqueConstraint(string columnName, bool value) {
+	if(this->columnNames.find(columnName) == this->columnNames.end()) {
+		cout << "[-] Column Does not Exists. Uniqueness Constraint cannot be added." << endl;
+		return;
+	}
+	int index = this->columnNames[columnName];
+	this->columns[index]->setIsUniqueConstraint(value);
+	cout << "[+] Uniqueness Constraint set successfully." << endl;
 }

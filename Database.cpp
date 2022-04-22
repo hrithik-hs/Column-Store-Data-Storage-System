@@ -16,15 +16,12 @@ Database::Database(string name, vector<Table *> & tables){
 }
 Database::~Database(){
     // fn();
-    while(!this->tables.empty()){
-		delete this->tables.back();
-		this->tables.pop_back();
+	for(int i = 0; i < this->tables.size(); i ++) {
+		delete this->tables[i];
 	}
-    while(!this->tableRecords.empty()){
-		delete this->tableRecords.back();
-		this->tableRecords.pop_back();
+	for(int i = 0; i < this->tableRecords.size(); i ++) {
+		delete this->tableRecords[i];
 	}
-
 }
 
 void Database::createTable(string tableName){
@@ -111,6 +108,15 @@ void Database::setPrimaryKey(string tableName, string columnName) {
 void Database::setName(string name){
 	this->name = name;
 }
+void Database::setIsUniqueConstraint(string tableName, string columnName, bool value) {
+	for(int i = 0; i < (int)(this->tables.size()); i ++) {
+		if(this->tables[i]->getName() == tableName) {
+			this->tables[i]->setIsUniqueConstraint(columnName, value);
+			return ;
+		}
+	}
+}
+
 string Database::getName(){
 	return this->name;
 }
@@ -177,7 +183,6 @@ void Database::loadFile() {
 	while(1){
 	    TableRecord *ptr = new TableRecord();
         int sz=fread(ptr, sizeof(TableRecord), 1, fptr);
-
         if(sz == 0) break;
         // cerr << (ptr->getName()) << endl;
         this->tableRecords.push_back(ptr);
@@ -191,10 +196,14 @@ void Database::writeFile() {
 	string address = this->address + "/" + this->name + ".db";
 	FILE* fptr = fopen(&address[0], "wb");
 	for(int i=0; i<this->tableRecords.size(); i++){
+		cerr << this->tableRecords[i]->getName() << endl;
 		if(this->tableRecords[i] != NULL){
-			fwrite(this->tableRecords[i],sizeof(TableRecord),1,fptr);
+
+			int sz = fwrite(this->tableRecords[i],sizeof(TableRecord),1,fptr);
+			cerr << sz << endl;
 		}
 	}
+	fclose(fptr);
 }
 
 void Database::close() {
