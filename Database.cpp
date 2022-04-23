@@ -140,12 +140,12 @@ vector<Table*> Database::getTables(){
 
 int Database::insertRow(string  tableName,Row * row){
 	if(this->tableNames.find(tableName)==this->tableNames.end()){
-		cout << "[ D! Warning ]  [ Insert row ] Table doesn't exists with given name: " << tableName << endl;
+		cout << "[ D! Warning ] [ Insert row ] Table doesn't exists with given name: " << tableName << endl;
 		return 0;
 	}
 	int fl = this->tables[this->tableNames[tableName]]->insertRow(row);
-	if(fl) cout << "[ D+ ]  [ Insert row ] Insert row successfull" << endl;
-	else cout << "[ D- ]  [ Insert row ] Insert row failed" << endl;
+	if(fl) cout << "[ D+ ] [ Insert row ] Insert row successfull" << endl;
+	else cout << "[ D- ] [ Insert row ] Insert row failed" << endl;
 	return fl;
 }
 
