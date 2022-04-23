@@ -37,10 +37,10 @@ class Column{
 		void insertValue(string value, int index);
 		void insertValue(string value, int index, vector<string> encoding);
 
-		bool checkConstraints(Data* data);
-		bool checkIsUniqueConstraint(int value);
-		bool checkIsUniqueConstraint(float value);
-		bool checkIsUniqueConstraint(string value);
+		bool checkConstraints(Data* data, string flagAddress);
+		bool checkIsUniqueConstraint(int value, string flagAddress);
+		bool checkIsUniqueConstraint(float value, string flagAddress);
+		bool checkIsUniqueConstraint(string value, string flagAddress);
 
 		string getType();
 		string getName();
@@ -49,7 +49,6 @@ class Column{
 		void setName(string name);
 		void setType(string type);
 		void setAddress(string address);
-		void setIsNotNullConstraint(bool value);
 		void setIsUniqueConstraint(bool value);
         void close();
 

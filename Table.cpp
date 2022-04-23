@@ -200,6 +200,8 @@ void Table::setPrimaryKey(string columnName){
 			break;
 		}
 	}
+	int index = this->columnNames[columnName];
+	this->columns[index]->setIsUniqueConstraint(true);
 	cout << "[ T+ ] [ Set primary ] Set primary successfull for " << columnName << " column." << endl;
 }
 
@@ -216,6 +218,7 @@ vector<Column *> Table::getColumns(){
 }
 
 int Table::insertRow(Row *row){
+	string flagAddress = this->address+'/'+this->name+'/'+this->name+".flag";
     if(row->getRow().size()!=this->columns.size()){
 		cout << "[ T- ] [ Insert row ] Unequal row size while inserting in " << this->name << " table." << endl;
 		return 0;
@@ -232,7 +235,7 @@ int Table::insertRow(Row *row){
 	for(int i = 0; i < (int)(row->getRow().size()); i ++) {
 		string type = row->getRow()[i]->getType();
 		if(type == "int" || type == "float" || type == "string") {
-			bool result = this->columns[i]->checkConstraints(row->getRow()[i]);
+			bool result = this->columns[i]->checkConstraints(row->getRow()[i], flagAddress);
 			if(result == 0) {
 				cout << "[ T- ] [ Insert row ] Row values violates constraints while inserting in " << this->name << " table." << endl;
 				return 0;
@@ -282,7 +285,7 @@ int Table::insertRow(Row *row){
 		}
 	}
 
-	string flagAddress = this->address+'/'+this->name+'/'+this->name+".flag";
+	flagAddress = this->address+'/'+this->name+'/'+this->name+".flag";
 	FILE* fptr = fopen(&flagAddress[0], "r+");
 	if(!fptr) {
         cout << "[ T- ] [ Insert row ] Cannot open flag file for " << this->name << " table." << endl;

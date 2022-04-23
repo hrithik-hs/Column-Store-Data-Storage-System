@@ -94,7 +94,38 @@ int main() {
     vector<string> cols = {"EmpID", "Name", "Salary"};
     database->selectRows("Emp", cols, {});
 
+    // Delete row with EmpID = 1
     DataInteger* tempData = new DataInteger(1);
     database->deleteRows("Emp", {make_pair("EmpID", tempData)});
     database->selectRows("Emp", cols, {});
+
+    // Insert New Row with EmpID = 1
+    Row *testRow2 = new Row();
+    testRow2->addElement(1);
+    testRow2->addElement("E5");
+    testRow2->addElement(70000.0f);
+    success = database->insertRow("Emp", testRow2);
+    printResult(success == 1);  
+
+    database->selectRows("Emp", cols, {});
+
+    // Testing Enum
+    vector<string> deptColName = {"EmpID", "DeptName"};
+    DataString* cond1 = new DataString("D1");
+    database->selectRows("Dept", deptColName, {{"DeptName", cond1}});
+    
+    DataString* cond2 = new DataString("D10");
+    database->selectRows("Dept", deptColName, {{"DeptName", cond2}});
+    
+    // Delete on basis of enum.
+    database->deleteRows("Dept", {{"DeptName", cond1}});
+    database->selectRows("Dept", deptColName, {});
+
+    Row* testRow3 = new Row();
+    testRow3->addElement(1);
+    testRow3->addElement("D5");
+    database->insertRow("Dept", testRow3);
+
+    database->show();
+
 }

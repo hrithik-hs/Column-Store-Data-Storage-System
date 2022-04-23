@@ -306,17 +306,17 @@ vector<Data*> Column::selectRows(int block, vector<int> index, vector<string> en
     return ans;
 }
 
-bool Column::checkConstraints(Data* data) {
+bool Column::checkConstraints(Data* data, string flagAddress) {
     if(this->isUnique == true) {
         bool flag = 0;
         if(data->getType() == "int") {
-            flag = checkIsUniqueConstraint(data->getInt());
+            flag = checkIsUniqueConstraint(data->getInt(), flagAddress);
         }
         else if(data->getType() == "float") {
-            flag = checkIsUniqueConstraint(data->getFloat());
+            flag = checkIsUniqueConstraint(data->getFloat(), flagAddress);
         }
         else if(data->getType() == "string") {
-            flag = checkIsUniqueConstraint(data->getString());
+            flag = checkIsUniqueConstraint(data->getString(), flagAddress);
         }
         if(flag) {
             cout << "[ C+ ] [ Check constraint ] Uniqueness constraint verified." << endl;
@@ -329,52 +329,64 @@ bool Column::checkConstraints(Data* data) {
     return true;
 }
 
-bool Column::checkIsUniqueConstraint(int value) {
+bool Column::checkIsUniqueConstraint(int value, string flagAddress) {
     string file_source=this->address+"/"+this->name+".col";
     FILE* readptr = fopen(&file_source[0], "r");
+    FILE* flagReadPtr = fopen(&flagAddress[0], "r");
     if(!readptr) {
         cout << "[ C- ] [ Check constraint ] Cannot open column file for " << this->name << " column." << endl;
         return false;
     }
     while(1) {
+        int flagValue;
+        int sz = fread(&flagValue, sizeof(flagValue), 1, flagReadPtr);
+        if(sz == 0) break;
         int data;
-        int sz = fread(&data, sizeof(data), 1, readptr);
+        sz = fread(&data, sizeof(data), 1, readptr);
         if(sz == 0) break;
-        if(data == value) return false;
+        if(flagValue == 0 && data == value) return false;
     }
     fclose(readptr);
     return true;
 }
 
-bool Column::checkIsUniqueConstraint(float value) {
+bool Column::checkIsUniqueConstraint(float value, string flagAddress) {
     string file_source=this->address+"/"+this->name+".col";
     FILE* readptr = fopen(&file_source[0], "r");
+    FILE* flagReadPtr = fopen(&flagAddress[0], "r");
     if(!readptr) {
         cout << "[ C- ] [ Check constraint ] Cannot open column file for " << this->name << " column." << endl;
         return false;
     }
     while(1) {
+        int flagValue;
+        int sz = fread(&flagValue, sizeof(flagValue), 1, flagReadPtr);
+        if(sz == 0) break;
         float data;
-        int sz = fread(&data, sizeof(data), 1, readptr);
+        sz = fread(&data, sizeof(data), 1, readptr);
         if(sz == 0) break;
-        if(data == value) return false;
+        if(flagValue == 0 && data == value) return false;
     }
     fclose(readptr);
     return true;
 }
 
-bool Column::checkIsUniqueConstraint(string value) {
+bool Column::checkIsUniqueConstraint(string value, string flagAddress) {
     string file_source=this->address+"/"+this->name+".col";
     FILE* readptr = fopen(&file_source[0], "r");
+    FILE* flagReadPtr = fopen(&flagAddress[0], "r");
     if(!readptr) {
         cout << "[ C- ] [ Check constraint ] Cannot open column file for " << this->name << " column." << endl;
         return false;
     }
     while(1) {
-        char data[100];
-        int sz = fread(&data, sizeof(data), 1, readptr);
+        int flagValue;
+        int sz = fread(&flagValue, sizeof(flagValue), 1, flagReadPtr);
         if(sz == 0) break;
-        if(data == value) return false;
+        char data[100];
+        sz = fread(&data, sizeof(data), 1, readptr);
+        if(sz == 0) break;
+        if(flagValue == 0 && data == value) return false;
     }
     fclose(readptr);
     return true;
