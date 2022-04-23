@@ -63,4 +63,5 @@ class Query{
 
         vector<DatabaseInsert> getDatabaseInserts();
         vector<DatabaseCreate> getDatabaseCreates();
+
 };
