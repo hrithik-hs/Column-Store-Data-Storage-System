@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <set>
-#include <rapidxml.hpp>
+#include "rapidxml.hpp"
 #include <fstream>
 
 using namespace std;
@@ -11,27 +11,28 @@ using namespace rapidxml;
 
 struct TableInsert{
     string tableName;
-    vector<string>columnName;
-    vector<string>columnValue;
+    vector<string>columnNames;
+    vector<string>columnValues;
 };
 struct DatabaseInsert{
-    string dbName;
+    string databaseName;
     vector<TableInsert> tableInserts;
 };
 
 struct ColumnCreate{
     string columnName;
     string columnType;
-    string constraint;
+    bool isUniqueConstraint;
+    bool isPrimaryConstraint;
 };
 
 struct TableCreate{
-    string TableName;
+    string tableName;
     vector<ColumnCreate>columns;
 };
 
 struct DatabaseCreate{
-    string DatabasaeName;
+    string databaseName;
     vector<TableCreate>tables;
 };
 
@@ -60,4 +61,6 @@ class Query{
 		string getFileName();
         string getType();
 
+        vector<DatabaseInsert> getDatabaseInserts();
+        vector<DatabaseCreate> getDatabaseCreates();
 };
