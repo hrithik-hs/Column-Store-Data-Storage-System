@@ -38,6 +38,7 @@ class Table{
 
 		Column * getPrimaryKey();
 		string getName();
+		string getColumnType(string columName);
 		vector<Column *> getColumns();
 
 		int insertRow(Row *row);

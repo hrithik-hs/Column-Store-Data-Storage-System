@@ -134,6 +134,15 @@ string Database::getName(){
 	return this->name;
 }
 
+string Database::getColumnType(string tableName, string columnName) {
+	if(tableNames.count(tableName) == 0) {
+		cout << "[ D- ][ getColumnType ] Table does not exists." << endl;
+		return ;
+	}
+	int index = this->tableNames[tableName];
+	this->tables[index]->getColumnType(columnName);
+}
+
 vector<Table*> Database::getTables(){
 	return this->tables;
 }
@@ -151,12 +160,12 @@ int Database::insertRow(string  tableName,Row * row){
 
 int Database::selectRows(string tableName, vector<string> cols, vector<pair<string,Data*>> conditions){
 	if(this->tableNames.find(tableName)==this->tableNames.end()){
-		cout << "[ D! Warning ]  [ Select row ] Table doesn't exists with given name: " << tableName << endl;
+		cout << "[ D! Warning ] [ Select row ] Table doesn't exists with given name: " << tableName << endl;
 		return 0;
 	}
 	int fl = this->tables[this->tableNames[tableName]]->selectRows(cols,conditions);
-	if(fl) cout << "[ D+ ]  [ Select row ] Select row successfull" << endl;
-	else cout << "[ D- ]  [ Select row ] Select row failed" << endl;
+	if(fl) cout << "[ D+ ] [ Select row ] Select row successfull" << endl;
+	else cout << "[ D- ] [ Select row ] Select row failed" << endl;
 	return fl;
 }
 

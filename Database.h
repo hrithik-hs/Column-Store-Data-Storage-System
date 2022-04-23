@@ -36,6 +36,7 @@ class Database{
 
 		void setName(string name);
 		string getName();
+		string getColumnType(string tableName, string columnName);
 		vector<Table*> getTables();
 		int writeFile();
     	int loadFile();
