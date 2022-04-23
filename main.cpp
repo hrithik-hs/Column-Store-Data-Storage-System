@@ -18,12 +18,12 @@ int main(int argc, char *argv[]){
     if(argv[2] == "insert") {
         vector<DatabaseInsert> vecObject = q->parseInsertQuery();
         for(auto dbInsert : vecObject) {
-            string databaseName = dbInsert.dbName;
+            string databaseName = dbInsert.databaseName;
             Database* database = new Database(databaseName, "./File");
             for(auto tbInsert : dbInsert.tableInserts) {
                 Row* row = new Row();
-                vector<string> colName = tbInsert.columnName;
-                vector<string> colValue = tbInsert.columnValue;
+                vector<string> colName = tbInsert.columnNames;
+                vector<string> colValue = tbInsert.columnValues;
                 int len = colName.size();
                 Row *row = new Row();
                 for(int i = 0; i < len; i ++) {
