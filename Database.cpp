@@ -137,10 +137,10 @@ string Database::getName(){
 string Database::getColumnType(string tableName, string columnName) {
 	if(tableNames.count(tableName) == 0) {
 		cout << "[ D- ][ getColumnType ] Table does not exists." << endl;
-		return ;
+		return "";
 	}
 	int index = this->tableNames[tableName];
-	this->tables[index]->getColumnType(columnName);
+	return this->tables[index]->getColumnType(columnName);
 }
 
 vector<Table*> Database::getTables(){

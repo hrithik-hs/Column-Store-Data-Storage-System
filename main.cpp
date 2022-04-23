@@ -31,7 +31,7 @@ void loadRoot(){
 
 void writeRoot(){
     string file_source="./File/root";
-    FILE* writeptr = fopen(&file_source[0], "r");
+    FILE* writeptr = fopen(&file_source[0], "w");
     if(!writeptr) {
         cout << "[ M- ] [ Write root ] Cannot open root file." << endl;
     }
@@ -47,10 +47,9 @@ int main(int argc, char *argv[]){
     loadRoot();
 
     Query *q = new Query(argv[1], argv[2]);
-
-    if(argv[2] == "create") {
-        vector<DatabaseCreate> vecObject = q->getDatabaseCreates();
-        for(auto dbCreate: vecObject){
+    
+    if(string(argv[2]) == "create") {
+        vector<DatabaseCreate> vecObject = q->getDatabaseCreates();        for(auto dbCreate: vecObject){
             string databaseName = dbCreate.databaseName;
             if(databaseNames.find(databaseName)==databaseNames.end()){
                 string address = "./File/"+databaseName+".db";
@@ -69,17 +68,17 @@ int main(int argc, char *argv[]){
                     else if(colCreate.isUniqueConstraint) database->setIsUniqueConstraint(tableName,colCreate.columnName,true);
                 }
             }
+            database->close();
         }
     }
-
-    if(argv[2] == "insert") {
+    
+    if(string(argv[2]) == "insert") {
         vector<DatabaseInsert> vecObject = q->getDatabaseInserts();
         for(auto dbInsert : vecObject) {
             string databaseName = dbInsert.databaseName;
             if(databaseNames.find(databaseName)==databaseNames.end()) continue;
             Database* database = new Database(databaseName, "./File");
             for(auto tbInsert : dbInsert.tableInserts) {
-                Row* row = new Row();
                 vector<string> colName = tbInsert.columnNames;
                 vector<string> colValue = tbInsert.columnValues;
                 int len = colName.size();
