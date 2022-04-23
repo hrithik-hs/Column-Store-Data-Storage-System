@@ -8,21 +8,10 @@ Table::Table(){}
 Table::Table(string name, string address){
 	this->name=name;
 	this->address = address;
-	this->loadFile();
+	int fl = this->loadFile();
+	if(fl) cout << "[ T+ ] [ Constructor ] Table open successfull." << endl;
+	else cout << "[ T- ] [ Constructor ] Table open failed." << endl;
 }
-
-// Table::Table(string name,vector<Column *> columns){
-// 	this->name=name;
-// 	this->columns=columns;
-// 	for(auto column:columns){
-// 		this->columnNames.insert
-// 	}
-// }
-// Table::Table(string name,vector<Column *> columns, Column * primaryKey){
-// 	this->name=name;
-// 	this->columns=columns;
-// 	this->primaryKey=primaryKey;
-// }
 
 Table::~Table(){
 	for(int i = 0; i < this->columns.size(); i ++) {
@@ -31,39 +20,46 @@ Table::~Table(){
 	for(int i = 0; i < this->ColumnRecords.size(); i ++) {
 		delete this->ColumnRecords[i];
 	}
-    // fn();
+	cout << "[ T+ ] [ Destructor ] Table close successfull." << endl;
 }
 
-void Table::loadFile(){
+int Table::loadFile(){
 	string curAddress = this->address+'/'+this->name+".tb";
 	string folderAddress = this->address+'/'+this->name;
 	FILE* fptr = fopen(&curAddress[0], "r");
-	int i=0;
+	if(!fptr) {
+        cout << "[ T- ] [ Load table ] Cannot open column record file for " << this->name << " table." << endl;
+        return 0;
+    }
+	int ind=0;
 	while(1){
 	    ColumnRecord* ptr = new ColumnRecord();
 		int sz=fread(ptr, sizeof(ColumnRecord), 1, fptr);
         if(sz==0)break;
-		this->columnNames[(ptr->getColName())]=i;
-		i++;
-
+		this->columnNames[(ptr->getColName())]=ind;
+		ind++;
 		Column* col=new Column(ptr->getColName(),folderAddress,ptr->getColType());
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(ptr);
 		if(ptr->getIsPrimary()) this->primaryKey=this->columns.back();
 	}
-	this->flag.assign(this->ColumnRecords.size(), 0);
 	fclose(fptr);
+	return 1;
 }
 
-void Table::writeFile(){
+int Table::writeFile(){
 	string curAddress = this->address+'/'+this->name+".tb";
 	FILE* fptr = fopen(&(curAddress)[0], "wb");
+	if(!fptr) {
+        cout << "[ T- ] [ Write table ] Cannot open column record file for " << this->name << " table." << endl;
+        return 0;
+    }
 	for(int i=0;i<this->ColumnRecords.size();i++){
-		// cerr << this->ColumnRecords[i]->getColName() << endl;
 		if(this->ColumnRecords[i] != NULL) 
             fwrite(this->ColumnRecords[i],sizeof(ColumnRecord),1,fptr);
 	}
 	fclose(fptr);
+	return 1;
 }
 
 
@@ -71,24 +67,32 @@ void Table::addColumn(string columnName, string type){
 	if(columnName.size() && this->columnNames.find(columnName)==this->columnNames.end()){
         this->columnNames[(columnName)]=this->columns.size();
 		Column* col=new Column(columnName,this->address + "/" + this->name,type);
-		// cerr << "CAT " << col->getType() << endl;
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(new ColumnRecord(columnName,type,0));
 		if(type == "enum") {
 			for(int i = 0; i < 10; i ++) {
 				string columnAddress = this->address + "/" + this->name + "/" + columnName + "_" + to_string(i) + ".col";
 				FILE* fptr = fopen(&columnAddress[0], "w");
+				if(!fptr) {
+					cout << "[ T- ] [ Add column ] Cannot create file for " << columnName << " column." << endl;
+					return;
+				}
 				fclose(fptr);
 			}
 		}
 		else {
 			string columnAddress = this->address + '/' + this->name + '/' + columnName + ".col";
 			FILE* fptr = fopen(&columnAddress[0], "w");
+			if(!fptr) {
+				cout << "[ T- ] [ Add column ] Cannot create file for " << columnName << " column." << endl;
+				return;
+			}
 			fclose(fptr);
-		}	
+		}
+		cout << "[ T+ ] [ Add column ] Column creation successfull. Name: "<< columnName << endl;
 	}
     else{
-        cerr << "Column Already Exists!" << endl;
+        cout << "[ T! Warning ] [ Add column ] Column already exists with given name: " << columnName << endl;
     }
 }
 
@@ -102,7 +106,9 @@ void Table::dropColumn(string columnName){
 			}
 		}
 		this->columnNames.erase(columnName);
+		cout << "[ T+ ] [ Drop column ] Column drop successfull. Name: "<< columnName << endl;
 	}
+	else cout << "[ T! Warning ] [ Drop column ] Column doesn't exists with given name: " << columnName << endl;
 }
 
 void Table::alterColumn(string oldName, string newName){ /*only for renaming*/
@@ -122,16 +128,18 @@ void Table::alterColumn(string oldName, string newName){ /*only for renaming*/
 		string oldAddress = this->address + '/' + this->name + '/' + oldName + ".col";
 		string newAddress = this->address + '/' + this->name + '/' + newName + ".col";
 		int f = rename(&oldAddress[0],&newAddress[0]);
-		if(f!=0) return;
+		if(f!=0) cout << "[ T- ] [ Alter column ] Cannot rename file for " << oldName << " column." << endl;
+		return;
 	}
 	else {
 		for(int i = 0; i < 10; i ++) {
 			string oldAddress = this->address + '/' + this->name + '/' + oldName + "_" + to_string(i) + ".col";
 			string newAddress = this->address + '/' + this->name + '/' + newName + "_" + to_string(i) + ".col";
 			int f = rename(&oldAddress[0], &newAddress[0]);
-			if(f != 0) return;
+			if(f != 0) cout << "[ T- ] [ Alter column ] Cannot rename file for " << oldName << " column." << endl;
 		}
 	}
+	cout << "[ T+ ] [ Alter column ] Alter column successfull for " << newName << " column." << endl;
 } 
 
 void Table::showTable(){
@@ -141,11 +149,15 @@ void Table::showTable(){
 		cols.push_back(column.first);
 
     }
-	cout<<endl;
+	// cout<<endl;
 	this->selectRows(cols,conditions);
 	cout<<"Flag file"<<endl;
 	string flagAddress = this->address+'/'+this->name+'/'+this->name+".flag";
 	FILE* fptr = fopen(&flagAddress[0], "r");
+	if(!fptr) {
+        cout << "[ D- ] [ Show table ] Cannot open flag file for " << this->name << " database." << endl;
+        return;
+    }
 	fseek(fptr,0,SEEK_SET);
 	while(1){
 		int fl=0;
@@ -170,7 +182,10 @@ void Table::setName(string newName){
 */
 
 void Table::setPrimaryKey(string columnName){
-	if(columnName.size() && this->columnNames.find(columnName)==this->columnNames.end()) return;
+	if(columnName.size() && this->columnNames.find(columnName)==this->columnNames.end()){
+		cout << "[ T! Warning ] [ Set primary ] Column doesn't exists with given name: " << columnName << endl;
+		return;
+	}
 
 	for(int i=0;i<this->ColumnRecords.size();i++){
 		if(this->ColumnRecords[i] && this->ColumnRecords[i]->getIsPrimary()){
@@ -185,6 +200,7 @@ void Table::setPrimaryKey(string columnName){
 			break;
 		}
 	}
+	cout << "[ T+ ] [ Set primary ] Set primary successfull for " << columnName << " column." << endl;
 }
 
 Column * Table::getPrimaryKey(){
@@ -199,18 +215,18 @@ vector<Column *> Table::getColumns(){
 	return this->columns;
 }
 
-void Table::insertRow(Row *row){
-	// cerr << row->getRow().size() << endl;
+int Table::insertRow(Row *row){
     if(row->getRow().size()!=this->columns.size()){
-		return;
+		cout << "[ T- ] [ Insert row ] Unequal row size while inserting in " << this->name << " table." << endl;
+		return 0;
 	}
 	for(int i=0;i<row->getRow().size();i++){
-		// cerr << row->getRow()[i]->getType() << endl;
 		if(row->getRow()[i]->getType() == "string" && this->columns[i]->getType() == "enum") {
 			continue;
 		}
-		if(row->getRow()[i]->getType()!=this->columns[i]->getType()){
-			return;
+		else if(row->getRow()[i]->getType()!=this->columns[i]->getType()){
+			cout << "[ T- ] [ Insert row ] Unequal row type while inserting in " << this->name << " table." << endl;
+			return 0;
 		}
 	}
 	for(int i = 0; i < (int)(row->getRow().size()); i ++) {
@@ -218,22 +234,25 @@ void Table::insertRow(Row *row){
 		if(type == "int" || type == "float" || type == "string") {
 			bool result = this->columns[i]->checkConstraints(row->getRow()[i]);
 			if(result == 0) {
-				cout << "[-] Insertion Failed." << endl;
-				return ;
+				cout << "[ T- ] [ Insert row ] Row values violates constraints while inserting in " << this->name << " table." << endl;
+				return 0;
 			} 
 		}
 	}
+
 	string delAddress = this->address+'/'+this->name+'/'+this->name+".del";
 	FILE* delptr = fopen(&delAddress[0], "r+");
+	if(!delptr) {
+        cout << "[ T- ] [ Insert row ] Cannot open delete file for " << this->name << " table." << endl;
+        return 0;
+    }
 	int delIndex;
 	fseek(delptr,-1*sizeof(delIndex),SEEK_END);
 	int sz=fread(&delIndex,sizeof(delIndex),1,delptr);
 	if(sz==0) delIndex=-1;
 	fs::path p{delAddress};
 	ftruncate(fileno(delptr),fs::file_size(p)-4);
-	// cout<<"delete file size: "<<fs::file_size(p)<<endl;
 	fclose(delptr);
-	cout<<"Inserting into index: "<<delIndex<<endl;
 
 	for(int i=0;i<row->getRow().size();i++){
 		if(this->columns[i]->getType()=="int"){
@@ -249,9 +268,6 @@ void Table::insertRow(Row *row){
 			string value = row->getRow()[i]->getString();
 			vector<string> encoding = this->ColumnRecords[i]->getEncoding();
 			this->columns[i]->insertValue(value, delIndex, this->ColumnRecords[i]->getEncoding());
-			for(int j = 0; j < encoding.size(); j ++) {
-				cerr << "DE " << encoding[j] << endl; 
-			}
 			int found = -1;
 			for(int j = 0; j < encoding.size(); j ++) {
 				if(value == encoding[j]) {
@@ -268,38 +284,46 @@ void Table::insertRow(Row *row){
 
 	string flagAddress = this->address+'/'+this->name+'/'+this->name+".flag";
 	FILE* fptr = fopen(&flagAddress[0], "r+");
+	if(!fptr) {
+        cout << "[ T- ] [ Insert row ] Cannot open flag file for " << this->name << " table." << endl;
+        return 0;
+    }
 	int fl=0;
 	if(delIndex!=-1) fseek(fptr,delIndex*sizeof(fl),SEEK_SET);
 	else fseek(fptr,0,SEEK_END);
 	sz=fwrite(&fl,sizeof(fl),1,fptr);
-	if(!sz) cout<<"Error when writing into flag file"<<endl;
+	if(!sz) cout<<"[ T- ] [ Insert row ] Error when writing into flag file"<<endl;
 	fclose(fptr);
+
+	cout << "[ T+ ] [ Insert row ] Insert row successfull for " << this->name << " table." << endl;
+	return 1;
 }
 
-void Table::close() {
-    writeFile();
-	if(this->columns.size() == 0) return ;
+int Table::close() {
+    int fl = writeFile();
+	if(!fl){
+		cout << "[ T- ] [ Close table ] Close failed for " << this->name << " table." << endl;
+		return 0;
+	}
+	// if(this->columns.size() == 0) return ;
     for(auto column: this->columns) {
         column->close();
     }
+	cout << "[ T+ ] [ Close table ] Close successfull for " << this->name << " table." << endl;
+	return 1;
 }
-// template <typename T1,typename T2>
-// void Table::updateRow(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue){
-
-// }
-
-// template <typename T>
-// void Table::deleteRow(string comparisionColumn,T comparisionValue){
-    
-// }
 
 
-void Table::selectRows(vector<string> cols, vector<pair<string,Data*>> conditions){
+int Table::selectRows(vector<string> cols, vector<pair<string,Data*>> conditions){
 	int block=-1,flag=1;
 	for(auto col:cols) cout<<col<<"\t";
 	cout<<endl;
 	string flagAddress = this->address+'/'+this->name+'/'+this->name+".flag";
 	FILE* fptr = fopen(&flagAddress[0], "r");
+	if(!fptr) {
+        cout << "[ T- ] [ Select row ] Cannot open flag file for " << this->name << " table." << endl;
+        return 0;
+    }
 	while(flag){
 		block++;
 		vector<int> index;
@@ -327,14 +351,10 @@ void Table::selectRows(vector<string> cols, vector<pair<string,Data*>> condition
 					index = this->columns[colIndex]->selectRows(block,conditions[i].second->getString(),index);
 				}
                 else if(this->columns[colIndex]->getType()=="enum"){
-                    cout << "Calling This" << endl;
 					index = this->columns[colIndex]->selectRows(block,conditions[i].second->getString(),index, this->ColumnRecords[colIndex]->getEncoding());
 				}
 			}
 		}
-		// cout<<"Printing index array for block "<<block<<":"<<endl;
-		// for(int i=0;i<index.size();i++) cout<<index[i]<<' ';
-		// cout<<endl;
 		if(index.size()==0) continue;
 		vector<string> colType;
 		vector<vector<Data*>> ans;
@@ -345,31 +365,36 @@ void Table::selectRows(vector<string> cols, vector<pair<string,Data*>> condition
 			    ans.push_back(this->columns[colIndex]->selectRows(block,index));
             }
             else {
-                cout << "\n TABLE::SELECT ROWS " << "ENUM" << endl; 
                 ans.push_back(this->columns[colIndex]->selectRows(block,index, this->ColumnRecords[colIndex]->getEncoding()));
             }
 		}
-        for(auto i : index) {
-            cout << i << endl;
-        }
 		for(int j=0;j<index.size();j++){
 			for(int i=0;i<cols.size();i++){
 				if(colType[i]=="int") cout<< ans[i][j]->getInt() <<"\t";
 				else if(colType[i]=="float") cout<< ans[i][j]->getFloat() << "\t";
-				if(colType[i]=="string" || colType[i] == "enum") cout<<string(ans[i][j]->getString())<<endl;
+				if(colType[i]=="string" || colType[i] == "enum") cout<<string(ans[i][j]->getString())<< "\t";
 			}
 			cout<<endl;
 		}
 	}
 	fclose(fptr);
+	return 1;
 }
 
-void Table::deleteRows(vector<pair<string,Data*>> conditions){
+int Table::deleteRows(vector<pair<string,Data*>> conditions){
 	int block=-1,flag=1;
 	string flagAddress = this->address+'/'+this->name+'/'+this->name+".flag";
 	string delAddress = this->address+'/'+this->name+'/'+this->name+".del";
 	FILE* fptr = fopen(&flagAddress[0], "r+");
+	if(!fptr) {
+        cout << "[ T- ] [ Delete row ] Cannot open flag file for " << this->name << " table." << endl;
+        return 0;
+    }
 	FILE* delptr = fopen(&delAddress[0], "a");
+	if(!delptr) {
+        cout << "[ T- ] [ Delete row ] Cannot open delete file for " << this->name << " table." << endl;
+        return 0;
+    }
 	while(flag){
 		block++;
 		fseek(fptr,(block*blockSize)*sizeof(int),SEEK_SET);
@@ -400,9 +425,6 @@ void Table::deleteRows(vector<pair<string,Data*>> conditions){
 				}
 			}
 		}
-		// cout<<"Printing index array in deletion for block "<<block<<":"<<endl;
-		// for(int i=0;i<index.size();i++) cout<<index[i]<<' ';
-		// cout<<endl;
 		if(index.size()==0) continue;
 		int fl=1;
 		for(int i=0;i<index.size();i++){
@@ -414,14 +436,15 @@ void Table::deleteRows(vector<pair<string,Data*>> conditions){
 	}
 	fclose(fptr);
 	fclose(delptr);
+	return 1;
 }
 
 void Table::setIsUniqueConstraint(string columnName, bool value) {
 	if(this->columnNames.find(columnName) == this->columnNames.end()) {
-		cout << "[-] Column Does not Exists. Uniqueness Constraint cannot be added." << endl;
+		cout << "[ T- ] [ Set constraint ] Column Does not Exists. Uniqueness Constraint cannot be added." << endl;
 		return;
 	}
 	int index = this->columnNames[columnName];
 	this->columns[index]->setIsUniqueConstraint(value);
-	cout << "[+] Uniqueness Constraint set successfully." << endl;
+	cout << "[ T+ ] [ Set constraint ] Uniqueness Constraint set successfully." << endl;
 }

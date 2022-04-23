@@ -20,7 +20,6 @@ class Column{
 		string name;
         string address;
 		string type;
-		vector<Data *> column;
 		bool isUnique;
 	public:
 		Column();
@@ -38,18 +37,11 @@ class Column{
 		void insertValue(string value, int index);
 		void insertValue(string value, int index, vector<string> encoding);
 
-		// void deleteValue(int index);
-
-		void alterValue(int index, int newValue);
-		void alterValue(int index, float newValue);
-		void alterValue(int index, string newValue);
-		void alterValue(int index, string newValue, vector<string> encoding);
 		bool checkConstraints(Data* data);
 		bool checkIsUniqueConstraint(int value);
 		bool checkIsUniqueConstraint(float value);
 		bool checkIsUniqueConstraint(string value);
 
-		vector<Data *> getColumn();
 		string getType();
 		string getName();
 		string getAddress();

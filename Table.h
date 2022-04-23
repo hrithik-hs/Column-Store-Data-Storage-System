@@ -20,17 +20,13 @@ class Table{
 		Column * primaryKey;
 		map<string,int> columnNames;
 		vector<ColumnRecord*> ColumnRecords;
-		vector<bool> flag;
-		// vector<pair<Column *,pair<Table *, Column *>>> foreignKey; 
 	public:
 		Table();
 		Table(string name, string address);
-		// Table(string name,vector<Column *> columns);
-		// Table(string name,vector<Column *> columns, Column * primaryKey);
 		~Table();
 
-		void loadFile();
-		void writeFile();
+		int loadFile();
+		int writeFile();
 
 		void addColumn(string columnName, string type);
 		void dropColumn(string columnName);
@@ -44,16 +40,11 @@ class Table{
 		string getName();
 		vector<Column *> getColumns();
 
-		void insertRow(Row *row);
-		void selectRows(vector<string> columnNames, vector<pair<string,Data*>> conditions);
-		void deleteRows(vector<pair<string,Data*>> conditions);
-
-        template <typename T1,typename T2>
-		void updateRow(string columnName,T1 newValue, string comparisionColumn, T2 comparisionValue);
-		
-		void deleteRow(string columnName, int primaryKeyValue);
+		int insertRow(Row *row);
+		int selectRows(vector<string> columnNames, vector<pair<string,Data*>> conditions);
+		int deleteRows(vector<pair<string,Data*>> conditions);
 
 		void setIsNotNullConstraint(string columnName, bool value);
 		void setIsUniqueConstraint(string columnName, bool value);
-        void close();
+        int close();
 };
