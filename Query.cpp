@@ -79,3 +79,10 @@ string Query::getFileName(){
 string Query::getType(){
     return this->type;
 }
+
+vector<DatabaseInsert> Query::getDatabaseInserts(){
+    return this->databaseInserts;
+}
+vector<DatabaseCreate> Query::getDatabaseCreates(){
+    return this->databaseCreates;
+}
