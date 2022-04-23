@@ -36,7 +36,7 @@ Table::~Table(){
         delete this->ColumnRecords.back();
 		this->ColumnRecords.pop_back();
     }
-	delete this->primaryKey;
+	// delete this->primaryKey;
     // fn();
 }
 

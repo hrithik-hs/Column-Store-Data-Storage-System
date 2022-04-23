@@ -194,6 +194,7 @@ void Database::writeFile() {
 			fwrite(this->tableRecords[i],sizeof(TableRecord),1,fptr);
 		}
 	}
+    fclose(fptr);
 }
 
 void Database::close() {
