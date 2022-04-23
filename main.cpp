@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
     Query *q = new Query(argv[1], argv[2]);
 
     if(argv[2] == "create") {
-        vector<DatabaseCreate> vecObject = q->parseCreateQuery();
+        vector<DatabaseCreate> vecObject = q->getDatabaseCreates();
         for(auto dbCreate: vecObject){
             string databaseName = dbCreate.databaseName;
             if(databaseNames.find(databaseName)==databaseNames.end()){
@@ -73,7 +73,7 @@ int main(int argc, char *argv[]){
     }
 
     if(argv[2] == "insert") {
-        vector<DatabaseInsert> vecObject = q->parseInsertQuery();
+        vector<DatabaseInsert> vecObject = q->getDatabaseInserts();
         for(auto dbInsert : vecObject) {
             string databaseName = dbInsert.databaseName;
             if(databaseNames.find(databaseName)==databaseNames.end()) continue;
