@@ -6,3 +6,4 @@ clean:
 	rm -r File
 	mkdir File
 	touch File/root
+	cp -r File_copy/* File/
