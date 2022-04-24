@@ -72,7 +72,7 @@ int main(int argc, char *argv[]){
         }
     }
     
-    if(string(argv[2]) == "insert") {
+    else if(string(argv[2]) == "insert") {
         vector<DatabaseInsert> vecObject = q->getDatabaseInserts();
         for(auto dbInsert : vecObject) {
             string databaseName = dbInsert.databaseName;
@@ -99,6 +99,67 @@ int main(int argc, char *argv[]){
                     }
                 }
                 database->insertRow(tbInsert.tableName, row);
+            }
+        }
+    }
+
+    else if(string(argv[2]) == "select") {
+        vector<DatabaseSelect> vecObject = q->getDatabaseSelects();
+        for(auto dbSelect : vecObject) {
+            string databaseName = dbSelect.databaseName;
+            if(databaseNames.find(databaseName)==databaseNames.end()) continue;
+            Database* database = new Database(databaseName, "./File");
+            for(auto tbSelect : dbSelect.tables) {
+                string tableName = tbSelect.tableName;
+                vector<string> colName = tbSelect.columnNames;
+                vector<Condition> conditions = tbSelect.conditions;
+                vector<pair<string,Data*>> inpCond;
+                for(auto cond:conditions){
+                    string type = database->getColumnType(tableName,cond.columnName);
+                    if(type == "int"){
+                        DataInteger* data = new DataInteger(stoi(cond.value));
+                        inpCond.push_back(make_pair(cond.columnName,data));
+                    }
+                    else if(type == "float"){
+                        DataFloat* data = new DataFloat(stof(cond.value));
+                        inpCond.push_back(make_pair(cond.columnName,data));
+                    }
+                    else{
+                        DataString* data = new DataString(cond.value);
+                        inpCond.push_back(make_pair(cond.columnName,data));
+                    }
+                }
+                database->selectRows(tableName,colName,inpCond);
+            }
+        }
+    }
+
+    else if(string(argv[2]) == "delete") {
+        vector<DatabaseDelete> vecObject = q->getDatabaseDeletes();
+        for(auto dbDelete : vecObject) {
+            string databaseName = dbDelete.databaseName;
+            if(databaseNames.find(databaseName)==databaseNames.end()) continue;
+            Database* database = new Database(databaseName, "./File");
+            for(auto tbDelete : dbDelete.tables) {
+                string tableName = tbDelete.tableName;
+                vector<Condition> conditions = tbDelete.conditions;
+                vector<pair<string,Data*>> inpCond;
+                for(auto cond:conditions){
+                    string type = database->getColumnType(tableName,cond.columnName);
+                    if(type == "int"){
+                        DataInteger* data = new DataInteger(stoi(cond.value));
+                        inpCond.push_back(make_pair(cond.columnName,data));
+                    }
+                    else if(type == "float"){
+                        DataFloat* data = new DataFloat(stof(cond.value));
+                        inpCond.push_back(make_pair(cond.columnName,data));
+                    }
+                    else{
+                        DataString* data = new DataString(cond.value);
+                        inpCond.push_back(make_pair(cond.columnName,data));
+                    }
+                }
+                database->deleteRows(tableName,inpCond);
             }
         }
     }
