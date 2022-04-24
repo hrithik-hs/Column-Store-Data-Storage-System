@@ -1,35 +1,35 @@
 import pandas as pd
 
 def parser_market_fact_table(row):
-    return ("<input>\n\t \
-    <Ord_id>%s</Ord_id>\n\t \
-    <Prod_id>%s</Prod_id>\n\t \
-    <Ship_id>%s</Ship_id>\n\t \
-    <Cust_id>%s</Cust_id>\n\t \
-    <Sales>%s</Sales>\n\t \
-    <Discount>%s</Discount>\n\t \
-    <Order_Quantity>%s</Order_Quantity>\n\t \
-    <Profit>%s</Profit>\n\t \
-    <Shipping_Cost>%s</Shipping_Cost>\n\t \
-    <Product_Base_Margin>%s</Product_Base_Margin>\n \
-    </input>" % (row.Ord_id, row.Prod_id, row.Ship_id, row.Cust_id, row.Sales, row.Discount, row.Order_Quantity, 
+    return ("<Insert>\n\t \
+    <Column name=\"Ord_id\">%s</Column>\n\t \
+    <Column name=\"Prod_id\">%s</Column>\n\t \
+    <Column name=\"Ship_id\">%s</Column>\n\t \
+    <Column name=\"Cust_id\">%s</Column>\n\t \
+    <Column name=\"Sales\">%s</Column>\n\t \
+    <Column name=\"Discount\">%s</Column>\n\t \
+    <Column name=\"Order_Quantity\">%s</Column>\n\t \
+    <Column name=\"Profit\">%s</Column>\n\t \
+    <Column name=\"Shipping_Cost\">%s</Column>\n\t \
+    <Column name=\"Product_Base_Margin\">%s</Column>\n\t \
+    </Insert>" % (row.Ord_id, row.Prod_id, row.Ship_id, row.Cust_id, row.Sales, row.Discount, row.Order_Quantity, 
     row.Profit, row.Shipping_Cost, row.Product_Base_Margin))
 
 def parse_cust_dimension(row):
-    return ("<input>\n\t \
-    <Cust_id>%s<\Cust_id>\n\t \
-    <Customer_Name>%s<\Customer_Name>\n\t \
-    <City>%s<\City>\n\t \
-    <State>%s<\State>\n\t \
-    <Customer_Segment>%s<\Customer_Segment>\n \
-    <\input>" % (row.Cust_id, row.Customer_Name, row.City, row.State, row.Customer_Segment))
+    return ("<Insert>\n\t \
+    <Column name=\"Cust_id\">%s</Column>\n\t \
+    <Column name=\"Customer_Name\">%s</Column>\n\t \
+    <Column name=\"City\">%s</Column>\n\t \
+    <Column name=\"State\">%s</Column>\n\t \
+    <Column name=\"Customer_Segment\">%s</Column>\n\t \
+    <\Insert>" % (row.Cust_id, row.Customer_Name, row.City, row.State, row.Customer_Segment))
 
 def parse_prod_dimension(row):
-    return ("<input>\n\t \
-    <Prod_id>%s<\Prod_id>\n\t \
-    <Product_Category>%s<\Product_Category>\n\t \
-    <Product_Sub_Category>%s<\Product_Sub_Category>\n \
-    <\input>" % (row.Prod_id, row.Product_Category, row.Product_Sub_Category))
+    return ("<Insert>\n\t \
+    <Column name=\"Prod_id\">%s</Column>\n\t \
+    <Column name=\"Product_Category\">%s</Column>\n\t \
+    <Column name=\"Product_Sub_Category\">%s</Column>\n\t \
+    <\Insert>" % (row.Prod_id, row.Product_Category, row.Product_Sub_Category))
 
 if __name__ == '__main__':
     # Parse market_fact_table.csv
