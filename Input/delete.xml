@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <Database name = "marketdb">
+        <Table name = "prod_dimension">
+            <Column name="Product_Sub_Category" value="APPLIANCES"/>
+        </Table>
+        <Table name = "cust_dimension">
+            <Column name="State" value="Karnataka"/>
+            <Column name="Customer_Segment" value="CORPORATE"/>
+        </Table>
+        <Table name = "market_fact_table">
+            <Column name="Discount" value="0"/>
+        </Table>
+        <Table name = "order_dimension">
+            <Column name="Order_Priority" value="HIGH"/>
+        </Table>
+    </Database>
+</root>

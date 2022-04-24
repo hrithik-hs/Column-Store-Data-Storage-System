@@ -29,6 +29,7 @@
         <Table name="order_dimension">
             <Column name="Ord_id" type="string" constraints="P"></Column>
             <Column name="Order_Priority" type="enum"></Column>
+        </Table>
     </Database>
 </root>
 
