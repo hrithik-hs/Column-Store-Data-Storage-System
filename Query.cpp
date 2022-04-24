@@ -131,12 +131,131 @@ void Query::parseCreateQuery(){
 	}
 }
 
+void Query::parseSelectQuery(){
+    xml_document<> doc;
+	xml_node<> * root_node = NULL;
+	ifstream theFile (this->fileName);
+	vector<char> buffer((istreambuf_iterator<char>(theFile)), istreambuf_iterator<char>());
+	buffer.push_back('\0');
+	doc.parse<0>(&buffer[0]);
+   
+	root_node = doc.first_node("root");
+
+	for (xml_node<> * database_node = root_node->first_node("Database"); database_node; database_node = database_node->next_sibling()){
+		
+		string dbName="";
+		if(database_node->first_attribute("name"))
+			dbName=database_node->first_attribute("name")->value();
+		else ;
+
+		// cerr<<"DB name: "<<dbName<<endl;
+
+		struct DatabaseSelect databaseSelect;
+		databaseSelect.databaseName=dbName;
+
+		for (xml_node<> * table_node = database_node->first_node("Table"); table_node; table_node = table_node->next_sibling()){
+			string tableName="";
+			if(table_node->first_attribute("name"))
+				tableName=table_node->first_attribute("name")->value();
+			// cerr<<"\tTable name: "<<tableName<<endl;
+
+			struct TableSelect tableSelect;
+			tableSelect.tableName=tableName;
+
+			for(xml_node<> * column_node = table_node->first_node("Column"); column_node; column_node = column_node->next_sibling()){
+				string columnName="";
+				if(column_node->first_attribute("name"))
+					columnName=column_node->first_attribute("name")->value();
+				// cerr<<"\t\tColumn  name:      "<<columnName<<endl;
+				
+				string columnValue="";
+				bool flag=0;
+				if(column_node->first_attribute("value")){
+					columnValue=column_node->first_attribute("value")->value();
+					flag=1;
+				}
+        		// if(flag)cerr<<"\t\t       Condnvalue:      "<<columnValue<<endl;
+
+        		if(flag){
+        			struct Condition condition;
+					condition.columnName=columnName;
+					condition.value=columnValue;
+					tableSelect.conditions.push_back(condition);
+        		}
+        		else{
+        			tableSelect.columnNames.push_back(columnName);
+        		}
+			}
+			databaseSelect.tables.push_back(tableSelect);
+		}
+		this->databaseSelects.push_back(databaseSelect);
+	}
+}
+void Query::parseDeleteQuery(){
+    xml_document<> doc;
+	xml_node<> * root_node = NULL;
+	ifstream theFile (this->fileName);
+	vector<char> buffer((istreambuf_iterator<char>(theFile)), istreambuf_iterator<char>());
+	buffer.push_back('\0');
+	doc.parse<0>(&buffer[0]);
+   
+	root_node = doc.first_node("root");
+
+	for (xml_node<> * database_node = root_node->first_node("Database"); database_node; database_node = database_node->next_sibling()){
+		
+		string dbName="";
+		if(database_node->first_attribute("name"))
+			dbName=database_node->first_attribute("name")->value();
+		else ;
+
+		// cerr<<"DB name: "<<dbName<<endl;
+
+		struct DatabaseDelete databaseDelete;
+		databaseDelete.databaseName=dbName;
+
+		for (xml_node<> * table_node = database_node->first_node("Table"); table_node; table_node = table_node->next_sibling()){
+			string tableName="";
+			if(table_node->first_attribute("name"))
+				tableName=table_node->first_attribute("name")->value();
+			// cerr<<"\tTable name: "<<tableName<<endl;
+
+			struct TableDelete tableDelete;
+			tableDelete.tableName=tableName;
+
+			for(xml_node<> * column_node = table_node->first_node("Column"); column_node; column_node = column_node->next_sibling()){
+				string columnName="";
+				if(column_node->first_attribute("name"))
+					columnName=column_node->first_attribute("name")->value();
+				// cerr<<"\t\tColumn  name:      "<<columnName<<endl;
+				
+				string columnValue="";
+				if(column_node->first_attribute("value"))
+					columnValue=column_node->first_attribute("value")->value();
+        		// if(flag)cerr<<"\t\t       Condnvalue:      "<<columnValue<<endl;
+    			struct Condition condition;
+				condition.columnName=columnName;
+				condition.value=columnValue;
+
+				tableDelete.conditions.push_back(condition);
+			}
+			databaseDelete.tables.push_back(tableDelete);
+		}
+		this->databaseDeletes.push_back(databaseDelete);
+	}
+}
+
 void Query::parseQuery(){
     if(this->type=="create"){
         this->parseCreateQuery();
     }
     else if(this->type=="insert"){
         this->parseInsertQuery();
+    }
+    else if(this->type=="select"){
+        this->parseSelectQuery();
+    }
+    else if(this->type=="delete"){
+        this->parseDeleteQuery();
     }
     else cerr<<"Query Type Inconsistent"<<endl;
 }
@@ -160,4 +279,10 @@ vector<DatabaseInsert> Query::getDatabaseInserts(){
 }
 vector<DatabaseCreate> Query::getDatabaseCreates(){
     return this->databaseCreates;
+}
+vector<DatabaseSelect> Query::getDatabaseSelects(){
+    return this->databaseSelects;
+}
+vector<DatabaseDelete> Query::getDatabaseDeletes(){
+    return this->databaseDeletes;
 }
