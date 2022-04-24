@@ -31,6 +31,12 @@ def parse_prod_dimension(row):
     <Column name=\"Product_Sub_Category\">%s</Column>\n\t \
     </Insert>" % (row.Prod_id, row.Product_Category, row.Product_Sub_Category))
 
+def parse_order_dimension(row):
+    return ("<Insert>\n\t \
+        <Column name=\"Ord_id\">%s</Column>\n\t \
+        <Column name=\"Order_Priority\">%s</Column>\n\t \
+    </Insert>" % (row.Ord_id, row.Order_Priority))
+
 if __name__ == '__main__':
     # Parse market_fact_table.csv
     df = pd.read_csv("market_fact_table.csv")
@@ -54,5 +60,12 @@ if __name__ == '__main__':
         f.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
         f.write("<root>\n<Database name = \"marketdb\">\n<Table name = \"prod_dimension\">\n")
         f.write('\n'.join(df.apply(parse_prod_dimension, axis=1)))
+        f.write("\n</Table>\n</Database>\n</root>")
+
+    df = pd.read_csv("order_dimension.csv")
+    with open("order_dimension.xml", "w", encoding = "utf-8") as f:
+        f.write("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
+        f.write("<root>\n<Database name = \"marketdb\">\n<Table name = \"order_dimension\">\n")
+        f.write('\n'.join(df.apply(parse_order_dimension, axis=1)))
         f.write("\n</Table>\n</Database>\n</root>")
 
