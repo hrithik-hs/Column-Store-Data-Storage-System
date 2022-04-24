@@ -91,5 +91,7 @@ class Query{
 
         vector<DatabaseInsert> getDatabaseInserts();
         vector<DatabaseCreate> getDatabaseCreates();
+        vector<DatabaseSelect> getDatabaseSelects();
+        vector<DatabaseDelete> getDatabaseDeletes();
 
 };
