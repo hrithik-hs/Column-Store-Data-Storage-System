@@ -78,7 +78,7 @@ void printResult(int success) {
 }
 
 int main() {
-    Database* database = new Database("Sample", "./File");
+    Database* database = new Database("Sample",2, "./File");
     init(database);
 
     // Set EmpID in Emp as primary key and check Uniqueness constraint.

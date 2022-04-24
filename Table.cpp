@@ -5,8 +5,9 @@
 
 Table::Table(){}
 
-Table::Table(string name, string address){
+Table::Table(string name, int blockSize, string address){
 	this->name=name;
+	this->blockSize = blockSize;
 	this->address = address;
 	int fl = this->loadFile();
 	if(fl) cout << "[ T+ ] [ Constructor ] Table open successfull." << endl;
@@ -38,7 +39,7 @@ int Table::loadFile(){
         if(sz==0)break;
 		this->columnNames[(ptr->getColName())]=ind;
 		ind++;
-		Column* col=new Column(ptr->getColName(),folderAddress,ptr->getColType());
+		Column* col=new Column(ptr->getColName(), this->blockSize ,folderAddress,ptr->getColType());
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(ptr);
 		if(ptr->getIsPrimary()) this->primaryKey=this->columns.back();
@@ -66,7 +67,7 @@ int Table::writeFile(){
 void Table::addColumn(string columnName, string type){
 	if(columnName.size() && this->columnNames.find(columnName)==this->columnNames.end()){
         this->columnNames[(columnName)]=this->columns.size();
-		Column* col=new Column(columnName,this->address + "/" + this->name,type);
+		Column* col=new Column(columnName, this->blockSize ,this->address + "/" + this->name,type);
 		this->columns.push_back(col);
 		this->ColumnRecords.push_back(new ColumnRecord(columnName,type,0));
 		if(type == "enum") {

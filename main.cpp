@@ -51,8 +51,10 @@ int main(int argc, char *argv[]){
     Query *q = new Query(argv[1], argv[2]);
     
     if(string(argv[2]) == "create") {
-        vector<DatabaseCreate> vecObject = q->getDatabaseCreates();        for(auto dbCreate: vecObject){
+        vector<DatabaseCreate> vecObject = q->getDatabaseCreates();
+        for(auto dbCreate: vecObject){
             string databaseName = dbCreate.databaseName;
+            string block = dbCreate.blockSize;
             if(databaseNames.find(databaseName)==databaseNames.end()){
                 string address = "./File/"+databaseName+".db";
                 string folderAddress = "./File/"+databaseName;
@@ -60,7 +62,7 @@ int main(int argc, char *argv[]){
                 ofstream outfile(address);
                 databaseNames.insert(databaseName);
             }
-            Database* database = new Database(databaseName, "./File");
+            Database* database = new Database(databaseName,stoi(block), "./File");
             for(auto tbCreate: dbCreate.tables){
                 string tableName = tbCreate.tableName;
                 database->createTable(tbCreate.tableName);

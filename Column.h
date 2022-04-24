@@ -12,7 +12,7 @@
 #include "DataString.h"
 using namespace std;
 
-#define blockSize 2
+// #define blockSize 2
 #define endl "\n"
 
 
@@ -21,12 +21,13 @@ class Column{
 		string name;
         string address;
 		string type;
+		int blockSize;
 		bool isUnique;
 	public:
 		Column();
 		Column(string name);
         Column(string name,string address);
-        Column(string name,string address,string type);
+        Column(string name,int blockSize,string address,string type);
 		~Column();
 
 		void writeFile();

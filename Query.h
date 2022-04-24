@@ -39,6 +39,7 @@ struct TableCreate{
 
 struct DatabaseCreate{
     string databaseName;
+    string blockSize;
     vector<TableCreate>tables;
 };
 

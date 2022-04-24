@@ -17,13 +17,14 @@ using namespace std;
 class Table{
 	private:
 		string name, address;
+		int blockSize;
 		vector<Column * > columns;
 		Column * primaryKey;
 		map<string,int> columnNames;
 		vector<ColumnRecord*> ColumnRecords;
 	public:
 		Table();
-		Table(string name, string address);
+		Table(string name, int blockSize, string address);
 		~Table();
 
 		int loadFile();

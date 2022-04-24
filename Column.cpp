@@ -17,10 +17,11 @@ Column::Column(string name,string address){
     cout << "[ C+ ] [ Constructor ] Column open successfull." << endl;
 }
 
-Column::Column(string name,string address,string type){
+Column::Column(string name,int blockSize,string address,string type){
 	this->name=name;
     this->address=address;
 	this->type=type;
+    this->blockSize= blockSize;
     this->loadFile();
     cout << "[ C+ ] [ Constructor ] Column open successfull." << endl;
 }

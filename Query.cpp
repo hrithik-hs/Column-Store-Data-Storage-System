@@ -70,13 +70,17 @@ void Query::parseCreateQuery(){
 	root_node = doc.first_node("root");
 	for (xml_node<> * database_node = root_node->first_node("Database"); database_node; database_node = database_node->next_sibling()){
 		
-		string dbName="";
+		string dbName="",block="";
 		if(database_node->first_attribute("name"))
 			dbName=database_node->first_attribute("name")->value();
+		else ;
+		if(database_node->first_attribute("block"))
+			block=database_node->first_attribute("block")->value();
 		else ;
 
 		struct DatabaseCreate databaseCreate;
 		databaseCreate.databaseName=dbName;
+		databaseCreate.blockSize=block;
 
 		//cerr<<"DB name: "<<dbName<<endl;
 

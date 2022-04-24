@@ -19,12 +19,14 @@ class Database{
 	private:
 		string name;
 		string address;
+		int blockSize;
 		vector<Table * > tables;
 		vector<TableRecord*> tableRecords;
 		map<string,int> tableNames;
 	public:
 		Database();
 		Database(string name, string address);
+		Database(string name, int block, string address);
 		Database(string name, vector<Table *> & tables);
 		~Database();
 

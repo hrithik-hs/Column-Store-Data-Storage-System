@@ -1,7 +1,7 @@
 <!-- Create -->
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-    <Database name="marketdb">
+    <Database name="marketdb" block="1000">
         <Table name="market_fact_table">
             <Column name="Ord_id" type="string" constraints="P"></Column>
             <Column name="Prod_id" type="string"></Column>

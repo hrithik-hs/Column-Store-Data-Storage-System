@@ -12,6 +12,15 @@ Database::Database(string name, string address){
 	else cout << "[ D- ] [ Constructor ] Database open failed." << endl;
 }
 
+Database::Database(string name, int block, string address){
+	this->name = name;
+	this->address = address;
+	this->blockSize = block;
+    int fl = this->loadFile();
+	if(fl) cout << "[ D+ ] [ Constructor ] Database open successfull." << endl;
+	else cout << "[ D- ] [ Constructor ] Database open failed." << endl;
+}
+
 Database::Database(string name, vector<Table *> & tables){
 	this->name = name;
 	this->tables = tables;
@@ -60,7 +69,7 @@ void Database::createTable(string tableName){
     }
 	fclose(fptr2);
     
-	Table* table = new Table(tableName, this->address+'/'+this->name);
+	Table* table = new Table(tableName,this->blockSize, this->address+'/'+this->name);
 	this->tables.push_back(table);
 	tableRecords.push_back(new TableRecord(tableName));
 
@@ -188,6 +197,7 @@ int Database::loadFile() {
         cout << "[ D- ] [ Load database ] Cannot open table record file for " << this->name << " database." << endl;
         return 0;
     }
+	fread(&(this->blockSize), sizeof(this->blockSize), 1, fptr);
 	int ind=0;
 	while(1){
 	    TableRecord *ptr = new TableRecord();
@@ -196,7 +206,7 @@ int Database::loadFile() {
 		this->tableNames[(ptr->getName())]=ind;
 		ind++;
         this->tableRecords.push_back(ptr);
-        Table* newTable = new Table(ptr->getName(), folderAddress);
+        Table* newTable = new Table(ptr->getName(), this->blockSize, folderAddress);
 		this->tables.push_back(newTable);
 	}
 	fclose(fptr);
@@ -210,6 +220,7 @@ int Database::writeFile() {
         cout << "[ D- ] [ Write database ] Cannot open table record file for " << this->name << " database." << endl;
         return 0;
     }
+	fwrite(&(this->blockSize),sizeof(this->blockSize),1,fptr);
 	for(int i=0; i<this->tableRecords.size(); i++){
 		if(this->tableRecords[i] != NULL){
 			int sz = fwrite(this->tableRecords[i],sizeof(TableRecord),1,fptr);
