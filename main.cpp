@@ -79,26 +79,28 @@ int main(int argc, char *argv[]){
             if(databaseNames.find(databaseName)==databaseNames.end()) continue;
             Database* database = new Database(databaseName, "./File");
             for(auto tbInsert : dbInsert.tableInserts) {
-                vector<string> colName = tbInsert.columnNames;
-                vector<string> colValue = tbInsert.columnValues;
-                int len = colName.size();
-                Row *row = new Row();
-                for(int i = 0; i < len; i ++) {
-                    string type = database->getColumnType(tbInsert.tableName, colName[i]);
-                    if(type == "int") {
-                        int value = stoi(colValue[i]);
-                        row->addElement(value);
+                string tableName = tbInsert.tableName;
+                vector<InsertRow> rows = tbInsert.rows;
+                for(auto r: rows){
+                    int len = r.columnNames.size();
+                    Row *row = new Row();
+                    for(int i = 0; i < len; i ++) {
+                        string type = database->getColumnType(tableName, r.columnNames[i]);
+                        if(type == "int") {
+                            int value = stoi(r.columnValues[i]);
+                            row->addElement(value);
+                        }
+                        else if(type == "float") {
+                            float value = stof(r.columnValues[i]);
+                            row->addElement(value);
+                        }
+                        else {
+                            string value = r.columnValues[i];
+                            row->addElement(value);
+                        }
                     }
-                    else if(type == "float") {
-                        float value = stof(colValue[i]);
-                        row->addElement(value);
-                    }
-                    else {
-                        string value = colValue[i];
-                        row->addElement(value);
-                    }
+                    database->insertRow(tbInsert.tableName, row);
                 }
-                database->insertRow(tbInsert.tableName, row);
             }
         }
     }

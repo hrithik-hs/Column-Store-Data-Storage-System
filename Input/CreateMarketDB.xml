@@ -2,7 +2,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
     <Database name="marketdb">
-        <Table name="fact_sales">
+        <Table name="market_fact_table">
             <Column name="Ord_id" type="string" constraints="P"></Column>
             <Column name="Prod_id" type="string"></Column>
             <Column name="Ship_id" type="string"></Column>
@@ -14,12 +14,12 @@
             <Column name="Shipping_Cost" type="float"></Column>
             <Column name="Product_Base_Margin" type="float"></Column>
         </Table>
-        <Table name="dim_prod">
+        <Table name="prod_dimension">
             <Column name="Prod_id" type="string" constraints="P"></Column>
             <Column name="Product_Category" type="string"></Column>
             <Column name="Product_Sub_Category" type="string"></Column>
         </Table>
-        <Table name="dim_cust">
+        <Table name="cust_dimension">
             <Column name="Cust_id" type="string" constraints="P"></Column>
             <Column name="Customer_Name" type="string"></Column>
             <Column name="City" type="string"></Column>

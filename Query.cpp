@@ -12,8 +12,7 @@ Query::~Query(){}
 
 // code
 void Query::parseInsertQuery(){
-	// cerr<<"parse Ins Query\n";
-    xml_document<> doc;
+	xml_document<> doc;
     xml_node<> * root_node = NULL;
 
     ifstream theFile (this->fileName);
@@ -32,39 +31,30 @@ void Query::parseInsertQuery(){
 		struct DatabaseInsert databaseInsert;
 		databaseInsert.databaseName=dbName;
 
-		//cerr<<"DB name: "<<dbName<<endl;
-
 		for (xml_node<> * table_node = database_node->first_node("Table"); table_node; table_node = table_node->next_sibling()){
 			string tableName="";
 			if(table_node->first_attribute("name"))
 				tableName=table_node->first_attribute("name")->value();
-			//cerr<<"\tTable name: "<<tableName<<endl;
-
+			
 			struct TableInsert tableInsert;
 			tableInsert.tableName=tableName;
 			
 			for (xml_node<> * insert_node = table_node->first_node("Insert"); insert_node; insert_node = insert_node->next_sibling()){
-				//cerr<<"\tInsert Node"<<endl;
+				struct InsertRow row;
 				for(xml_node<> * column_node = insert_node->first_node("Column"); column_node; column_node = column_node->next_sibling()){
 					string columnName="";
 					if(column_node->first_attribute("name"))
 						columnName=column_node->first_attribute("name")->value();
-					// string columnType="";
-					// if(column_node->first_attribute("type"))
-					// 	columnType=column_node->first_attribute("type")->value();
-					//cerr<<"\t\tColumn name:      "<<columnName<<endl;
-            		// cerr<<"\t\t       type:      "<<columnType;
-            		string columnValue="";
+					string columnValue="";
             		columnValue=column_node->value();
-					//cerr<<"\t\tColumn Value:      "<<columnValue<<endl;
 
-					tableInsert.columnNames.push_back(columnName);
-					tableInsert.columnValues.push_back(columnValue);
+					row.columnNames.push_back(columnName);
+					row.columnValues.push_back(columnValue);
 				}
+				tableInsert.rows.push_back(row);
 			}
 			databaseInsert.tableInserts.push_back(tableInsert);
 		}
-
 		this->databaseInserts.push_back(databaseInsert);
 	}
 }

@@ -9,11 +9,16 @@
 using namespace std;
 using namespace rapidxml;
 
-struct TableInsert{
-    string tableName;
+struct InsertRow{
     vector<string>columnNames;
     vector<string>columnValues;
 };
+
+struct TableInsert{
+    string tableName;
+    vector<InsertRow>rows;
+};
+
 struct DatabaseInsert{
     string databaseName;
     vector<TableInsert> tableInserts;

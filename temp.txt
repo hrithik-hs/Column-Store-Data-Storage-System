@@ -1,0 +1,50 @@
+[ D+ ] [ Constructor ] Database open successfull.
+[ T+ ] [ Constructor ] Table open successfull.
+[ D+ ] [ Create table ] Table creation successfull. Name: market_fact_table
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Ord_id
+[ T+ ] [ Set primary ] Set primary successfull for Ord_id column.
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Prod_id
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Ship_id
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Cust_id
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Sales
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Discount
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Order_Quantity
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Profit
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Shipping_Cost
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Product_Base_Margin
+[ T+ ] [ Constructor ] Table open successfull.
+[ D+ ] [ Create table ] Table creation successfull. Name: prod_dimension
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Prod_id
+[ T+ ] [ Set primary ] Set primary successfull for Prod_id column.
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Product_Category
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Product_Sub_Category
+[ T+ ] [ Constructor ] Table open successfull.
+[ D+ ] [ Create table ] Table creation successfull. Name: cust_dimension
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Cust_id
+[ T+ ] [ Set primary ] Set primary successfull for Cust_id column.
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Customer_Name
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: City
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: State
+[ C+ ] [ Constructor ] Column open successfull.
+[ T+ ] [ Add column ] Column creation successfull. Name: Customer_Segment
+[ T+ ] [ Close table ] Close successfull for market_fact_table table.
+[ T+ ] [ Close table ] Close successfull for prod_dimension table.
+[ T+ ] [ Close table ] Close successfull for cust_dimension table.
+[ D+ ] [ Close database ] Close successfull for marketdb database.
