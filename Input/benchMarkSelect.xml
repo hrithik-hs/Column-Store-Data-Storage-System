@@ -1,26 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
     <Database name = "marketdb">
-        <Table name = "prod_dimension">
-            <Column name="Prod_id"/>
-            <Column name="Product_Category"/>
-            <Column name="Product_Sub_Category" value="APPLIANCES"/>
-        </Table>
-        <Table name = "cust_dimension">
-            <Column name="Cust_id"/>
-            <Column name="Customer_Name"/>
-            <Column name="City"/>
-            <Column name="State" value="Karnataka"/>
-            <Column name="Customer_Segment" value="CORPORATE"/>
-        </Table>
         <Table name = "market_fact_table">
-            <Column name="Ord_id"/>
-            <Column name="Prod_id"/>
-            <Column name="Cust_id"/>
             <Column name="Profit"/>
-            <Column name="Sales"/>
-            <Column name="Discount"/>
             <Column name="Discount" value="0"/> 
+        </Table>
+        <Table name="order_dimension">
+            <Column name="Order_Priority" />
         </Table>
     </Database>
 </root>

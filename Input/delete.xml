@@ -11,5 +11,8 @@
         <Table name = "market_fact_table">
             <Column name="Discount" value="0"/>
         </Table>
+        <Table name="order_dimension">
+            <Column name="Ord_Priority" value = "HIGH" /> 
+        </Table>
     </Database>
 </root>

@@ -104,6 +104,7 @@ int main(int argc, char *argv[]){
                     database->insertRow(tbInsert.tableName, row);
                 }
             }
+            database->close();
         }
     }
 
@@ -139,6 +140,7 @@ int main(int argc, char *argv[]){
                 auto duration = duration_cast<milliseconds>(stop - start);
                 cout << "Total time taken(in milliseconds): " << duration.count() << endl;
             }
+            database->close();
         }
     }
 
@@ -169,6 +171,7 @@ int main(int argc, char *argv[]){
                 }
                 database->deleteRows(tableName,inpCond);
             }
+            database->close();
         }
     }
 

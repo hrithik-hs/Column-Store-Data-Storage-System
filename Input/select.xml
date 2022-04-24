@@ -22,5 +22,10 @@
             <Column name="Discount"/>
             <Column name="Discount" value="0"/>
         </Table>
+        <Table name="order_dimension">
+            <Column name="Ord_id" />
+            <Column name="Order_Priority" />
+            <Column name="Order_Priority" value="HIGH"/>
+        </Table>
     </Database>
 </root>
