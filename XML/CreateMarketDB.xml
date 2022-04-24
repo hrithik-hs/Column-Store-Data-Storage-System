@@ -1,0 +1,32 @@
+<!-- Create -->
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <Database name="marketdb">
+        <Table name="fact_sales">
+            <Column name="Ord_id" type="string" constraints="P"></Column>
+            <Column name="Prod_id" type="string"></Column>
+            <Column name="Ship_id" type="string"></Column>
+            <Column name="Cust_id" type="string"></Column>
+            <Column name="Sales" type="float"></Column>
+            <Column name="Discount" type="float"></Column>
+            <Column name="Order_Quantity" type="int"></Column>
+            <Column name="Profit" type="float"></Column>
+            <Column name="Shipping_Cost" type="float"></Column>
+            <Column name="Product_Base_Margin" type="float"></Column>
+        </Table>
+        <Table name="dim_prod">
+            <Column name="Prod_id" type="string" constraints="P"></Column>
+            <Column name="Product_Category" type="string"></Column>
+            <Column name="Product_Sub_Category" type="string"></Column>
+        </Table>
+        <Table name="dim_cust">
+            <Column name="Cust_id" type="string" constraints="P"></Column>
+            <Column name="Customer_Name" type="string"></Column>
+            <Column name="City" type="string"></Column>
+            <Column name="State" type="string"></Column>
+            <Column name="Customer_Segment" type="string"></Column>
+        </Table>
+    </Database>
+</root>
+
+		

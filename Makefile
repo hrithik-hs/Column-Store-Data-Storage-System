@@ -5,5 +5,4 @@ test:
 clean:
 	rm -r File
 	mkdir File
-	mkdir File/Sample
-	touch File/Sample.db
+	touch File/root

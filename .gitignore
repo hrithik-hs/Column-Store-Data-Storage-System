@@ -2,11 +2,4 @@
 .vscode/settings.json
 a.out
 File/
-File/Sample.db
-File/Sample/Emp.tb
-File/Sample/Emp/EmpID.col
-File/Sample/Emp/Name.col
-File/Sample/Emp/Salary.col
-File/Sample/Emp/Emp.del
-File/Sample/Emp/Emp.flag
 

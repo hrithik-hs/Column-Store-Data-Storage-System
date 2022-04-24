@@ -216,7 +216,7 @@ string Table::getName(){
 string Table::getColumnType(string columnName) {
 	if(this->columnNames.count(columnName) == 0) {
 		cout << "[ T- ][ getColumnType ] Column does not exists." << endl;
-		return ;
+		return "";
 	}
 	int index = this->columnNames[columnName];
 	return this->columns[index]->getType();

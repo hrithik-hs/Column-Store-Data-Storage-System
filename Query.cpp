@@ -1,14 +1,18 @@
 #include "Query.h"
 
+
 Query::Query(){}
 Query::Query(string fileName,string type){
+	// cerr<<"Query"<<endl;
     this->fileName=fileName;
     this->type=type;
+    this->parseQuery();
 }
 Query::~Query(){}
 
 // code
 void Query::parseInsertQuery(){
+	// cerr<<"parse Ins Query\n";
     xml_document<> doc;
     xml_node<> * root_node = NULL;
 
@@ -25,16 +29,22 @@ void Query::parseInsertQuery(){
 			dbName=database_node->first_attribute("name")->value();
 		else ;
 
-		cerr<<"DB name: "<<dbName<<endl;
+		struct DatabaseInsert databaseInsert;
+		databaseInsert.databaseName=dbName;
+
+		//cerr<<"DB name: "<<dbName<<endl;
 
 		for (xml_node<> * table_node = database_node->first_node("Table"); table_node; table_node = table_node->next_sibling()){
 			string tableName="";
 			if(table_node->first_attribute("name"))
 				tableName=table_node->first_attribute("name")->value();
-			cerr<<"\tTable name: "<<tableName<<endl;
+			//cerr<<"\tTable name: "<<tableName<<endl;
+
+			struct TableInsert tableInsert;
+			tableInsert.tableName=tableName;
 			
 			for (xml_node<> * insert_node = table_node->first_node("Insert"); insert_node; insert_node = insert_node->next_sibling()){
-				cerr<<"\tInsert Node"<<endl;
+				//cerr<<"\tInsert Node"<<endl;
 				for(xml_node<> * column_node = insert_node->first_node("Column"); column_node; column_node = column_node->next_sibling()){
 					string columnName="";
 					if(column_node->first_attribute("name"))
@@ -42,19 +52,83 @@ void Query::parseInsertQuery(){
 					// string columnType="";
 					// if(column_node->first_attribute("type"))
 					// 	columnType=column_node->first_attribute("type")->value();
-					cerr<<"\t\tColumn name:      "<<columnName<<endl;
+					//cerr<<"\t\tColumn name:      "<<columnName<<endl;
             		// cerr<<"\t\t       type:      "<<columnType;
             		string columnValue="";
             		columnValue=column_node->value();
-					cerr<<"\t\tColumn Value:      "<<columnValue<<endl;
-				}
+					//cerr<<"\t\tColumn Value:      "<<columnValue<<endl;
 
+					tableInsert.columnNames.push_back(columnName);
+					tableInsert.columnValues.push_back(columnValue);
+				}
 			}
+			databaseInsert.tableInserts.push_back(tableInsert);
 		}
+
+		this->databaseInserts.push_back(databaseInsert);
 	}
 }
 void Query::parseCreateQuery(){
+	xml_document<> doc;
+	xml_node<> * root_node = NULL;
 
+	ifstream theFile (this->fileName);
+	vector<char> buffer((istreambuf_iterator<char>(theFile)), istreambuf_iterator<char>());
+	buffer.push_back('\0');
+	doc.parse<0>(&buffer[0]);
+   
+	root_node = doc.first_node("root");
+	for (xml_node<> * database_node = root_node->first_node("Database"); database_node; database_node = database_node->next_sibling()){
+		
+		string dbName="";
+		if(database_node->first_attribute("name"))
+			dbName=database_node->first_attribute("name")->value();
+		else ;
+
+		struct DatabaseCreate databaseCreate;
+		databaseCreate.databaseName=dbName;
+
+		//cerr<<"DB name: "<<dbName<<endl;
+
+		for (xml_node<> * table_node = database_node->first_node("Table"); table_node; table_node = table_node->next_sibling()){
+			string tableName="";
+			if(table_node->first_attribute("name"))
+				tableName=table_node->first_attribute("name")->value();
+			//cerr<<"\tTable name: "<<tableName<<endl;
+
+			struct TableCreate tableCreate;
+			tableCreate.tableName=tableName;
+
+			for(xml_node<> * column_node = table_node->first_node("Column"); column_node; column_node = column_node->next_sibling()){
+				string columnName="";
+				if(column_node->first_attribute("name"))
+					columnName=column_node->first_attribute("name")->value();
+				string columnType="";
+				if(column_node->first_attribute("type"))
+					columnType=column_node->first_attribute("type")->value();
+				string columnConstraints="";
+				if(column_node->first_attribute("constraints"))
+					columnConstraints=column_node->first_attribute("constraints")->value();
+
+				struct ColumnCreate columnCreate;
+				columnCreate.columnName=columnName;
+				columnCreate.columnType=columnType;
+				columnCreate.isUniqueConstraint=0;
+				columnCreate.isPrimaryConstraint=0;
+
+				if(columnConstraints=="P")columnCreate.isPrimaryConstraint=1;
+				if(columnConstraints=="U")columnCreate.isUniqueConstraint=1;
+
+				//cerr<<"\t\tColumn  name:      "<<columnName<<endl;
+        		//cerr<<"\t\t        type:      "<<columnType<<endl;
+        		//cerr<<"\t\t       const:      "<<columnConstraints<<endl;
+
+        		tableCreate.columns.push_back(columnCreate);
+			}
+			databaseCreate.tables.push_back(tableCreate);
+		}
+		this->databaseCreates.push_back(databaseCreate);
+	}
 }
 
 void Query::parseQuery(){
@@ -64,6 +138,7 @@ void Query::parseQuery(){
     else if(this->type=="insert"){
         this->parseInsertQuery();
     }
+    else cerr<<"Query Type Inconsistent"<<endl;
 }
 
 void Query::setFileName(string fileName){
