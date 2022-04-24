@@ -280,6 +280,8 @@ vector<Data*> Column::selectRows(int block, vector<int> index){
 }
 
 vector<Data*> Column::selectRows(int block, vector<int> index, vector<string> encoding){
+    cout << "Column Enum" << endl;
+    for(auto i : encoding) cout << i << endl;
     vector<Data*> ans;
     vector<FILE* > rptr;
     for(int i = 0; i < encoding.size(); i ++) {
@@ -294,11 +296,14 @@ vector<Data*> Column::selectRows(int block, vector<int> index, vector<string> en
         }
         char value[100];
         for(int j = 0; j < encoding.size(); j ++) {
+            cout << 1 << " " << readData[j] << " ";
             if(readData[j]) {
+                cerr << encoding[j] << endl;
                 strcpy(value, encoding[j].c_str());
                 break;
             }
         }
+        cout << endl;
         DataString *ptr = new DataString(value);
         ans.push_back(ptr);
     }

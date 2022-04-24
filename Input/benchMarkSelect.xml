@@ -20,7 +20,7 @@
             <Column name="Profit"/>
             <Column name="Sales"/>
             <Column name="Discount"/>
-            <Column name="Discount" value="0"/>
+            <Column name="Discount" value="0"/> 
         </Table>
     </Database>
 </root>

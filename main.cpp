@@ -2,7 +2,7 @@
 #include <set>
 #include <vector>
 #include <iostream>
-
+#include <chrono>
 #include "Database.h"
 #include "Row.h"
 #include "Query.h"
@@ -12,7 +12,7 @@
 #define endl "\n"
 
 using namespace std;
-
+using namespace std::chrono;
 set<string> databaseNames;
 
 void loadRoot(){
@@ -45,6 +45,7 @@ void writeRoot(){
 }
 
 int main(int argc, char *argv[]){
+    
     loadRoot();
 
     Query *q = new Query(argv[1], argv[2]);
@@ -132,7 +133,11 @@ int main(int argc, char *argv[]){
                         inpCond.push_back(make_pair(cond.columnName,data));
                     }
                 }
+                auto start = high_resolution_clock::now();
                 database->selectRows(tableName,colName,inpCond);
+                auto stop = high_resolution_clock::now();
+                auto duration = duration_cast<milliseconds>(stop - start);
+                cout << "Total time taken(in milliseconds): " << duration.count() << endl;
             }
         }
     }
