@@ -80,6 +80,8 @@ class Query{
 		// code
         void parseInsertQuery();
         void parseCreateQuery();
+        void parseSelectQuery();
+        void parseDeleteQuery();
 
         void parseQuery();
 
