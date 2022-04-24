@@ -10,6 +10,7 @@
 #include "DataString.h"
 
 using namespace std;
+#define endl "\n"
 
 class Row{
 	private:

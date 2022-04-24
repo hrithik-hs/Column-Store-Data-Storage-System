@@ -12,6 +12,7 @@ namespace fs = std::experimental::filesystem;
 #include "Row.h"
 
 using namespace std;
+#define endl "\n"
 
 class Table{
 	private:

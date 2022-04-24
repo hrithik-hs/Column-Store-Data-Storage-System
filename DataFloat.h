@@ -6,6 +6,7 @@
 #include <set>
 #include "Data.h"
 using namespace std;
+#define endl "\n"
 
 class DataFloat:public Data{
 	private:

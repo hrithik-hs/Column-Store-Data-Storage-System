@@ -11,6 +11,8 @@
 #include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 
+#define endl "\n"
+
 using namespace std;
 
 class Database{

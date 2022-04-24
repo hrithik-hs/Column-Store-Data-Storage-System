@@ -6,6 +6,7 @@
 #include <cstring>
 
 using namespace std;
+#define endl "\n"
 
 class Data{
 	private:

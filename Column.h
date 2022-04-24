@@ -13,6 +13,7 @@
 using namespace std;
 
 #define blockSize 2
+#define endl "\n"
 
 
 class Column{

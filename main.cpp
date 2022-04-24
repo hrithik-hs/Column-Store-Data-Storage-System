@@ -9,6 +9,7 @@
 
 #define tr(X) cerr << X << endl;
 #define fn() cerr<<__PRETTY_FUNCTION__<<endl;
+#define endl "\n"
 
 using namespace std;
 

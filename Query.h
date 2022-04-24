@@ -8,6 +8,7 @@
 
 using namespace std;
 using namespace rapidxml;
+#define endl "\n"
 
 struct InsertRow{
     vector<string>columnNames;

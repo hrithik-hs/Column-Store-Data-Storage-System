@@ -6,6 +6,7 @@
 #include <cstring>
 #include "Data.h"
 using namespace std;
+#define endl "\n"
 
 class DataInteger:public Data{
 	private:

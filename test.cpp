@@ -4,6 +4,7 @@
 
 // #include "Database.h"
 // #include "Row.h"
+// #define endl "\n"
 
 // void init(Database* database) {
 //     cerr << "Database" << endl;
