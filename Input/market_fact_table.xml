@@ -100790,6 +100790,6 @@
 	     <Column name="Shipping_Cost">4.86</Column>
 	     <Column name="Product_Base_Margin">0.38</Column>
 	     </Insert>
-<\Table>
-<\Database>
-<\root>
+</Table>
+</Database>
+</root>
