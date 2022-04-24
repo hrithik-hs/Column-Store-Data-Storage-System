@@ -36,6 +36,32 @@ struct DatabaseCreate{
     vector<TableCreate>tables;
 };
 
+struct Condition{
+    string columnName;
+    string value;
+};
+
+struct TableSelect{
+    string tableName;
+    vector<string>columnNames;
+    vector<Condition>conditions;
+};
+
+struct DatabaseSelect{
+    string databaseName;
+    vector<TableSelect>tables;
+};
+
+struct TableDelete{
+    string tableName;
+    vector<Condition>conditions;
+};
+
+struct DatabaseDelete{
+    string databaseName;
+    vector<TableDelete>tables;
+};
+
 
 class Query{
 	private:
@@ -43,6 +69,8 @@ class Query{
         string type; // insert create
         vector<DatabaseInsert> databaseInserts;
         vector<DatabaseCreate> databaseCreates;
+        vector<DatabaseSelect> databaseSelects;
+        vector<DatabaseDelete> databaseDeletes;
 
 	public:
 		Query();
