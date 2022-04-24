@@ -8,16 +8,24 @@ Database::Database(string name, string address){
 	this->name = name;
 	this->address = address;
     int fl = this->loadFile();
-	if(fl) cout << "[ D+ ] [ Constructor ] Database open successfull." << endl;
-	else cout << "[ D- ] [ Constructor ] Database open failed." << endl;
+	if(fl){
+        //cerr << "[ D+ ] [ Constructor ] Database open successfull." << endl;
+    } 
+	else {
+        //cerr << "[ D- ] [ Constructor ] Database open failed." << endl;
+    }
 }
 
 Database::Database(string name, vector<Table *> & tables){
 	this->name = name;
 	this->tables = tables;
     int fl = this->loadFile();
-	if(fl) cout << "[ D+ ] [ Constructor ] Database open successfull." << endl;
-	else cout << "[ D- ] [ Constructor ] Database open failed." << endl;
+	if(fl){
+         //cerr << "[ D+ ] [ Constructor ] Database open successfull." << endl;
+    }
+	else{
+        //cerr << "[ D- ] [ Constructor ] Database open failed." << endl;
+    }
 }
 
 Database::~Database(){
@@ -27,13 +35,13 @@ Database::~Database(){
 	for(int i = 0; i < this->tableRecords.size(); i ++) {
 		delete this->tableRecords[i];
 	}
-	cout << "[ D+ ] [ Destructor ] Database close successfull." << endl;
+	//cerr << "[ D+ ] [ Destructor ] Database close successfull." << endl;
 }
 
 void Database::createTable(string tableName){
     for(auto table: this->tables) {
         if(table->getName() == tableName) {
-            cout << "[ D! Warning ] [ Create table ] Table already exists with given name: " << tableName << endl;
+            //cerr << "[ D! Warning ] [ Create table ] Table already exists with given name: " << tableName << endl;
             return;
         }
     }
@@ -47,7 +55,7 @@ void Database::createTable(string tableName){
 	string flagAddress = folderAddress + "/" + tableName + ".flag";
 	FILE* fptr1 = fopen(&flagAddress[0], "w");
 	if(!fptr1) {
-        cout << "[ D- ] [ Create table ] Cannot create the flag file for " << tableName << " table." << endl;
+        //cerr << "[ D- ] [ Create table ] Cannot create the flag file for " << tableName << " table." << endl;
         return;
     }
 	fclose(fptr1);
@@ -55,7 +63,7 @@ void Database::createTable(string tableName){
 	string delAddress = folderAddress + "/" + tableName + ".del";
 	FILE* fptr2 = fopen(&delAddress[0], "w");
 	if(!fptr2) {
-        cout << "[ D- ] [ Create table ] Cannot create the delete file for " << tableName << " table." << endl;
+        //cerr << "[ D- ] [ Create table ] Cannot create the delete file for " << tableName << " table." << endl;
         return;
     }
 	fclose(fptr2);
@@ -64,12 +72,12 @@ void Database::createTable(string tableName){
 	this->tables.push_back(table);
 	tableRecords.push_back(new TableRecord(tableName));
 
-	cout << "[ D+ ] [ Create table ] Table creation successfull. Name: "<< tableName << endl;
+	//cerr << "[ D+ ] [ Create table ] Table creation successfull. Name: "<< tableName << endl;
 }
 
 void Database::dropTable(string tableName){
 	if(this->tableNames.find(tableName)==this->tableNames.end()){
-		cout << "[ D! Warning ]  [ Drop table ] Table doesn't exists with given name: " << tableName << endl;
+		//cerr << "[ D! Warning ]  [ Drop table ] Table doesn't exists with given name: " << tableName << endl;
 		return;
 	}
 	int toDelete=this->tableNames[tableName];
@@ -81,13 +89,13 @@ void Database::dropTable(string tableName){
 		}
 		this->tables.erase(this->tables.begin() + toDelete);
 		this->tableRecords.erase(this->tableRecords.begin() + toDelete);
-		cout << "[ D+ ] [ Drop table ] Table drop successfull. Name: "<< tableName << endl;
+		//cerr << "[ D+ ] [ Drop table ] Table drop successfull. Name: "<< tableName << endl;
 	}
 }
 
 void Database::addColumn(string tableName, string columnName, string datatype) {
 	if(this->tableNames.find(tableName)==this->tableNames.end()){
-		cout << "[ D! Warning ]  [ Add column ] Table doesn't exists with given name: " << tableName << endl;
+		//cerr << "[ D! Warning ]  [ Add column ] Table doesn't exists with given name: " << tableName << endl;
 		return;
 	}
 	this->tables[this->tableNames[tableName]]->addColumn(columnName, datatype);
@@ -95,7 +103,7 @@ void Database::addColumn(string tableName, string columnName, string datatype) {
 
 void Database::dropColumn(string tableName, string columnName) {
 	if(this->tableNames.find(tableName)==this->tableNames.end()){
-		cout << "[ D! Warning ]  [ Drop column ] Table doesn't exists with given name: " << tableName << endl;
+		//cerr << "[ D! Warning ]  [ Drop column ] Table doesn't exists with given name: " << tableName << endl;
 		return;
 	}
 	this->tables[this->tableNames[tableName]]->dropColumn(columnName);
@@ -103,7 +111,7 @@ void Database::dropColumn(string tableName, string columnName) {
 
 void Database::alterColumn(string tableName, string columnName, string newName) {
 	if(this->tableNames.find(tableName)==this->tableNames.end()){
-		cout << "[ D! Warning ]  [ Alter column ] Table doesn't exists with given name: " << tableName << endl;
+		//cerr << "[ D! Warning ]  [ Alter column ] Table doesn't exists with given name: " << tableName << endl;
 		return;
 	}
 	this->tables[this->tableNames[tableName]]->alterColumn(columnName, newName);
@@ -111,7 +119,7 @@ void Database::alterColumn(string tableName, string columnName, string newName) 
 
 void Database::setPrimaryKey(string tableName, string columnName) {
 	if(this->tableNames.find(tableName)==this->tableNames.end()){
-		cout << "[ D! Warning ]  [ Set primary ] Table doesn't exists with given name: " << tableName << endl;
+		//cerr << "[ D! Warning ]  [ Set primary ] Table doesn't exists with given name: " << tableName << endl;
 		return;
 	}
 	this->tables[this->tableNames[tableName]]->setPrimaryKey(columnName);
@@ -119,12 +127,12 @@ void Database::setPrimaryKey(string tableName, string columnName) {
 
 void Database::setName(string name){
 	this->name = name;
-	cout << "[ D+ ] Set name successfull " << endl;
+	//cerr << "[ D+ ] Set name successfull " << endl;
 }
 
 void Database::setIsUniqueConstraint(string tableName, string columnName, bool value) {
 	if(this->tableNames.find(tableName)==this->tableNames.end()){
-		cout << "[ D! Warning ]  [ Set unique ] Table doesn't exists with given name: " << tableName << endl;
+		//cerr << "[ D! Warning ]  [ Set unique ] Table doesn't exists with given name: " << tableName << endl;
 		return;
 	}
 	this->tables[this->tableNames[tableName]]->setIsUniqueConstraint(columnName, value);
@@ -136,7 +144,7 @@ string Database::getName(){
 
 string Database::getColumnType(string tableName, string columnName) {
 	if(tableNames.count(tableName) == 0) {
-		cout << "[ D- ][ getColumnType ] Table does not exists." << endl;
+		//cerr << "[ D- ][ getColumnType ] Table does not exists." << endl;
 		return "";
 	}
 	int index = this->tableNames[tableName];
@@ -149,35 +157,47 @@ vector<Table*> Database::getTables(){
 
 int Database::insertRow(string  tableName,Row * row){
 	if(this->tableNames.find(tableName)==this->tableNames.end()){
-		cout << "[ D! Warning ] [ Insert row ] Table doesn't exists with given name: " << tableName << endl;
+		//cerr << "[ D! Warning ] [ Insert row ] Table doesn't exists with given name: " << tableName << endl;
 		return 0;
 	}
 	int fl = this->tables[this->tableNames[tableName]]->insertRow(row);
-	if(fl) cout << "[ D+ ] [ Insert row ] Insert row successfull" << endl;
-	else cout << "[ D- ] [ Insert row ] Insert row failed" << endl;
+	if(fl) {
+        //cerr << "[ D+ ] [ Insert row ] Insert row successfull" << endl;
+    }
+	else {
+        //cerr << "[ D- ] [ Insert row ] Insert row failed" << endl;
+    }
 	return fl;
 }
 
 int Database::selectRows(string tableName, vector<string> cols, vector<pair<string,Data*>> conditions){
 	if(this->tableNames.find(tableName)==this->tableNames.end()){
-		cout << "[ D! Warning ] [ Select row ] Table doesn't exists with given name: " << tableName << endl;
+		//cerr << "[ D! Warning ] [ Select row ] Table doesn't exists with given name: " << tableName << endl;
 		return 0;
 	}
 	int fl = this->tables[this->tableNames[tableName]]->selectRows(cols,conditions);
-	if(fl) cout << "[ D+ ] [ Select row ] Select row successfull" << endl;
-	else cout << "[ D- ] [ Select row ] Select row failed" << endl;
-	return fl;
+	if(fl) {
+        //cerr << "[ D+ ] [ Select row ] Select row successfull" << endl;
+    }
+    else {
+        //cerr << "[ D- ] [ Select row ] Select row failed" << endl;
+    }
+    return fl;
 }
 
 int Database::deleteRows(string tableName, vector<pair<string,Data*>> conditions){
 	if(this->tableNames.find(tableName)==this->tableNames.end()){
-		cout << "[ D! Warning ]  [ Delete row ] Table doesn't exists with given name: " << tableName << endl;
+		//cerr << "[ D! Warning ]  [ Delete row ] Table doesn't exists with given name: " << tableName << endl;
 		return 0;
 	}
 	int fl = this->tables[this->tableNames[tableName]]->deleteRows(conditions);
-	if(fl) cout << "[ D+ ]  [ Delete row ] Delete row successfull" << endl;
-	else cout << "[ D- ]  [ Delete row ] Delete row failed" << endl;
-	return fl;
+	if(fl){ 
+        //cerr << "[ D+ ]  [ Delete row ] Delete row successfull" << endl;
+	}
+    else {
+        //cerr << "[ D- ]  [ Delete row ] Delete row failed" << endl;
+    }
+    return fl;
 }
 
 int Database::loadFile() {
@@ -185,7 +205,7 @@ int Database::loadFile() {
 	string folderAddress = this->address+'/'+this->name;
 	FILE* fptr = fopen(&curAddress[0], "rb");
 	if(!fptr) {
-        cout << "[ D- ] [ Load database ] Cannot open table record file for " << this->name << " database." << endl;
+        //cerr << "[ D- ] [ Load database ] Cannot open table record file for " << this->name << " database." << endl;
         return 0;
     }
 	int ind=0;
@@ -207,7 +227,7 @@ int Database::writeFile() {
 	string address = this->address + "/" + this->name + ".db";
 	FILE* fptr = fopen(&address[0], "wb");
 	if(!fptr) {
-        cout << "[ D- ] [ Write database ] Cannot open table record file for " << this->name << " database." << endl;
+        //cerr << "[ D- ] [ Write database ] Cannot open table record file for " << this->name << " database." << endl;
         return 0;
     }
 	for(int i=0; i<this->tableRecords.size(); i++){
@@ -222,22 +242,26 @@ int Database::writeFile() {
 void Database::close() {
     int fl = writeFile();
 	if(!fl){
-		cout << "[ D- ] [ Close database ] Close failed for " << this->name << " database." << endl;
+		//cerr << "[ D- ] [ Close database ] Close failed for " << this->name << " database." << endl;
         return;
 	}
     for(auto table: this->tables) {
         fl = table->close();
 		if(!fl) break;
     }
-	if(!fl) cout << "[ D- ] [ Close database ] Close failed for " << this->name << " database." << endl;
-	else cout << "[ D+ ] [ Close database ] Close successfull for " << this->name << " database." << endl;
+	if(!fl) {
+        //cerr << "[ D- ] [ Close database ] Close failed for " << this->name << " database." << endl;
+	}
+    else {
+        //cerr << "[ D+ ] [ Close database ] Close successfull for " << this->name << " database." << endl;
+    }
 }
 
 void Database::show() {
-	cout<<endl;
+	//cerr<<endl;
     for(auto table : this->tables) {
-        cout << "Printing " << table->getName() << endl;
+        //cerr << "Printing " << table->getName() << endl;
         table->showTable();
-		cout<<endl;
+		//cerr<<endl;
     }
 }

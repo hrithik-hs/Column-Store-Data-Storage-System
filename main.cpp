@@ -19,7 +19,7 @@ void loadRoot(){
     string file_source="./File/root";
     FILE* readptr = fopen(&file_source[0], "r");
     if(!readptr) {
-        cout << "[ M- ] [ Load root ] Cannot open root file." << endl;
+        //cerr << "[ M- ] [ Load root ] Cannot open root file." << endl;
     }
     while(1){
         char readData[100];
@@ -34,7 +34,7 @@ void writeRoot(){
     string file_source="./File/root";
     FILE* writeptr = fopen(&file_source[0], "w");
     if(!writeptr) {
-        cout << "[ M- ] [ Write root ] Cannot open root file." << endl;
+        //cerr << "[ M- ] [ Write root ] Cannot open root file." << endl;
     }
     for(auto st:databaseNames){
         char writeData[100];

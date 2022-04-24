@@ -14,7 +14,7 @@ Column::Column(string name,string address){
 	this->name=name;
     this->address=address;
     this->loadFile();
-    cout << "[ C+ ] [ Constructor ] Column open successfull." << endl;
+    //cerr << "[ C+ ] [ Constructor ] Column open successfull." << endl;
 }
 
 Column::Column(string name,string address,string type){
@@ -22,11 +22,11 @@ Column::Column(string name,string address,string type){
     this->address=address;
 	this->type=type;
     this->loadFile();
-    cout << "[ C+ ] [ Constructor ] Column open successfull." << endl;
+    //cerr << "[ C+ ] [ Constructor ] Column open successfull." << endl;
 }
 
 Column::~Column(){
-    cout << "[ C+ ] [ Destructor ] Column close successfull." << endl;
+    //cerr << "[ C+ ] [ Destructor ] Column close successfull." << endl;
 }
 
 void Column::writeFile(){
@@ -39,7 +39,7 @@ void Column::insertValue(float value, int index){
     string file_source=this->address+"/"+this->name+".col";
     FILE* writeptr = fopen(&file_source[0], "r+");
     if(!writeptr) {
-        cout << "[ C- ] [ Insert ] Cannot open column file for " << this->name << " column." << endl;
+        //cerr << "[ C- ] [ Insert ] Cannot open column file for " << this->name << " column." << endl;
         return;
     }
     if(index!=-1) fseek(writeptr,index*sizeof(value),SEEK_SET);
@@ -52,7 +52,7 @@ void Column::insertValue(int value, int index){
     string file_source=this->address+"/"+this->name+".col";
     FILE* writeptr = fopen(&file_source[0], "r+");
     if(!writeptr) {
-        cout << "[ C- ] [ Insert ] Cannot open column file for " << this->name << " column." << endl;
+        //cerr << "[ C- ] [ Insert ] Cannot open column file for " << this->name << " column." << endl;
         return;
     }
     if(index!=-1) fseek(writeptr,index*sizeof(value),SEEK_SET);
@@ -67,7 +67,7 @@ void Column::insertValue(string value, int index){
     string file_source=this->address+"/"+this->name+".col";
     FILE* writeptr = fopen(&file_source[0], "r+");
     if(!writeptr) {
-        cout << "[ C- ] [ Insert ] Cannot open column file for " << this->name << " column." << endl;
+        //cerr << "[ C- ] [ Insert ] Cannot open column file for " << this->name << " column." << endl;
         return;
     }
     if(index!=-1) fseek(writeptr,index*sizeof(writeData),SEEK_SET);
@@ -114,7 +114,7 @@ void Column::insertValue(string value, int index, vector<string> encoding) {
         string file_source = this->address + "/" + this->name + "_" + to_string(i) + ".col";
         FILE* writeptr = fopen(&file_source[0], "r+");
         if(!writeptr) {
-            cout << "[ C- ] [ Insert ] Cannot open column file for " << this->name << " column." << endl;
+            //cerr << "[ C- ] [ Insert ] Cannot open column file for " << this->name << " column." << endl;
             return;
         }
         bool writeData = (i == found);
@@ -162,7 +162,7 @@ vector<int> Column::selectRows(int block,int value, vector<int> index){
     FILE* readptr = fopen(&file_source[0], "r");
     vector<int> ans;
     if(!readptr) {
-        cout << "[ C- ] [ Select row index ] Cannot open column file for " << this->name << " column." << endl;
+        //cerr << "[ C- ] [ Select row index ] Cannot open column file for " << this->name << " column." << endl;
         return ans;
     }
     for(int i=0;i<index.size();i++){
@@ -181,7 +181,7 @@ vector<int> Column::selectRows(int block,float value, vector<int> index){
     FILE* readptr = fopen(&file_source[0], "r");
     vector<int> ans;
     if(!readptr) {
-        cout << "[ C- ] [ Select row index ] Cannot open column file for " << this->name << " column." << endl;
+        //cerr << "[ C- ] [ Select row index ] Cannot open column file for " << this->name << " column." << endl;
         return ans;
     }
     for(int i=0;i<index.size();i++){
@@ -200,7 +200,7 @@ vector<int> Column::selectRows(int block,string value, vector<int> index){
     FILE* readptr = fopen(&file_source[0], "r");
     vector<int> ans;
     if(!readptr) {
-        cout << "[ C- ] [ Select row index ] Cannot open column file for " << this->name << " column." << endl;
+        //cerr << "[ C- ] [ Select row index ] Cannot open column file for " << this->name << " column." << endl;
         return ans;
     }
     for(int i=0;i<index.size();i++){
@@ -227,7 +227,7 @@ vector<int> Column::selectRows(int block, string value, vector<int> index, vecto
     FILE* readptr = fopen(&file_source[0], "r");
     vector<int> ans;
     if(!readptr) {
-        cout << "[ C- ] [ Select row index ] Cannot open column file for " << this->name << " column." << endl;
+        //cerr << "[ C- ] [ Select row index ] Cannot open column file for " << this->name << " column." << endl;
         return ans;
     }
     for(int i = 0; i < index.size(); i ++) {
@@ -245,7 +245,7 @@ vector<Data*> Column::selectRows(int block, vector<int> index){
     string file_source=this->address+"/"+this->name+".col";
     FILE* readptr = fopen(&file_source[0], "r");
     if(!readptr) {
-        cout << "[ C- ] [ Select row values ] Cannot open column file for " << this->name << " column." << endl;
+        //cerr << "[ C- ] [ Select row values ] Cannot open column file for " << this->name << " column." << endl;
         return ans;
     }
     if(this->type == "int"){
@@ -319,10 +319,10 @@ bool Column::checkConstraints(Data* data, string flagAddress) {
             flag = checkIsUniqueConstraint(data->getString(), flagAddress);
         }
         if(flag) {
-            cout << "[ C+ ] [ Check constraint ] Uniqueness constraint verified." << endl;
+            //cerr << "[ C+ ] [ Check constraint ] Uniqueness constraint verified." << endl;
         }
         else {
-            cout << "[ C- ] [ Check constraint ] Uniqueness constraint violated." << endl;
+            //cerr << "[ C- ] [ Check constraint ] Uniqueness constraint violated." << endl;
             return false;
         }
     }
@@ -334,7 +334,7 @@ bool Column::checkIsUniqueConstraint(int value, string flagAddress) {
     FILE* readptr = fopen(&file_source[0], "r");
     FILE* flagReadPtr = fopen(&flagAddress[0], "r");
     if(!readptr) {
-        cout << "[ C- ] [ Check constraint ] Cannot open column file for " << this->name << " column." << endl;
+        //cerr << "[ C- ] [ Check constraint ] Cannot open column file for " << this->name << " column." << endl;
         return false;
     }
     while(1) {
@@ -355,7 +355,7 @@ bool Column::checkIsUniqueConstraint(float value, string flagAddress) {
     FILE* readptr = fopen(&file_source[0], "r");
     FILE* flagReadPtr = fopen(&flagAddress[0], "r");
     if(!readptr) {
-        cout << "[ C- ] [ Check constraint ] Cannot open column file for " << this->name << " column." << endl;
+        //cerr << "[ C- ] [ Check constraint ] Cannot open column file for " << this->name << " column." << endl;
         return false;
     }
     while(1) {
@@ -376,7 +376,7 @@ bool Column::checkIsUniqueConstraint(string value, string flagAddress) {
     FILE* readptr = fopen(&file_source[0], "r");
     FILE* flagReadPtr = fopen(&flagAddress[0], "r");
     if(!readptr) {
-        cout << "[ C- ] [ Check constraint ] Cannot open column file for " << this->name << " column." << endl;
+        //cerr << "[ C- ] [ Check constraint ] Cannot open column file for " << this->name << " column." << endl;
         return false;
     }
     while(1) {

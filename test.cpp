@@ -7,7 +7,7 @@
 // #define endl "\n"
 
 // void init(Database* database) {
-//     cerr << "Database" << endl;
+//     //cerr << "Database" << endl;
 //     // Create table Emp[EmpID(int), Name(string), Salary(float)].
 //     database->createTable("Emp");
 //     database->addColumn("Emp","EmpID","int");
@@ -65,15 +65,15 @@
 //     database->insertRow("Dept", DeptRow3);
 //     database->insertRow("Dept", DeptRow4);
 
-//     cerr << "Database successfully created" << endl;
+//     //cerr << "Database successfully created" << endl;
 // }
 
 // void printResult(int success) {
 //     if(success) {
-//         cout << "[+] Test Case Passed" << endl;
+//         //cerr << "[+] Test Case Passed" << endl;
 //     }
 //     else {
-//         cout << "[-] Test Case Failed" << endl;
+//         //cerr << "[-] Test Case Failed" << endl;
 //     }
 // }
 
