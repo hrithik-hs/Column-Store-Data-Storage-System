@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8">
+<root>
+<Database name = "marketdb">
+<Table name = "prod_dimension">
+<input>
+	     <Prod_id>Prod_1<\Prod_id>
+	     <Product_Category>OFFICE SUPPLIES<\Product_Category>
+	     <Product_Sub_Category>STORAGE & ORGANIZATION<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_2<\Prod_id>
+	     <Product_Category>OFFICE SUPPLIES<\Product_Category>
+	     <Product_Sub_Category>APPLIANCES<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_3<\Prod_id>
+	     <Product_Category>OFFICE SUPPLIES<\Product_Category>
+	     <Product_Sub_Category>BINDERS AND BINDER ACCESSORIES<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_4<\Prod_id>
+	     <Product_Category>TECHNOLOGY<\Product_Category>
+	     <Product_Sub_Category>TELEPHONES AND COMMUNICATION<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_5<\Prod_id>
+	     <Product_Category>FURNITURE<\Product_Category>
+	     <Product_Sub_Category>OFFICE FURNISHINGS<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_6<\Prod_id>
+	     <Product_Category>OFFICE SUPPLIES<\Product_Category>
+	     <Product_Sub_Category>PAPER<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_7<\Prod_id>
+	     <Product_Category>OFFICE SUPPLIES<\Product_Category>
+	     <Product_Sub_Category>RUBBER BANDS<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_8<\Prod_id>
+	     <Product_Category>TECHNOLOGY<\Product_Category>
+	     <Product_Sub_Category>COMPUTER PERIPHERALS<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_9<\Prod_id>
+	     <Product_Category>OFFICE SUPPLIES<\Product_Category>
+	     <Product_Sub_Category>ENVELOPES<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_10<\Prod_id>
+	     <Product_Category>FURNITURE<\Product_Category>
+	     <Product_Sub_Category>BOOKCASES<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_11<\Prod_id>
+	     <Product_Category>FURNITURE<\Product_Category>
+	     <Product_Sub_Category>TABLES<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_12<\Prod_id>
+	     <Product_Category>OFFICE SUPPLIES<\Product_Category>
+	     <Product_Sub_Category>LABELS<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_13<\Prod_id>
+	     <Product_Category>OFFICE SUPPLIES<\Product_Category>
+	     <Product_Sub_Category>PENS & ART SUPPLIES<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_14<\Prod_id>
+	     <Product_Category>TECHNOLOGY<\Product_Category>
+	     <Product_Sub_Category>COPIERS AND FAX<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_15<\Prod_id>
+	     <Product_Category>FURNITURE<\Product_Category>
+	     <Product_Sub_Category>CHAIRS & CHAIRMATS<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_16<\Prod_id>
+	     <Product_Category>OFFICE SUPPLIES<\Product_Category>
+	     <Product_Sub_Category>SCISSORS, RULERS AND TRIMMERS<\Product_Sub_Category>
+     <\input>
+<input>
+	     <Prod_id>Prod_17<\Prod_id>
+	     <Product_Category>TECHNOLOGY<\Product_Category>
+	     <Product_Sub_Category>OFFICE MACHINES<\Product_Sub_Category>
+     <\input>
+<\Table>
+<\Database>
+<\root>
