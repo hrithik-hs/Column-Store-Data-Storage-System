@@ -17,7 +17,7 @@ Prod_dimension Row Insertion (NoSQL): 0.01s
 
 Schema Creation Time (NoSQL): 0.008s
 
-Select.xml (NoSQL): 0.103s
+Select.xml (NoSQL): 0.025s
 
 Select profit with discount = 0
 
