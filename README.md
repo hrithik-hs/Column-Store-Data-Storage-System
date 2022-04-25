@@ -9,14 +9,24 @@ It can be used in ETL operations and data visualization tools just like row data
 Apache Cassandra, HBase, CosmoDB.
 
 ### Benchmarks:
-Cust_dimension Row Insertion (NoSQL): 0.248s  
+Cust_dimension Row Insertion (NoSQL): 0.248s
+
 Market_fact_table Row Insertion (NoSQL): 1.76s 
+
 Prod_dimension Row Insertion (NoSQL): 0.01s
+
 Schema Creation Time (NoSQL): 0.008s
+
 Select.xml (NoSQL): 0.103s
+
 Select profit with discount = 0
-NoSQL: 0.05s
-SQL: 0.37s
-Select profit
-NoSQL: 0.087s
-SQL: 0.03s
+
+  NoSQL: 0.05s
+
+  SQL: 0.37s
+
+Select profit:
+
+  NoSQL: 0.087s
+
+  SQL: 0.03s
