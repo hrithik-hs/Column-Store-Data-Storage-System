@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://www.select.org"
+			xmlns="http://www.select.org"
+			elementFormDefault="qualified">
+	<xsd:element name="root">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Database" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="Database">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Table" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+        <xsd:attribute name="name" type="xsd:string" use="required"/> 
+	</xsd:element>
+
+    <xsd:element name="Table">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="Column" minOccurs="1" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+	</xsd:element>
+
+    <xsd:element name="Column">
+        <xsd:attribute name="name" type="xsd:string" use="required"/>
+        <xsd:attribute name="value" type="xsd:string"/>
+    </xsd:element>
+
+</xsd:schema>

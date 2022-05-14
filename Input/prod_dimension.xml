@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+<Database name = "marketdb">
+<Table name = "prod_dimension">
+<Insert>
+	     <Column name="Prod_id">Prod_1</Column>
+	     <Column name="Product_Category">OFFICE SUPPLIES</Column>
+	     <Column name="Product_Sub_Category">STORAGE & ORGANIZATION</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_2</Column>
+	     <Column name="Product_Category">OFFICE SUPPLIES</Column>
+	     <Column name="Product_Sub_Category">APPLIANCES</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_3</Column>
+	     <Column name="Product_Category">OFFICE SUPPLIES</Column>
+	     <Column name="Product_Sub_Category">BINDERS AND BINDER ACCESSORIES</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_4</Column>
+	     <Column name="Product_Category">TECHNOLOGY</Column>
+	     <Column name="Product_Sub_Category">TELEPHONES AND COMMUNICATION</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_5</Column>
+	     <Column name="Product_Category">FURNITURE</Column>
+	     <Column name="Product_Sub_Category">OFFICE FURNISHINGS</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_6</Column>
+	     <Column name="Product_Category">OFFICE SUPPLIES</Column>
+	     <Column name="Product_Sub_Category">PAPER</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_7</Column>
+	     <Column name="Product_Category">OFFICE SUPPLIES</Column>
+	     <Column name="Product_Sub_Category">RUBBER BANDS</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_8</Column>
+	     <Column name="Product_Category">TECHNOLOGY</Column>
+	     <Column name="Product_Sub_Category">COMPUTER PERIPHERALS</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_9</Column>
+	     <Column name="Product_Category">OFFICE SUPPLIES</Column>
+	     <Column name="Product_Sub_Category">ENVELOPES</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_10</Column>
+	     <Column name="Product_Category">FURNITURE</Column>
+	     <Column name="Product_Sub_Category">BOOKCASES</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_11</Column>
+	     <Column name="Product_Category">FURNITURE</Column>
+	     <Column name="Product_Sub_Category">TABLES</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_12</Column>
+	     <Column name="Product_Category">OFFICE SUPPLIES</Column>
+	     <Column name="Product_Sub_Category">LABELS</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_13</Column>
+	     <Column name="Product_Category">OFFICE SUPPLIES</Column>
+	     <Column name="Product_Sub_Category">PENS & ART SUPPLIES</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_14</Column>
+	     <Column name="Product_Category">TECHNOLOGY</Column>
+	     <Column name="Product_Sub_Category">COPIERS AND FAX</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_15</Column>
+	     <Column name="Product_Category">FURNITURE</Column>
+	     <Column name="Product_Sub_Category">CHAIRS & CHAIRMATS</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_16</Column>
+	     <Column name="Product_Category">OFFICE SUPPLIES</Column>
+	     <Column name="Product_Sub_Category">SCISSORS, RULERS AND TRIMMERS</Column>
+	     </Insert>
+<Insert>
+	     <Column name="Prod_id">Prod_17</Column>
+	     <Column name="Product_Category">TECHNOLOGY</Column>
+	     <Column name="Product_Sub_Category">OFFICE MACHINES</Column>
+	     </Insert>
+</Table>
+</Database>
+</root>

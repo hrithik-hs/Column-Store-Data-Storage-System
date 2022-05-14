@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+    <Database name = "marketdb">
+        <Table name = "market_fact_table">
+            <Column name="Profit"/>
+            <Column name="Discount" value="0"/> 
+        </Table>
+        <Table name="order_dimension">
+            <Column name="Order_Priority" />
+        </Table>
+    </Database>
+</root>

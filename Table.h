@@ -1,33 +1,53 @@
 #pragma once
-#include <bits/stdc++.h>
+// #include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <map>
+#include <unordered_set>
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
+
 #include "Column.h"
+#include "ColumnRecord.h"
+#include "Row.h"
 
 using namespace std;
+#define endl "\n"
 
 class Table{
 	private:
-		string name;
+		string name, address;
+		int blockSize;
 		vector<Column * > columns;
 		Column * primaryKey;
-		unordered_set<string >columnNames;
-		// vector<pair<Column *,pair<Table *, Column *>>> foreignKey; 
+		map<string,int> columnNames;
+		vector<ColumnRecord*> ColumnRecords;
 	public:
 		Table();
-		Table(string name);
-		// Table(string name,vector<Column *> columns);
-		// Table(string name,vector<Column *> columns, Column * primaryKey);
+		Table(string name, int blockSize, string address);
 		~Table();
 
-		void dropTable();
-		void addColumn(Column * column);
-		void dropColumn(string columnName);
-		void alterColumn(/*Old column new column new datatype*/); 
-		void showTable(vector<Column *>& columns/*, Filters */);
+		int loadFile();
+		int writeFile();
 
-		void setName(string name);
-		void setPrimaryKey(Column * column);
+		void addColumn(string columnName, string type);
+		void dropColumn(string columnName);
+		void alterColumn(string oldName, string newName); 
+		void showTable();
+
+		// void setName(string newName);
+		void setPrimaryKey(string columnName);
 
 		Column * getPrimaryKey();
 		string getName();
-		vector<Column *> getColumns();    
+		string getColumnType(string columName);
+		vector<Column *> getColumns();
+
+		int insertRow(Row *row);
+		int selectRows(vector<string> columnNames, vector<pair<string,Data*>> conditions);
+		int deleteRows(vector<pair<string,Data*>> conditions);
+
+		void setIsNotNullConstraint(string columnName, bool value);
+		void setIsUniqueConstraint(string columnName, bool value);
+        int close();
 };
